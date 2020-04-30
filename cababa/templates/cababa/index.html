@@ -1,0 +1,13 @@
+{% extends 'partials/base.html' %}
+{% block title %}TOP{% endblock %}
+
+{% block content %}
+<h2>トップページ</h2>
+
+<div class="top-button">
+    <a class="btn btn-outline-info" href="{% url 'reservations:hostess_search' %}" role="button">嬢とおしゃべりしたい方はこちら</a>
+</div>
+<div class="top-button">
+    <a class="btn btn-outline-info" href="{% url 'hostess:login' %}" role="button">嬢になりたい方はこちら</a>
+</div>
+{% endblock %}

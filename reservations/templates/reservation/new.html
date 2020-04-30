@@ -1,0 +1,35 @@
+{% extends 'partials/base.html' %}
+{% block title %}予約確認{% endblock %}
+
+{% block content %}
+<h2>予約確認</h2>
+
+<p>こちらの内容で予約しますか？</p>
+
+<h3>{{ available_time.hostess.display_name }}</h3>
+
+<div class="staff">
+    <div class="left">
+        <figure>
+            <img src="{{ available_time.hostess.hostess_profile.image }}" alt="profile-image">
+        </figure>
+    </div>
+
+    <div class="right">
+        <h3>予約内容</h3>
+        <div id="sub">
+            <nav class="box1">
+                <ul class="submenu">
+                    <li>{{ available_time.start_at|date:'Y年m月d日 H:i' }}-{{ available_time.end_at|date:'H:i' }}</li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">予約確定</button>
+</form>
+
+{% endblock %}

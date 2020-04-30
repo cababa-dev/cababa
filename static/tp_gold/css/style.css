@@ -1,0 +1,880 @@
+@charset "utf-8";
+
+
+/*slide.cssの読み込み
+------------------------------------------------------------------------------------------------------------------------------------------------------*/
+@import url(slide.css);
+
+
+/*全端末（PC・タブレット・スマホ）共通設定
+------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*全体の設定
+---------------------------------------------------------------------------*/
+body {
+	margin: 0px;
+	padding: 0px;
+	color: #fff;	/*全体の文字色*/
+	font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;	/*フォント種類*/
+	font-size: 15px;	/*文字サイズ*/
+	line-height: 2;		/*行間*/
+	background: #000;	/*背景色*/
+	-webkit-text-size-adjust: none;
+}
+h1,h2,h3,h4,h5,p,ul,ol,li,dl,dt,dd,form,figure,form,select,input,textarea {margin: 0px;padding: 0px;font-size: 100%;}
+ul {list-style-type: none;}
+img {border: none;max-width: 100%;height: auto;vertical-align: middle;}
+table {border-collapse:collapse;font-size: 100%;border-spacing: 0;}
+iframe {width: 100%;}
+video,audio {max-width: 100%;}
+
+/*リンク（全般）設定
+---------------------------------------------------------------------------*/
+a {
+	color: #fff;		/*リンクテキストの色*/
+	transition: 0.5s;	/*マウスオン時の移り変わるまでの時間設定。0.5秒。*/
+}
+a:hover {
+	color: #ffcf3e;			/*マウスオン時の文字色*/
+	text-decoration: none;	/*マウスオン時に下線を消す設定。残したいならこの１行削除。*/
+}
+
+/*inner共通
+---------------------------------------------------------------------------*/
+.inner {
+	max-width: 1300px;	/*サイトの最大幅*/
+	margin: 0 auto;
+	padding: 0 2%;		/*上下、左右へのボックス内の余白*/
+}
+
+/*ヘッダー（ロゴが入った最上段のブロック）
+---------------------------------------------------------------------------*/
+/*ヘッダーブロック*/
+header {
+	height: 100px;	/*高さ*/
+	background-: #000;	/*背景色（古いブラウザ用）*/
+	background: linear-gradient(#666, #333 49%, #111 50%, #000);	/*背景グラデーション*/
+}
+/*ロゴ画像*/
+header #logo {
+	width: 220px;		/*ロゴ画像の幅*/
+	float: left;		/*左に回り込み*/
+	margin-top: 32px;	/*ロゴの上にあけるスペース。上下のバランスをここで調整して下さい。*/
+	margin-left: 3%;	/*ロゴの左に空けるスペース。*/
+}
+
+/*ヘッダー右側の電話番号ブロック
+---------------------------------------------------------------------------*/
+/*ブロック全体*/
+#contact {
+	float: right;		/*右に回り込み*/
+	text-align: center;	/*文字をセンタリング*/
+	margin-top: 12px;	/*ブロックの上にあけるスペース。上下のバランスをここで調整して下さい。*/
+	margin-right: 3%;	/*ブロックの右側に空けるスペース。*/
+}
+/*TEL*/
+.tel {
+	letter-spacing: 0.1em;	/*文字間隔を広くする設定。通常がいいならこの行削除。*/
+	font-size: 24px;		/*文字サイズを大きく*/
+}
+/*TELの受付時間の小文字部分*/
+.tel span {
+	display: block;
+	font-size: 11px;	/*文字サイズを小さく*/
+}
+
+/*メインメニュー
+---------------------------------------------------------------------------*/
+/*メニューブロック*/
+#menubar {
+	clear: both;overflow: hidden;
+	background: #d0c175;	/*背景色（古いブラウザ用）*/
+	background: linear-gradient(#fefefc, #ddd29a 49%, #d0c175 50%, #bba752);	/*背景グラデーション*/
+	height: 75px;		/*メニューの高さ。下の「#menubar li a」の「height」と「padding-top」の数字を合計した数字に合わせる。*/
+	box-shadow: 0px 0px 60px 10px #bba752;	/*ボックスの影。右へ、下へ、ぼかす範囲、広げる距離、色。insestは影を内側に向ける意味。*/
+}
+/*メニュー１個あたりの設定*/
+#menubar li {
+	float: left;	/*左に回り込み*/
+	width: 16.66%;	/*メニュー幅（100÷6個=16.66%）　もし４個にするなら100÷4=25%になる。*/
+}
+#menubar li a {
+	display:  block;text-decoration: none;
+	text-align: center;	/*文字をセンタリング*/
+	font-weight: bold;	/*太字に*/
+	border-right: 1px solid #000;				/*メニューの右側の線の幅、線種、色（古いブラウザ用）*/
+	border-right: 1px solid rgba(0,0,0,0.3);	/*メニューの右側の線の幅、線種、色。0,0,0は黒の事で0.3は30%色がついた状態の事。*/
+	height: 60px;		/*高さ*/
+	padding-top: 15px;	/*上に追加する余白*/
+	line-height: 1.8;	/*行間を少し狭くする*/
+	color: #333;		/*文字色*/
+}
+/*１つ目のメニューへの追加設定*/
+#menubar li:first-child a {
+	border-left: 1px solid #000;			/*メニューの左側の線の幅、線種、色（古いブラウザ用）*/
+	border-left: 1px solid rgba(0,0,0,0.3);	/*メニューの左側の線の幅、線種、色。0,0,0は黒の事で0.3は30%色がついた状態の事。*/
+}
+/*装飾文字（英語表記）の設定*/
+#menubar li a span {
+	text-shadow: none;display: block;
+	font-size: 9px;			/*文字サイズ*/
+	font-weight: normal;	/*文字を太字でなく標準に戻す設定*/
+	letter-spacing: 0.2em;	/*文字間隔を少しあける設定*/
+}
+/*マウスオン時と、現在表示中(current)のメニューの設定*/
+#menubar li a:hover, #menubar li.current a {
+	background: #ebe3a8;
+	background: linear-gradient(#fefefc, #f2eecf 49%, #ebe3a8 50%, #e2d683);	/*背景グラデーション*/
+}
+/*スマホ用メニューを表示させない*/
+#menubar-s {display: none;}
+/*３本バーアイコンを表示させない*/
+#menubar_hdr {display: none;}
+
+/*fixmenu設定（メニューが画面上部に到達した際のスタイル）
+---------------------------------------------------------------------------*/
+/*上部固定メニュー用fixmenu設定*/
+body.is-fixed-menu .nav-fix-pos {
+	width: 100%;z-index: 100;position: fixed;top: 0;left: 0;
+}
+body.is-fixed-menu header {
+	margin-bottom: 75px;	/*#menubarのheightの数字を指定する*/
+}
+/*上の設定の「is-fixed-menu」を「is-fixed」に変更したものをそのまま記入します。fixmenuスクリプトを２つ使う為に必要な設定になります。*/
+body.is-fixed .nav-fix-pos {
+	width: 100%;z-index: 100;position: fixed;top: 0;left: 0;
+}
+body.is-fixed header {
+	margin-bottom: 75px;
+}
+
+/*contents（３カラムを囲むブロック）
+---------------------------------------------------------------------------*/
+#contents {
+	clear: both;overflow: hidden;position: relative;z-index: 10;
+	padding-top: 40px;		/*上に空けるボックス内の余白*/
+	padding-bottom: 40px;	/*下に空けるボックス内の余白*/
+}
+/*トップページのコンテンツ。スライドショー分多めに余白を設定する。*/
+.home #contents {
+	margin-top: -15%;
+}
+
+/*contents-in（mainとsubを囲むブロック）
+---------------------------------------------------------------------------*/
+#contents-in {
+	float: left;	/*左に回り込み*/
+	width: 80%;		/*ブロックの幅*/
+}
+/*２カラム時*/
+.c2 #contents-in {
+	float: none;
+	width: auto;
+}
+
+/*mainコンテンツ（中央のブロック）
+---------------------------------------------------------------------------*/
+#main {
+	float: right;	/*右に回り込み*/
+	width: 75%;		/*ブロックの幅*/
+}
+/*mainコンテンツのh2タグ設定*/
+#main h2 {
+	clear: both;
+	margin-bottom: 20px;
+	padding: 15px 20px;	/*上下、左右への余白*/
+	font-size: 16px;	/*文字サイズ*/
+	background: #000 url(../images/bg1.png) no-repeat right bottom;	/*背景色と背景画像（古いブラウザ用）*/
+	background: url(../images/bg1.png) no-repeat right bottom, linear-gradient(#666, #333 49%, #111 50%, #000);	/*背景画像、背景グラデーション*/
+	border-bottom: 4px solid #d0c175;		/*下線の幅、線種、色*/
+}
+/*mainコンテンツのh3タグ設定*/
+#main h3 {
+	clear: both;
+	margin-bottom: 20px;
+	padding: 6px 20px;			/*上下、左右への余白*/
+	font-size: 16px;			/*文字サイズ*/
+	border: 1px solid #666;		/*枠線の幅、線種、色*/
+}
+/*h3タグの１文字目への追加設定*/
+#main h3::first-letter {
+	border-left: 3px solid #d0c175;	/*左の線の幅、線種、色*/
+	padding-left: 15px;				/*線とテキストとの余白*/
+}
+/*mainコンテンツの段落タグ設定*/
+#main p {
+	padding: 0px 20px 20px;	/*上、左右、下への余白*/
+}
+/*他。微調整。*/
+#main p + p {
+	margin-top: -5px;
+}
+#main h2 + p,
+#main h3 + p {
+	margin-top: -10px;
+}
+#main section + section {
+	margin-top: 30px;
+}
+
+/*Cast用の各ブロック
+---------------------------------------------------------------------------*/
+/*各キャストボックスの設定*/
+.list {
+	position: relative;overflow: hidden;
+	float: left;			/*左に回り込み*/
+	font-size: 11px;		/*文字サイズ*/
+	line-height: 1.5;		/*行間*/
+	width: 23%;				/*ボックスの幅*/
+	margin-left: 1.5%;		/*ボックスの左右間に空けるスペース*/
+	margin-bottom: 20px;	/*ボックスの上下間に空けるスペース*/
+}
+.list a {
+	text-decoration: none;display: block;overflow: hidden;
+	padding: 10px;	/*ボックス内の余白*/
+	height: 220px;	/*高さ*/
+	border: 1px solid #d0c175;	/*枠線の幅、線種、色*/
+	box-shadow: 0px 0px 50px #bba752 inset;	/*ボックスの影。右へ、下へ、広げる幅、色。insestは影を内側に向ける意味。*/
+}
+/*マウスオン時。内側の影を消す設定。*/
+.list a:hover {
+	box-shadow: none;
+}
+/*２カラム時のボックス幅*/
+.c2 .list a {
+	padding: 15px;	/*ボックス内の余白*/
+	height: 240px;	/*高さ*/
+}
+/*ボックス内のp(段落)タグ設定*/
+.list p {
+	padding: 0px !important;
+}
+/*ボックス内のh4タグ設定*/
+.list h4 {
+	padding: 0px;
+	color: #ffcf3e;	/*文字色*/
+}
+
+/*スタッフ詳細ページ　staff.html
+---------------------------------------------------------------------------*/
+/*左側ボックス*/
+#main .staff .left {
+	float: left;	/*左に回り込み*/
+	width: 35%;		/*幅*/
+	padding-bottom: 15px;
+}
+/*左側ボックス内のp(段落)タグ*/
+#main .staff .left p {
+	padding: 0px;
+}
+/*右側ボックス*/
+#main .staff .right {
+	width: 60%;		/*幅*/
+	float: right;	/*右に回り込み*/
+	padding-bottom: 15px;
+}
+/*テーブルタグの左側の見出し（※幅以外は下の方にある「テーブル１」のスタイルで設定しています）*/
+#main .staff .right .ta1 th {
+	width: 100px;	/*幅*/
+}
+
+/*subコンテンツ（左側のブロック）
+---------------------------------------------------------------------------*/
+#sub {
+	float: left;	/*左に回り込み*/
+	width: 22.5%;	/*ブロックの幅*/
+}
+
+/*sideコンテンツ（右側のブロック）
+---------------------------------------------------------------------------*/
+#side {
+	float: right;	/*右に回り込み*/
+	width: 18%;		/*ブロックの幅*/
+}
+/*２カラム時*/
+.c2 #side {
+	display: none;	
+}
+
+/*sub,side共通設定
+---------------------------------------------------------------------------*/
+/*h2見出しタグ設定*/
+#sub h2,
+#side h2 {
+	text-align: center;		/*文字をセンタリング*/
+	background: #d0c175;	/*背景色（古いブラウザ用）*/
+	background: linear-gradient(#fefefc, #ddd29a 49%, #d0c175 50%, #bba752);	/*背景グラデーション*/
+	padding: 10px;	/*見出し内の余白*/
+	color: #333;	/*文字色*/
+}
+/*段落タグ（p）設定*/
+#sub p,
+#side p {
+	line-height: 1.6;	/*行間を少し狭く*/
+}
+
+/*box1設定（sub,sideで使っています）
+---------------------------------------------------------------------------*/
+/*box1設定*/
+#sub .box1,
+#side .box1 {
+	border: 1px solid #d0c175;	/*枠線の幅、線種、色*/
+	padding: 10px;				/*ボックス内の余白*/
+	margin-bottom: 20px;		/*ボックスの下にあけるスペース*/
+	box-shadow: 0px 0px 50px #bba752 inset;	/*ボックスの影。右へ、下へ、広げる幅、色。insestは影を内側に向ける意味。*/
+}
+/*box1の中にあるh2タグの設定*/
+#sub .box1 h2,
+#side .box1 h2 {
+	border-radius: 0;	/*角丸をなくす設定*/
+}
+.box1 .submenu {
+	margin-bottom: 0 !important;
+}
+
+/*submenu（sub,sideのメニュー）
+---------------------------------------------------------------------------*/
+/*メニューブロック全体の設定*/
+#sub .submenu,
+#side .submenu {
+	margin-bottom: 20px;	/*メニューブロックの下にあけるスペース*/
+	border-top: 1px solid #d0c175;	/*上の線の幅、線種、色*/
+}
+/*メニュー１個ごとの設定*/
+#sub .submenu li a,
+#side .submenu li a {
+	text-decoration: none;display: block;
+	padding: 3px 10px;	/*上下、左右のボックス内の余白*/
+	border: 1px solid #d0c175;	/*枠線の幅、線種、色*/
+	border-top: none;			/*上の線だけ消す設定*/
+	background: #000;			/*背景色（古いブラウザ用）*/
+	background: rgba(0,0,0,0.5);	/*背景色。0,0,0は黒の事で0.5は50%色がついた状態の事。*/
+}
+
+/*list-subボックス
+---------------------------------------------------------------------------*/
+/*ボックス１個あたりの設定*/
+.list-sub {
+	overflow: hidden;
+	font-size: 11px;	/*文字サイズ*/
+	line-height: 1.5;	/*行間*/
+	border-bottom: 1px solid #ccc;	/*下線の幅、線種、色*/
+}
+.list-sub a {
+	display: block;overflow: hidden;text-decoration: none;
+	padding: 10px 0px;	/*上下、左右へのボックス内の余白*/
+}
+/*画像*/
+.list-sub img {
+	float: left;	/*左に回り込み*/
+	width: 30%;		/*幅*/
+	margin-right: 10px;	/*画像の右側に空けるスペース*/
+}
+/*最後のボックスへの追加設定*/
+.list-sub:nth-last-of-type(1) {
+	margin-bottom: 15px;	/*ボックスの下にあけるスペース*/
+}
+
+/*フッター設定
+---------------------------------------------------------------------------*/
+footer {
+	clear: both;
+	background: #555;	/*背景色*/
+	font-size: 85%;		/*文字サイズ*/
+}
+footer .pr {display: block;font-size: 80%;}
+
+/*フッターメニュー
+---------------------------------------------------------------------------*/
+/*ボックス全体*/
+#footermenu {
+	overflow: hidden;
+	padding: 20px 0;	/*上下、左右へのボックス内の余白*/
+	font-size: 12px;	/*文字サイズを少し小さく*/
+}
+/*１行分の設定*/
+#footermenu ul {
+	float: left;	/*左に回り込み*/
+	width: 23%;		/*幅。今回は4列作ったのでここの幅23%と下のpadding(合計の2%)でトータル25%になるよう設定。列に応じて調整して下さい。*/
+	padding-right: 1%;
+	padding-left: 1%;
+}
+/*見出し*/
+#footermenu li.title {
+	font-weight: bold;	/*太字にする*/
+}
+/*リンクテキスト*/
+#footermenu a {
+	text-decoration: none;
+	opacity: 0.7;	/*透明度。70%色がでた状態の事。*/
+	color: #fff;	/*文字色*/
+}
+/*マウスオン時*/
+#footermenu a:hover {
+	opacity: 1;	/*透明度。100%色がでた状態の事。*/
+}
+
+/*コピーライト
+---------------------------------------------------------------------------*/
+#copyright {
+	clear: both;
+	text-align: center;
+	background: #333;	/*背景色*/
+}
+#copyright a {text-decoration: none;}
+
+/*トップページ内「更新情報・お知らせ」ブロック
+---------------------------------------------------------------------------*/
+/*ブロック全体の設定*/
+#new dl {
+	padding: 0px 20px 20px;	/*上、左右、下へのブロック内の余白*/
+}
+/*日付設定*/
+#new dt {
+	float: left;
+	width: 9em;
+	letter-spacing: 0.1em;
+}
+/*記事設定*/
+#new dd {
+	padding-left: 9em;
+	border-bottom: 1px solid #666;	/*下線の幅、線種、色*/
+}
+
+/*テーブル
+---------------------------------------------------------------------------*/
+/*テーブル１行目に入った見出し部分（※caption）*/
+.ta1 caption {
+	border: 1px solid #666;	/*テーブルの枠線の幅、線種、色*/
+	border-bottom: none;	/*下線だけ消す*/
+	text-align: left;		/*文字を左寄せ*/
+	font-weight: bold;		/*太字に*/
+	padding: 10px;			/*ボックス内の余白*/
+	background: #222;
+}
+/*ta1設定*/
+.ta1 {
+	table-layout: fixed;
+	width: 100%;
+	margin: 0 auto 20px;
+}
+.ta1, .ta1 td, .ta1 th {
+	word-break: break-all;
+	border: 1px solid #666;	/*テーブルの枠線の幅、線種、色*/
+	padding: 10px;	/*ボックス内の余白*/
+}
+/*ta1の左側ボックス*/
+.ta1 th {
+	width: 140px;		/*幅*/
+	text-align: center;	/*センタリング*/
+}
+/*schedule-table（CMS用）*/
+.ta1.schedule-table th{
+	width: auto;
+}
+.ta1.schedule-table td{
+	width: 12%;
+	text-align: center;
+}
+
+/*フォーム関連
+---------------------------------------------------------------------------*/
+/*ボタン（btn）*/
+input[type="submit"].btn,
+input[type="button"].btn,
+input[type="reset"].btn {
+	padding: 5px 20px;		/*上下、左右へのボックス内の余白*/
+	border-radius: 3px;		/*角丸のサイズ*/
+	background: #111;	/*背景色（古いブラウザ用）*/
+	background: linear-gradient(#222, #000);/*背景グラデーション*/
+	color: #b9b9b9;	/*文字色*/
+}
+/*マウスオン時のボタン（btn）設定*/
+input[type="submit"].btn:hover,
+input[type="button"].btn:hover,
+input[type="reset"].btn:hover {
+	background: #000;	/*背景色*/
+	color: #fff;		/*文字色*/
+}
+/*input,textarea共通*/
+input,textarea {
+	outline: none;background: transparent;
+	border: 1px solid #444;	/*枠線の幅、線種、色*/
+	color: #fff;			/*文字色*/
+}
+/*input,textareaのフォーカス時*/
+input:focus,textarea:focus {
+	border: 1px solid #fff;	/*枠線の幅、線種、色*/
+}
+
+/*「人気」「NEW」マーク
+---------------------------------------------------------------------------*/
+/*mark1,matk2共通設定*/
+.mark1, .mark2 {
+	display: inline-block;position: absolute;
+	left: 5px;			/*ボックス内の左から5pxの場所に配置*/
+	top: 5px;			/*ボックス内の上から5pxの場所に配置*/
+	width: 40px;		/*幅*/
+	line-height: 40px;	/*高さ*/
+	font-size: 9px;		/*文字サイズ*/
+	text-align: center;	/*文字をセンタリング*/
+	color: #fff;		/*文字色*/
+	border-radius: 50%;	/*角丸のサイズ*/
+	transform: rotate(-30deg);	/*左回転で30度傾ける設定*/
+	box-shadow: 1px 2px 4px rgba(0,0,0,0.6);	/*ボックスの影。右へ、下へ、広げる幅、0,0,0は黒の事で0.6は60%色がついた状態。*/
+}
+/*mark1の背景色*/
+.mark1 {background: #df246f;}
+/*mark2の背景色*/
+.mark2 {background: #249fdf;}
+
+/*PAGE TOP（↑）設定
+---------------------------------------------------------------------------*/
+/*アニメーションのキーグレーム設定（変更不要）*/
+@keyframes scroll {
+0% {opacity: 0;}
+100% {opacity: 1;}
+}
+/*デフォルトでは非表示に*/
+body .nav-fix-pos-pagetop a {display: none;}
+/*ボタンの設定*/
+body.is-fixed-pagetop .nav-fix-pos-pagetop a {
+	display: block;text-decoration: none;text-align: center;z-index: 100;position: fixed;
+	width: 50px;		/*幅*/
+	line-height: 50px;	/*高さ*/
+	bottom: 50px;		/*下から50pxの場所に配置*/
+	right: 3%;			/*右から3%の場所に配置*/
+	color: #fff;		/*文字色*/
+	background: #000;	/*背景色（古いブラウザ用）*/
+	background: rgba(0,0,0,0.6);	/*背景色。0,0,0は黒の事で0.6は透明度60%の事。*/
+	border: 1px solid #fff;	/*枠線の幅、線種、色*/
+	animation-name: scroll;	/*上のアニメーションで指定しているkeyframesの名前（scroll）*/
+	animation-duration: 1S;	/*アニメーションの実行時間*/
+	animation-fill-mode: forwards;	/*アニメーションの完了後、最後のキーフレームを維持する*/
+}
+/*マウスオン時*/
+body.is-fixed-pagetop .nav-fix-pos-pagetop a:hover {
+	background: #999;	/*背景色*/
+}
+
+/*ul.disc,olタグ
+---------------------------------------------------------------------------*/
+ul.disc {
+	list-style: disc;
+	padding: 0 20px 20px 40px;
+}
+ol {
+	padding: 0 20px 20px 45px;
+}
+
+/*checkブロック。赤い注意書きブロックです。
+---------------------------------------------------------------------------*/
+p.check {
+	background: #ff0000;
+	color:#fff;
+	padding: 10px 25px !important;
+	margin-bottom: 20px;
+}
+p.check a {color: #fff;}
+
+/*トップページのNEWアイコン
+---------------------------------------------------------------------------*/
+.newicon {
+	background: #F00;	/*背景色*/
+	color: #FFF;		/*文字色*/
+	font-size: 70%;
+	line-height: 1.5;
+	padding: 2px 5px;
+	border-radius: 2px;
+	margin: 0px 5px;
+	vertical-align: text-top;
+}
+
+/*その他
+---------------------------------------------------------------------------*/
+.look {background: #333;padding: 5px 10px;border-radius: 4px;}
+.mb10 {margin-bottom: 10px;}
+.mb15,.mb1em {margin-bottom: 15px;}
+.clear {clear: both;}
+.color1, .color1 a {color: #ffcf3e;}
+.pr {font-size: 10px;}
+.wl {width: 96%;}
+.ws {width: 50%;}
+.c {text-align: center;}
+.r {text-align: right;}
+.l {text-align: left;}
+img.fr {float: right;margin-left: 10px;margin-bottom: 10px;}
+img.fl {float: left;margin-right: 10px;margin-bottom: 10px;}
+.big1 {font-size: 36px;letter-spacing: 0.2em;}
+.mini1 {font-size: 11px;display: inline-block;line-height: 1.5;}
+.sh {display: none;}
+.border1 {border: 1px solid #666;}
+
+
+
+/*画面幅1100px以下の設定
+------------------------------------------------------------------------------------------------------------------------------------------------------*/
+@media screen and (max-width:1100px){
+
+/*Cast用の各ブロック
+---------------------------------------------------------------------------*/
+/*各キャストボックスの設定*/
+.list a {
+	height: 190px;	/*高さ*/
+}
+/*２カラム時のボックス幅*/
+.c2 .list a {
+	height: 210px;	/*高さ*/
+}
+
+}
+
+
+
+/*画面幅800px以下の設定
+------------------------------------------------------------------------------------------------------------------------------------------------------*/
+@media screen and (max-width:800px){
+
+/*ヘッダー右側の電話番号ブロック
+---------------------------------------------------------------------------*/
+/*ブロック全体*/
+#contact {
+	margin-right: 80px;		/*右に空けるスペース*/
+}
+/*TEL*/
+.tel {
+	letter-spacing: normal;	/*文字間隔を標準に戻す。*/
+	font-size: 20px;		/*文字サイズ*/
+}
+
+/*メインメニュー
+---------------------------------------------------------------------------*/
+/*アニメーションのフレーム設定。全100コマアニメーションだと思って下さい。透明(0%)から色を100%出すアニメーション指定。*/
+@keyframes menu1 {
+	0% {opacity: 0;}
+	100% {opacity: 1;}
+}
+/*スマホ用メニューブロック*/
+#menubar-s {
+	display: block;overflow: hidden;
+	position: absolute;z-index: 100;
+	top: 100px;	/*上から100pxの場所に配置*/
+	border-top: 1px solid #fff;		/*上の線の幅、線種、色*/
+	width: 100%;
+	animation-name: menu1;		/*上のkeyframesの名前*/
+	animation-duration: 0.5S;	/*アニメーションの実行時間。0.5秒。*/
+	animation-fill-mode: both;	/*アニメーションの完了後、最後のキーフレームを維持する*/
+}
+/*メニュー１個あたりの設定*/
+#menubar-s li a {
+	display: block;text-decoration: none;
+	padding: 15px 10px 15px 20px;	/*上、右、下、左へのメニュー内の余白*/
+	border-bottom: 1px solid #fff;	/*下の線の幅、線種、色*/
+	background: #d0c175;	/*背景色*/
+	font-size: 20px;
+}
+/*英語表記（飾り文字）*/
+#menubar-s li a span {
+	display: block;
+	font-size: 12px;	/*文字サイズ*/
+}
+/*PC用メニューを非表示にする*/
+#menubar {display: none;}
+
+/*３本バーアイコン設定
+---------------------------------------------------------------------------*/
+/*３本バーブロック*/
+#menubar_hdr {
+	display: block;
+	position: absolute;
+	top: 20px;	/*上から20pxの場所に配置*/
+	right: 2%;	/*右から2%の場所に配置*/
+}
+/*アイコン共通設定*/
+#menubar_hdr.close,
+#menubar_hdr.open {
+	width: 50px;	/*幅*/
+	height: 50px;	/*高さ*/
+}
+/*三本バーアイコン*/
+#menubar_hdr.close {
+	background: url(../images/icon_menu.png) no-repeat center top/50px;
+}
+/*閉じるアイコン*/
+#menubar_hdr.open {
+	background: url(../images/icon_menu.png) no-repeat center bottom/50px;
+}
+
+/*fixmenu設定（メニューが画面上部に到達した際のスタイル）
+---------------------------------------------------------------------------*/
+/*fixmenuから折りたたみメニューになるのでリセット。*/
+body.is-fixed-menu header,body.is-fixed header {margin-bottom: 0px;}
+
+/*main,sub,side,contents-in
+---------------------------------------------------------------------------*/
+#main, #sub, #side, #contents-in {
+	float: none;
+	width: auto;
+	clear: both;
+}
+
+/*contents（３カラムを囲むブロック）
+---------------------------------------------------------------------------*/
+#contents {
+	padding-top: 0px;
+}
+
+/*list-subボックス
+---------------------------------------------------------------------------*/
+/*ボックス１個あたりの設定*/
+.list-sub {
+	font-size: 15px;	/*文字サイズ*/
+	line-height: 2;	/*行間*/
+}
+/*画像*/
+.list-sub img {
+	width: 20%;		/*幅*/
+}
+
+/*テーブル
+---------------------------------------------------------------------------*/
+.ta-box {overflow-x: auto;}
+.ta1 {overflow-x: auto;min-width: 800px;}
+
+/*その他
+---------------------------------------------------------------------------*/
+body.s-n #sub,body.s-n #side,body.s-n #footermenu {display: none;}
+.sh {display:block;}
+.pc {display:none;}
+
+}
+
+
+
+/*画面幅600px以下の設定
+------------------------------------------------------------------------------------------------------------------------------------------------------*/
+@media screen and (max-width:600px){
+
+/*ヘッダー右側の電話番号ブロック
+---------------------------------------------------------------------------*/
+/*ブロック全体を消す*/
+#contact {
+	display: none;
+}
+
+/*Cast用の各ブロック
+---------------------------------------------------------------------------*/
+/*各キャストボックスの設定*/
+.list {
+	float: none;
+	width: auto;
+	margin-left: 0;
+}
+.list a {
+	height: auto !important;
+}
+.list figure {
+	float: left;
+	width: 20%;
+	margin-right: 10px;
+}
+
+/*「人気」「NEW」マーク
+---------------------------------------------------------------------------*/
+/*mark1,matk2共通設定*/
+.mark1, .mark2 {
+	left: auto;transform: rotate(0deg);
+	top: -8px;		/*ボックス内の上から-8pxの場所に配置*/
+	right: -5px;	/*ボックス内の右から-5pxの場所に配置*/
+}
+
+}
+
+
+
+/*画面幅480px以下の設定
+------------------------------------------------------------------------------------------------------------------------------------------------------*/
+@media screen and (max-width:480px){
+
+/*全体の設定
+---------------------------------------------------------------------------*/
+body {
+	font-size: 12px;	/*文字サイズ*/
+	line-height: 1.5;	/*行間*/
+}
+
+/*mainコンテンツ（中央のブロック）
+---------------------------------------------------------------------------*/
+/*mainコンテンツのh2,h3タグ設定*/
+#main h2, #main h3 {
+	font-size: 14px;	/*文字サイズ*/
+}
+
+/*スタッフ詳細ページ　staff.html
+---------------------------------------------------------------------------*/
+/*左側、右側ボックス*/
+#main .staff .left, #main .staff .right {
+	float: none;
+	width: auto;
+}
+/*大きな写真の設定*/
+#main .staff .left figure {
+	display: block;margin: 0 auto;
+	width: 70%;	/*幅を画面の70%幅に*/
+}
+
+/*submenu（sub,sideのメニュー）
+---------------------------------------------------------------------------*/
+/*メニュー１個ごとの設定*/
+#sub .submenu li a,
+#side .submenu li a {
+	padding: 10px;	/*ボックス内の余白*/
+}
+
+/*list-subボックス
+---------------------------------------------------------------------------*/
+/*ボックス１個あたりの設定*/
+.list-sub {
+	font-size: 12px;	/*文字サイズ*/
+	line-height: 1.5;	/*行間*/
+}
+
+/*フッターメニュー
+---------------------------------------------------------------------------*/
+/*ボックス全体*/
+#footermenu {
+	font-size: 10px;
+}
+
+/*テーブル(ta1)
+---------------------------------------------------------------------------*/
+/*余白の上書き*/
+.ta1 caption,.ta1 th,.ta1 td {
+	padding: 5px;
+}
+/*テーブル内の左側*/
+.ta1 th {
+	width: 100px;
+}
+
+/*その他
+---------------------------------------------------------------------------*/
+.ws,.wl {width: 94%;}
+img.fr,img.fl {float: none;margin: 0;width: 100%;}
+
+}
+
+
+
+/*画面幅360px以下の設定
+------------------------------------------------------------------------------------------------------------------------------------------------------*/
+@media screen and (max-width:360px){
+
+/*スタッフ詳細ページ　staff.html
+---------------------------------------------------------------------------*/
+/*テーブルタグの左側の見出し（※幅以外は下の方にある「テーブル１」のスタイルで設定しています）*/
+#main .staff .right .ta1 th {
+	width: 80px;	/*幅*/
+}
+
+}

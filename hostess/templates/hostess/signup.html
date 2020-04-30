@@ -1,0 +1,99 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block title %}プロフィール設定{% endblock %}
+
+{% block script %}
+<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script>
+<script src="{% static 'cababa.js' %}"></script>
+<script>
+    // 画像選択時のプレビュー
+    var boxes = document.querySelectorAll('#profile-image');
+
+    for (let i = 0; i < boxes.length; i++) {
+        if (window.CP.shouldStopExecution(1)) {
+            break;
+        }
+        let box = boxes[i];
+        initDropEffect(box);
+        initImageUpload(box);
+    }
+    window.CP.exitedLoop(1);
+</script>
+{% endblock %}
+
+{% block content %}
+<h2>登録完了まであともう少しです</h2>
+<p><span style="color:red">※</span> 必須入力</p>
+
+<form method="POST" id="signup-form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="ta1">
+        <!-- 名前 -->
+        <tr>
+            <th width="150"><label for="display_name">おなまえ<span style="color:red">※</span></label></th>
+            <td>
+                <input type="text" size="40" maxlength="500" class="ws" name="display_name" placeholder="風俗花子" value="{{ form.display_name.value }}" required>
+            </td>
+        </tr>
+        
+        <!-- 写真 -->
+        <tr>
+            <th width="150"><label for="image">プロフィール写真<span style="color:red">※</span></label></th>
+            <td>
+                <input name="image" type="file" class="image-upload" required>
+                <!-- <input type="text" size="40" maxlength="500" class="ws" name="display_name" placeholder="風俗花子" value="{{ form.display_name.value }}" required> -->
+            </td>
+        </tr>
+
+        <!-- 誕生日 -->
+        <tr>
+            <th width="150"><label for="birthday">誕生日</label></th>
+            <td>
+                <input type="date" class="form-control" name="birthday">
+            </td>
+        </tr>
+
+        <!-- お住まいの都道府県 -->
+        <tr>
+            <th width="150"><label for="birthday">都道府県</label></th>
+            <td>
+                <select name="prefecture_code" class="form-control">
+                    {% for prefecture in prefectures %}
+                        <option value="{{ prefecture.code }}">{{ prefecture.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <!-- LINEボット登録 -->
+        <tr>
+            <th width="150"><label for="birthday">連絡用LINEチャンネル</label></th>
+            <td>
+                <small>こちらのチャンネルを友達登録してください</small>
+                <br>
+                <a href="https://lin.ee/1cPblm7wU"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" width=100 border="0"></a>
+            </td>
+        </tr>
+
+    </table>
+
+<!--    
+    <div class="form-group" id="profile-image">
+        <label for="image"><span class="text-danger">*</span>プロフィール写真</label>
+        {% if form.image.errors %}
+            <p class="text-danger">{{ form.image.errors.0|escape }}</p>
+        {% endif %}
+        <div class="mb-4">
+            <img src="https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg" class="rounded-circle z-depth-1-half preview-image" alt="placeholder">
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="btn btn-mdb-color btn-rounded float-left">
+                <input name="image" type="file" class="image-upload" required>
+            </div>
+        </div>
+    </div> -->
+    <div class="c">
+        <input type="submit" value="登録" class="btn">
+    </div>
+</form>
+{% endblock %}

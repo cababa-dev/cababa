@@ -1,0 +1,14 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block title %}ゲスト登録{% endblock %}
+
+{% block content %}
+
+{% if error %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+{% endif %}
+<h2>CABABA予約システム</h2>
+<h3>LINEログインしてお嬢を予約しましょう</h3>
+
+<a href="{{ login_url }}"><img src="{% static 'images/btn_login_base.png' %}" width=200></a>
+{% endblock %}

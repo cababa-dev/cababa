@@ -1,0 +1,48 @@
+{% extends 'partials/base.html' %}
+{% block title %}予約時間{% endblock %}
+
+{% block content %}
+
+<article>
+    <h2>{{ hostess.display_name }}</h2>
+    <div class="staff">
+        <h3>プロフィール</h3>
+
+        <div class="left">
+            <figure><img src="{{ hostess.hostess_profile.image }}" alt="profile-image"></figure>
+        </div>
+        <!--/left-->
+
+        <div class="right">   
+            <table class="ta1">
+                <tr>
+                    <th>名前</th>
+                    <td>{{ hostess.display_name }}</td>
+                </tr>
+                <tr>
+                    <th>年齢</th>
+                    <td>20</td>
+                    </tr>
+                <tr>
+            </table>
+
+            <h3>出勤可能時間</h3>
+            <div id="sub">
+                <nav class="box1">
+                    <ul class="submenu">
+                        {% for available in available_times %}
+                            <li><a href="{% url 'reservations:create_reserve' available.available_id %}">{{ available.start_at|date:'Y年m月d日 H:i' }}-{{ available.end_at|date:'H:i' }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!--/right-->
+
+        <p class="c">&lt;&lt; <a href="javascript:history.back()">前のページに戻る</a></p>
+    </div>
+    <!--/staff-->
+    
+</article>
+
+{% endblock %}

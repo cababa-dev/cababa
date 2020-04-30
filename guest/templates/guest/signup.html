@@ -1,0 +1,62 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block title %}プロフィール設定{% endblock %}
+
+{% block script %}
+<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script>
+<script src="{% static 'cababa.js' %}"></script>
+<script>
+    // 画像選択時のプレビュー
+    var boxes = document.querySelectorAll('#profile-image');
+
+    for (let i = 0; i < boxes.length; i++) {
+        if (window.CP.shouldStopExecution(1)) {
+            break;
+        }
+        let box = boxes[i];
+        initDropEffect(box);
+        initImageUpload(box);
+    }
+    window.CP.exitedLoop(1);
+</script>
+{% endblock %}
+
+{% block content %}
+<h5>登録完了まであともう少しです</h5>
+<p class="text-danger">* 必須入力</p>
+<hr>
+
+{% if form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">{{ form.non_field_errors.0 }}</div>
+{% endif %}
+
+<form method="POST" id="signup-form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group" id="profile-name">
+        <label for="display_name"><span class="text-danger">*</span>おなまえ</label>
+        {% if form.display_name.errors %}
+            <p class="text-danger">{{ form.display_name.errors.0|escape }}</p>
+        {% endif %}
+        <input type="text" class="form-control" name="display_name" aria-describedby="nameHelp" placeholder="風俗太郎" value="{{ form.display_name.value }}" required>
+        <small id="nameHelp" class="form-text text-muted">この名前はお嬢のみに共有されます</small>
+    </div>
+    <div class="form-group" id="profile-prefecture-code">
+        <label for="prefecture_code">お住まいの都道府県</label>
+        <select name="prefecture_code" class="form-control">
+            {% for prefecture in prefectures %}
+                <option value="{{ prefecture.code }}">{{ prefecture.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label>連絡用LINEチャンネル</label>
+        <p>
+            <a href="https://lin.ee/2S0np0FlU"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="36" border="0"></a>
+        </p>
+        <small class="form-text text-muted">こちらのチャンネルを友達登録してください</small>
+    </div>
+    <div class="form-grou">
+        <button class="btn btn-primary" type="submit">登録</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,143 @@
+@charset "utf-8";
+
+
+
+/*全端末（PC・タブレット・スマホ）共通設定
+---------------------------------------------------------------------------*/
+body {
+	margin: 0px;
+	padding: 0px;
+	color: #fff;	/*全体の文字色*/
+	font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;	/*フォント種類*/
+	font-size: 15px;	/*文字サイズ*/
+	line-height: 2;		/*行間*/
+	background: #000;	/*背景色*/
+	-webkit-text-size-adjust: none;
+}
+h1,h2,h3,h4,h5,p,ul,ol,li,dl,dt,dd,form,figure,form,select,input,textarea {margin: 0px;padding: 0px;font-size: 100%;}
+ul {list-style-type: none;}
+img {border: none;max-width: 100%;height: auto;vertical-align: middle;}
+table {border-collapse:collapse;font-size: 100%;border-spacing: 0;}
+iframe {width: 100%;}
+video,audio {max-width: 100%;}
+
+/*リンク（全般）設定
+---------------------------------------------------------------------------*/
+a {
+	color: #fff;		/*リンクテキストの色*/
+	transition: 0.5s;	/*マウスオン時の移り変わるまでの時間設定。0.5秒。*/
+}
+a:hover {
+	color: #ffcf3e;			/*マウスオン時の文字色*/
+	text-decoration: none;	/*マウスオン時に下線を消す設定。残したいならこの１行削除。*/
+}
+
+/*コンテナー
+---------------------------------------------------------------------------*/
+#container {
+	margin: 3% auto;
+	max-width: 800px;	/*最大ブロック幅*/
+	text-align: center;
+}
+
+/*ロゴ
+---------------------------------------------------------------------------*/
+#logo img {
+	width: 50%;
+	padding-bottom: 3%;
+}
+
+/*h2タグとpタグ
+---------------------------------------------------------------------------*/
+h2 {
+	background: #d0c175;	/*背景色*/
+	letter-spacing: 0.2em;	/*文字間隔を少し広げる設定*/
+	color: #333;			/*文字色*/
+}
+p {
+	padding: 20px 0;
+}
+
+/*ENTERとLEAVEのボタン
+---------------------------------------------------------------------------*/
+/*２つのボタンを囲むボックス*/
+ul#menu {
+	width: 80%;	/*containerの80%の幅にする*/
+	margin: 0px auto;
+}
+/*各ボタンの設定*/
+ul#menu li a {
+	text-decoration: none;
+	display: block;
+	background: linear-gradient(#e7e7e7, #5d5d5d 49%, #000 50%);	/*グラデーション*/
+	border: solid 1px #5d5d5d;	/*枠線の線種、幅、色*/
+	border-radius: 10px;	/*角丸のサイズ*/
+	float: left;
+	width: 45%;	/*ボタン幅*/
+	font-size: 20px;	/*文字サイズ*/
+	font-weight: bold;
+	padding: 10px 0px;
+	margin-left: 2.5%;
+	letter-spacing: 0.2em;
+	color: #fff;	/*文字色*/
+}
+/*「OVER 18 YEARS」などの小さい文字装飾*/
+ul#menu li a span {
+	display: block;
+	font-size: 11px;	/*文字サイズ*/
+	font-weight: normal;
+	letter-spacing: normal;
+}
+/*マウスオン時*/
+ul#menu li a:hover {
+	background: #fff;	/*背景色*/
+	color: #000;	/*文字色*/
+}
+
+/*フッター
+---------------------------------------------------------------------------*/
+footer {
+	clear: both;
+	padding: 5%;
+	line-height: 2;
+}
+footer .pr {
+	display: block;
+	font-size: 80%;
+}
+footer a {
+	text-decoration: none;
+}
+
+
+
+/*画面幅480px以下の設定
+------------------------------------------------------------------------------------------------------------------------------------------------------*/
+@media screen and (max-width:480px){
+
+/*全体の設定
+---------------------------------------------------------------------------*/
+body {
+	font-size: 12px;	/*文字サイズ*/
+	line-height: 1.5;	/*行間*/
+}
+
+/*コンテナー
+---------------------------------------------------------------------------*/
+#container {
+	margin: 3%;
+}
+
+/*ロゴ
+---------------------------------------------------------------------------*/
+#logo img {
+	width: 80%;
+}
+
+/*ENTERとLEAVEのボタン
+---------------------------------------------------------------------------*/
+ul#menu {
+	width: auto;
+}
+
+}
