@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
+    'storages',
 
     'cababa',
     'guest',
@@ -174,6 +175,7 @@ if env('STAGE') == 'local':
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 else:
     STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     MEDIA_URL = '/media/'  # or any prefix you choose
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
