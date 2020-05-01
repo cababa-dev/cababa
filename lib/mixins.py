@@ -45,3 +45,13 @@ class GuestPageMixin(LoginRequiredMixin, UserPassesTestMixin):
         if not redirect_to:
             redirect_to = urllib.parse.quote(self.request.path, safe='')
         return redirect(reverse('guest:signup') + '?redirect_to=' + redirect_to)
+
+
+class StaffPageMixin(LoginRequiredMixin, UserPassesTestMixin):
+    redirect_field_name = 'redirect_to'
+
+    def test_func(self):
+        return self.request.user.user_type == User.UserTypes.STAFF
+    
+    def handle_no_permission(self):
+        return redirect('staff:login')
