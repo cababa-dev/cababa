@@ -19,7 +19,10 @@ class Command(BaseCommand):
             user = models.User.objects.get(email=email)
         except models.User.DoesNotExist:
             user = models.User.objects.create_user(email, email, password)
+        group, created = models.Group.objects.get_or_create(title="CABABA公式", name="CABABA公式")
+        user.user_type = models.User.UserTypes.STAFF
         user.is_superuser = True
         user.is_staff = True
+        user.group = group
         user.save()
         self.stdout.write(self.style.SUCCESS('super user was created successfully'))

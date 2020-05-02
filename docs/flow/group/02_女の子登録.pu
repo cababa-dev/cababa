@@ -1,0 +1,39 @@
+@startuml
+title: 2. 女の子の登録
+
+participant お嬢 as hostess
+participant グループスタッフ as staff
+participant CABABA as app
+participant データベース as db
+participant CABABA管理者 as admin
+
+group 女の子登録
+staff -> app : 女の子一覧画面で、女の子の情報入力
+activate staff
+activate app
+app -> db : INSERT Hostess(username=otp_token), HostessProfile
+db -> app
+app -> staff : 女の子詳細画面へ
+deactivate app
+staff -> app : 女の子詳細画面
+activate app
+app -> db : SELECT hostess.username(otp_token)
+db -> app
+app -> staff : 招待コードつきのURLを作成
+deactivate app
+staff -> hostess : URLを共有
+deactivate staff
+activate hostess
+hostess -> app : URLをクリック, LINEログイン画面へ
+activate app
+app -> db : UPDATE hostess.username = line_user_id
+db -> app
+app -> hostess : LINE@への登録画面へ
+deactivate hostess
+deactivate app
+ref over hostess
+LINE@で操作
+end ref
+end
+
+@enduml

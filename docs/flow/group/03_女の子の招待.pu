@@ -1,0 +1,30 @@
+@startuml
+title: 3. 女の子の招待
+
+participant お嬢 as hostess
+participant グループスタッフ as staff
+participant CABABA as app
+participant データベース as db
+participant CABABA管理者 as admin
+
+group 女の子登録
+staff -> app : 設定画面から女の子の参加招待URLを作成
+activate staff
+activate app
+app -> db : SELECT Group.group_id
+db -> app
+app -> staff : 参加招待URLを表示
+deactivate app
+staff -> hostess : URLを共有
+deactivate staff
+activate hostess
+hostess -> app : URLをクリック, LINEログイン画面へ
+deactivate hostess
+activate app
+app -> db : UPDATE hostess.groups.add
+db -> app
+app -> staff : お嬢のグループ登録完了
+deactivate app
+end
+
+@enduml

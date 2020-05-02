@@ -1,0 +1,33 @@
+@startuml
+title: 2. プロフィール編集
+
+participant お嬢 as hostess
+participant CABABA as app
+participant データベース as db
+participant LINE as line
+
+group 登録
+hostess -> app : ログイン画面
+activate hostess
+activate app
+app -> hostess : LINEへリダイレクト
+deactivate app
+hostess -> line : LINEログイン画面
+activate line
+line -> app : リダイレクト (line_user_id)
+deactivate line
+activate app
+app -> db : INSERT User
+db -> app
+app -> hostess : プロフィール登録ページ
+deactivate app
+hostess -> app : プロフィール送信
+activate app
+app -> db : INSERT HostessProfile
+db -> app
+app -> hostess : 登録完了画面
+deactivate app
+deactivate hostess
+end
+
+@enduml

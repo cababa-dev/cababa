@@ -1,0 +1,42 @@
+@startuml
+title: 1. グループ登録申請
+
+participant グループスタッフ as staff
+participant CABABA as app
+participant データベース as db
+participant CABABA管理者 as admin
+
+group グループ登録
+staff -> app : アカウント作成
+activate app
+app -> db : INSERT 申請情報
+db -> app
+app -> staff : 作成完了通知メール
+deactivate app
+end
+
+group ログイン
+staff -> app : email, password
+activate app
+app -> db : select account
+db -> app
+ref over app
+2.お嬢登録画面へ
+end ref
+deactivate app
+end
+
+group パスワードリセット
+staff -> app : 登録メールアドレスを送信
+activate app
+app -> db : INSERT reset_token
+db -> app
+app -> staff : 確認メール送信
+staff -> app : 新しいパスワードを入力
+app -> db : UPDATE password
+db -> app
+app -> staff : パスワード更新通知メール
+deactivate app
+
+end
+@enduml

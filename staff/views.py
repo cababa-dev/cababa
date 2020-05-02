@@ -13,7 +13,6 @@ class StaffLoginView(View):
         return render(request, self.template)
 
     def post(self, request):
-        print(request.POST)
         form = forms.LoginForm(request.POST, context={'request': request})
         if not form.is_valid():
             context = dict(form=form)
@@ -30,6 +29,14 @@ class StaffSignupView(View):
 
     def get(self, request):
         return render(request, self.template)
+
+    def post(self, request):
+        form = forms.SignupForm(request.POST, context={'request': request})
+        if not form.is_valid():
+            context = dict(form=form)
+            return render(request, self.template, context)
+        user = form.save()
+        return render(request, 'staff/signup_done.html')
 
 
 class StaffTopView(mixins.StaffPageMixin, View):
