@@ -1,5 +1,6 @@
 from linebot.models import TextSendMessage, PostbackAction, TemplateSendMessage, ButtonsTemplate
 
+from django.utils.timezone import localtime
 from django.conf import settings
 
 from lib import line, zoom
@@ -11,7 +12,7 @@ class ReservationService:
         # ゲストに通知
         line_bot_api = line.get_line_bot_api(is_guest=True)
         hostess_name = reservation.time.hostess.display_name
-        date = "開始{}\n終了{}\n".format(reservation.time.start_at.strftime('%m-%d %H:00'), reservation.time.end_at.strftime('%m-%d %H:00'))
+        date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:00'), localtime(reservation.time.end_at).strftime('%m-%d %H:00'))
         text = "予約が完了しました！\n\n【予約情報】\nお嬢おなまえ: {}\n{}".format(hostess_name, date)
         line_bot_api.push_message(reservation.guest.line_user_id, TextSendMessage(text=text))
 
@@ -36,7 +37,6 @@ class ReservationService:
 
     def create_transaction(self, reservation):
         resp = line.pay_request(reservation)
-        print(resp)
         transaction = models.LinePayTransaction.objects.create(
             return_code=resp['return_code'],
             return_message=resp['return_message'],

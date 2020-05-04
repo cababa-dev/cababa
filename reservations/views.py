@@ -76,25 +76,24 @@ class DoneReserveView(mixins.GuestPageMixin, View):
 class ReserveAuthorizeView(View):
     template = 'reservation/authorize.html'
 
-    def get_queryset(self, reservation_id, transaction_id):
-        return models.LinePayTransaction.objects.get(reservation_id=reservation_id, transaction_id=transaction_id)
+    def get_queryset(self, reservation_id=None, transaction_id=None):
+        return models.LinePayTransaction.objects.get(reservation__reservation_id=reservation_id, transaction_id=int(transaction_id))
 
     def get(self, request, reservation_id):
         transaction_id = request.GET.get('transactionId')
         transaction = self.get_queryset(reservation_id=reservation_id, transaction_id=transaction_id)
         resp = line.pay_confirm(transaction)
-        print(resp)
         transaction.confirmed = True
         transaction.canceled = False
         transaction.save()
+
+        # ミーティングを作成
+        reservation = transaction.reservation
+        service = services.ReservationService()
+        meeting = service.create_meeting(reservation)
+        service.send_meeting(meeting)
         context = dict(transaction=transaction)
         return render(request, self.template, context=context)
-        # reservation = models.Reservation.objects.get(reservation_id=reservation_id)
-        # service = services.ReservationService()
-        # meeting = service.create_meeting(reservation)
-        # service.send_meeting(meeting)
-        # context = dict(meeting=meeting)
-        # return render(request, self.template, context=context)
 
 
 class ReserveCancelView(View):

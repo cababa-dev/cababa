@@ -57,7 +57,7 @@ class AvailableTimeMemu(Menu):
         # カルーセルで表示
         columns = [
             CarouselColumn(
-                title=available.start_at.strftime('%Y-%m-%d'), text='{}-{}'.format(available.start_at.strftime('%H:00'), available.end_at.strftime('%H:00')), actions=[
+                title=localtime(available.start_at).strftime('%Y-%m-%d'), text='{}-{}'.format(localtime(available.start_at).strftime('%H:00'), localtime(available.end_at).strftime('%H:00')), actions=[
                 PostbackAction(label='キャンセルする', display_text='キャンセルする', data='menu={}&action=cancel&id={}'.format(self.name, available.available_id))
             ])
             for available in availables
@@ -143,7 +143,7 @@ class UnconfirmReservationMenu(Menu):
         # カルーセルで表示
         columns = []
         for reservation in reservations:
-            date = "開始{}\n終了{}\n".format(reservation.time.start_at.strftime('%m-%d %H:00'), reservation.time.end_at.strftime('%m-%d %H:00'))
+            date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:00'), localtime(reservation.time.end_at).strftime('%m-%d %H:00'))
             column = CarouselColumn(
                 title=reservation.guest.display_name,
                 text=date,
@@ -179,7 +179,7 @@ class UnconfirmReservationMenu(Menu):
         service = ReservationService()
         transaction = service.create_transaction(reservation)
         # ゲストに通知
-        date = "開始{}\n終了{}\n".format(reservation.time.start_at.strftime('%m-%d %H:00'), reservation.time.end_at.strftime('%m-%d %H:00'))
+        date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:00'), localtime(reservation.time.end_at).strftime('%m-%d %H:00'))
         text = "お嬢が予約を承認しました！\n\n【予約情報】\nお嬢おなまえ: {}\n{}\n\n".format(hostess.display_name, date)
         text += "こちらから支払いお願いします\n{}".format(transaction.url)
         line_bot_api_guest.push_message(reservation.guest.line_user_id, TextSendMessage(text=text))
@@ -196,7 +196,7 @@ class UnconfirmReservationMenu(Menu):
         reservation.is_approval = False
         reservation.save()
         # ゲストに通知
-        date = "開始{}\n終了{}\n".format(reservation.time.start_at.strftime('%m-%d %H:00'), reservation.time.end_at.strftime('%m-%d %H:00'))
+        date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:00'), localtime(reservation.time.end_at).strftime('%m-%d %H:00'))
         text = "お嬢が予約を拒否しました。残念\n\n【予約情報】\nお嬢おなまえ: {}\n{}".format(hostess.display_name, date)
         line_bot_api_guest.push_message(reservation.guest.line_user_id, TextSendMessage(text=text))
         return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='ゲストに承認通知を送信しました'))

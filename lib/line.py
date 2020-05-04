@@ -170,8 +170,8 @@ def pay_request(reservation):
 def pay_confirm(transaction):
     api = get_line_pay_api()
     response = api.confirm(
-		transaction.transaction_id,
-        transaction.amount, 
+		int(transaction.transaction_id),
+        float(transaction.amount), 
 		transaction.currency,
 	)
     return response
