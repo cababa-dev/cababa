@@ -37,6 +37,23 @@ class HostessProfileAdmin(admin.ModelAdmin):
     image_tag.short_description = "image"
     image_tag.allow_tags = True
 
+
+@admin.register(models.GuestProfile)
+class GuestProfileAdmin(admin.ModelAdmin):
+    date_heirarchy = (
+        'updated_at',
+    )
+    list_display = (
+        'guest',
+        'prefecture_code',
+        'created_at',
+        'updated_at',
+    )
+    search_fields = (
+        'guest__display_name',
+    )
+
+
 @admin.register(models.TagGroup)
 class TagGroupAdmin(admin.ModelAdmin):
     date_heirarchy = (

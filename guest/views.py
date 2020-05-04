@@ -73,6 +73,10 @@ class SignUpView(mixins.GuestSignupMixin, View):
         profile = form.save()
         service = services.LineLoginService(request)
         service.send_welcome()
+        # ログイン完了時には元のページに移動
+        redirect_to = request.GET.get('redirect_to')
+        if redirect_to:
+            return redirect(redirect_to)
         return redirect(reverse('guest:signup_done'))
 
 

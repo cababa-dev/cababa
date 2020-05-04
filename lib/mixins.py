@@ -22,11 +22,16 @@ class GuestSignupMixin(LoginRequiredMixin, UserPassesTestMixin):
     
     def test_func(self):
         is_guest = self.request.user.user_type == User.UserTypes.GUEST
+        print('is_guest', is_guest)
         if not is_guest:
             return False
+        return True
     
     def handle_no_permission(self):
-        return redirect(reverse('guest:login') + '?redirect_to=' + urllib.parse.quote(self.request.path, safe=''))
+        redirect_to = self.request.GET.get('redirect_to')
+        if not redirect_to:
+            redirect_to = urllib.parse.quote(self.request.path, safe='')
+        return redirect(reverse('guest:login') + '?redirect_to=' + redirect_to)
 
 
 class GuestPageMixin(LoginRequiredMixin, UserPassesTestMixin):
