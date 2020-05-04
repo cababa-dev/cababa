@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate, login
 
 from users.models import User, Group
+from . import models
 
 
 
@@ -77,5 +78,83 @@ class SignupForm(forms.Form):
             user_type=User.UserTypes.STAFF
         )
         user.set_password(password)
+        user.save()
+        return user
+
+
+class SignupConfirmForm(forms.Form):
+    otp_id = forms.UUIDField(required=True)
+    password1 = forms.CharField(min_length=8, required=True)
+    password2 = forms.CharField(min_length=8, required=True)
+
+    def __init__(self, *args, **kwargs):
+        self.context = kwargs.pop('context', {})
+        super(SignupConfirmForm, self).__init__(*args, **kwargs)
+
+    def clean_otp_id(self):
+        otp_id = self.cleaned_data.get('otp_id')
+        try:
+            otp = models.OTP.objects.get(otp_id=otp_id)
+        except models.OTP.DoesNotError:
+            raise forms.ValidationError('このOTPは存在しません')
+        return otp
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 != password2:
+            raise forms.ValidationError('同じパスワードを入力してください')
+
+    def save(self):
+        otp = self.cleaned_data['otp_id']
+        password = self.cleaned_data['password1']
+        user = otp.user
+        user.set_password(password)
+        user.save()
+        return user
+
+
+class StaffForm(forms.Form):
+    email = forms.EmailField(required=False)
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        self.context = kwargs.pop('context', {})
+        super(StaffForm, self).__init__(*args, **kwargs)
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(username=email).exists():
+            raise forms.ValidationError('このメールアドレスはすでに登録されています')
+        return email
+    
+    def create(self):
+        data = self.cleaned_data
+        email = data.get('email')
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+
+        group = self.context['request'].user.group
+        user = User.objects.create(
+            username=email,
+            email=email,
+            group=group,
+            first_name=first_name,
+            last_name=last_name,
+            user_type=User.UserTypes.STAFF
+        )
+        user.save()
+        otp = models.OTP.objects.create(user=user)
+        return otp
+    
+    def update(self):
+        data = self.cleaned_data
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+
+        user = self.context['staff']
+        user.first_name = first_name
+        user.last_name = last_name
         user.save()
         return user

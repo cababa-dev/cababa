@@ -1,0 +1,4 @@
+<p>CABABAに登録されました。</p>
+
+<p>下記のURLから本登録を完了してください</p>
+<a href="https://{{ host_name }}{% url 'staff:signup_confirm' %}?token={{ otp.otp_id }}">https://{{ host_name }}{% url 'staff:signup_confirm' %}?token={{ otp.otp_id }}</a>

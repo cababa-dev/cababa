@@ -1,0 +1,35 @@
+{% extends 'staff-partials/base.html' %}
+
+{% block title %}スタッフ一覧{% endblock %}
+
+{% block content %}
+
+{% if page_obj %}
+<!-- スタッフを一覧表示 -->
+    <table class="table">
+        <thead class="thead-dark">
+            <th scope="col">ID</th>
+            <th scope="col">名前</th>
+            <th scope="col">メールアドレス</th>
+            <th scope="col">登録日</th>
+            <th scope="col">最終ログイン日時</th>
+        </thead>
+        <tbody>
+            {% for staff in page_obj %}
+                <tr>
+                    <td scope="row"><a href="{% url 'staff:staff_detail' staff.user_id %}">{{ staff.user_id }}</a></td>
+                    <td>{{ staff.last_name }} {{ staff.first_name }}</td>
+                    <td>{{ staff.email }}</td>
+                    <td>{{ staff.last_login }}</td>
+                    <td>{{ staff.date_joined }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+<!-- まだスタッフがいない場合 -->
+<h3>まだスタッフが作成されていません</h3>
+<p><a href="{% url 'staff:staff_create' %}">追加する場合はこちらから</a></p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'staff-partials/base.html' %}
+
+{% block title %}スタッフ追加{% endblock %}
+
+{% block content %}
+
+<h4>スタッフの編集</h4>
+
+<form method="POST" style="margin-top: 50px;">
+    {% if form.non_field_errors  %}
+        <div class="alert alert-danger" role="alert">{{ form.non_field_errors.0 }}</div>
+    {% endif %}
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="last_name">姓</label>
+        <input type="text" name="last_name" class="form-control" id="last_name" placeholder="" value="{{ staff.last_name }}" required>
+        {% if form.last_name.errors  %}
+            <p class="text-danger">{{ form.last_name.errors.0 }}</p>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="first_name">名</label>
+        <input type="text" name="first_name" class="form-control" id="first_name" placeholder="" value="{{ staff.first_name }}" required>
+        {% if form.first_name.errors  %}
+            <p class="text-danger">{{ form.first_name.errors.0 }}</p>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">変更</button>
+</form>
+
+{% endblock %}

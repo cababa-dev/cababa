@@ -56,6 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     user_type = models.CharField(_('user type'), max_length=2, choices=UserTypes.choices, default=UserTypes.GUEST, db_index=True)
     id_token = models.CharField(_('id_token'), max_length=1024, default=None, null=True)
+    group = models.ForeignKey('users.Group', db_index=True, null=True, default=None, on_delete=models.CASCADE, related_name='group_staff')
 
     objects = managers.UserManager()
 
@@ -132,17 +133,17 @@ class Tag(BaseModel, models.Model):
     value = models.CharField(_('value'), max_length=100)
     group = models.ForeignKey('users.TagGroup', on_delete=models.CASCADE, db_index=True)
 
-    hostes = models.ManyToManyField(User, through='HostesTagRelationship')
+    hostes = models.ManyToManyField(User, through='HostessTagRelationship')
 
 
-class HostesTagRelationship(BaseModel, models.Model):
-    hostes_tag_id = models.UUIDField(_('hostes_tag_id'), default=uuid.uuid4, unique=True, db_index=True)
-    hostes = models.ForeignKey('users.User', on_delete=models.CASCADE, db_index=True)
+class HostessTagRelationship(BaseModel, models.Model):
+    hostess_tag_id = models.UUIDField(_('hostess_tag_id'), default=uuid.uuid4, unique=True, db_index=True)
+    hostess = models.ForeignKey('users.User', on_delete=models.CASCADE, db_index=True)
     tag = models.ForeignKey('users.Tag', on_delete=models.CASCADE, db_index=True)
 
     class Meta:
         unique_together = (
-            ('hostes', 'tag'),
+            ('hostess', 'tag'),
         )
 
 
@@ -157,7 +158,7 @@ class Group(BaseModel, models.Model):
         blank=True,
     )
 
-    hostes = models.ManyToManyField(User, through='HostesGroupRelationship')
+    hostess = models.ManyToManyField(User, through='HostessGroupRelationship', related_name='group_hostess')
 
     objects = managers.GroupManager()
 
@@ -172,12 +173,12 @@ class Group(BaseModel, models.Model):
         return (self.name,)
 
 
-class HostesGroupRelationship(BaseModel, models.Model):
-    hostes_group_id = models.UUIDField(_('hostes_group_id'), default=uuid.uuid4, unique=True, db_index=True)
-    hostes = models.ForeignKey('users.User', on_delete=models.CASCADE, db_index=True)
+class HostessGroupRelationship(BaseModel, models.Model):
+    hostess_group_id = models.UUIDField(_('hostes_group_id'), default=uuid.uuid4, unique=True, db_index=True)
+    hostess = models.ForeignKey('users.User', on_delete=models.CASCADE, db_index=True)
     group = models.ForeignKey('users.Group', on_delete=models.CASCADE, db_index=True)
 
     class Meta:
         unique_together = (
-            ('hostes', 'group'),
+            ('hostess', 'group'),
         )

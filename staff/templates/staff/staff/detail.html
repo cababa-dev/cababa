@@ -1,0 +1,19 @@
+{% extends 'staff-partials/base.html' %}
+
+{% block title %}{{ staff.last_name }}{{ staff.first_name }}{% endblock %}
+
+{% block content %}
+
+<p>名前 - {{ staff.last_name }} {{ staff.first_name }}</p>
+<p>メールアドレス - {{ staff.email }}</p>
+<p>登録日 - {{ staff.date_joined }}</p>
+<p>最終ログイン日時 - {{ staff.last_login }}</p>
+
+
+<a class="btn btn-success" href="{% url 'staff:staff_edit' staff.user_id %}">編集</a>
+<form method="POST" action="{% url 'staff:staff_delete' staff.user_id %}">
+    {% csrf_token %}
+    <button class="btn btn-danger" type="submit">削除</button>
+</form>
+
+{% endblock %}

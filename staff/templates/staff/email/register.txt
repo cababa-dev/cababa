@@ -1,0 +1,4 @@
+CABABAに登録されました。
+
+下記のURLから本登録を完了してください
+https://{{ host_name }}{% url 'staff:signup_confirm' %}?token={{ otp.otp_id }}
