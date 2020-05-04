@@ -1,0 +1,21 @@
+{% extends 'staff-partials/base.html' %}
+
+{% block title %}お嬢追加{% endblock %}
+
+{% block content %}
+
+<h4>お嬢の新規追加</h4>
+
+<form method="POST" style="margin-top: 50px;">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="display_name">表示名</label>
+        <input type="text" name="display_name" class="form-control" id="display_name" placeholder="" value="{{ form.display_name.value }}" required>
+        {% if form.last_name.errors  %}
+            <p class="text-danger">{{ form.last_name.errors.0 }}</p>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">登録</button>
+</form>
+
+{% endblock %}

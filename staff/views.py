@@ -171,3 +171,66 @@ class StaffEditMeView(mixins.StaffPageMixin, View):
             return render(request, self.template, context)
         user = form.update()
         return redirect('staff:edit_me')
+
+
+class HostessListView(mixins.StaffPageMixin, View):
+    template = 'staff/hostess/list.html'
+
+    def get_queryset(self):
+        querysets = user_models.User.objects.filter(user_type=user_models.User.UserTypes.HOSTESS, group=self.request.user.group)
+        return querysets
+
+    def get(self, request):
+        page_obj = self.get_queryset()
+        context = {'page_obj': page_obj}
+        return render(request, self.template, context)
+
+
+class HostessCreateView(mixins.StaffPageMixin, View):
+    template = 'staff/hostess/new.html'
+
+    def get(self, request):
+        context = {}
+        return render(request, self.template, context)
+    
+    def post(self, request):
+        form = forms.HostessForm(request.POST, context={'request': request})
+        if not form.is_valid():
+            context = dict(form=form)
+            return render(request, self.template, context)
+        hostess = form.create()
+        return redirect(reverse('staff:hostess_list'))
+
+
+class HostessDetailView(mixins.StaffPageMixin, View):
+    template = 'staff/hostess/detail.html'
+
+    def get_queryset(self, hostess_id):
+        querysets = user_models.User.objects.get(user_id=hostess_id, user_type=user_models.User.UserTypes.HOSTESS, group=self.request.user.group)
+        return querysets
+
+    def get(self, request, hostess_id):
+        querysets = self.get_queryset(hostess_id)
+        context = {'hostess': querysets}
+        return render(request, self.template, context)
+
+class HostessEditView(mixins.StaffPageMixin, View):
+    template = 'staff/hostess/edit.html'
+
+    def get_queryset(self, hostess_id):
+        querysets = user_models.User.objects.get(user_id=hostess_id, user_type=user_models.User.UserTypes.HOSTESS, group=self.request.user.group)
+        return querysets
+
+    def get(self, request, hostess_id):
+        querysets = self.get_queryset(hostess_id)
+        context = {'hostess': querysets}
+        return render(request, self.template, context)
+
+    def post(self, request, hostess_id):
+        querysets = self.get_queryset(hostess_id)
+        form = forms.HostessForm(request.POST, context={'request': request, 'hostess': querysets})
+        if not form.is_valid():
+            context = dict(form=form)
+            return render(request, self.template, context)
+        hostess = form.update()
+        return redirect(reverse('staff:hostess_detail', kwargs=dict(hostess_id=querysets.user_id)))

@@ -178,3 +178,7 @@ class StaffEditMeForm(forms.Form):
         user.last_name = last_name
         user.save()
         return user
+
+
+class HostessForm(forms.Form):
+    pass
