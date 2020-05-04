@@ -155,3 +155,19 @@ class StaffDeleteView(mixins.StaffPageMixin, View):
         staff = self.get_queryset(staff_id)
         staff.delete()
         return redirect('staff:staff_list')
+
+
+class StaffEditMeView(mixins.StaffPageMixin, View):
+    template = 'staff/staff/edit_me.html'
+
+    def get(self, request):
+        context = {}
+        return render(request, self.template, context)
+
+    def post(self, request):
+        form = forms.StaffEditMeForm(request.POST, context={'request': request})
+        if not form.is_valid():
+            context = dict(form=form)
+            return render(request, self.template, context)
+        user = form.update()
+        return redirect('staff:edit_me')

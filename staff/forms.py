@@ -158,3 +158,23 @@ class StaffForm(forms.Form):
         user.last_name = last_name
         user.save()
         return user
+
+
+class StaffEditMeForm(forms.Form):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        self.context = kwargs.pop('context', {})
+        super(StaffEditMeForm, self).__init__(*args, **kwargs)
+    
+    def update(self):
+        data = self.cleaned_data
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+
+        user = self.context['request'].user
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+        return user
