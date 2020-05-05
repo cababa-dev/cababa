@@ -18,8 +18,8 @@
                 <tr>
                     <td scope="row"><a href="{% url 'staff:hostess_detail' hostess.user_id %}">{{ hostess.user_id }}</a></td>
                     <td>{{ hostess.display_name }}</td>
-                    <td>{{ hostess.hostess_profile }}</td>
-                    <td>{{ hostess.did_signup }}</td>
+                    <td>{% if hostess.hostess_profile.image %}<img src="{{ hostess.hostess_profile.image }}" height=50>{% else %}未登録{% endif %}</td>
+                    <td>{{ hostess.hostess_profile|yesno:"はい,いいえ,いいえ" }}</td>
                 </tr>
             {% endfor %}
         </tbody>

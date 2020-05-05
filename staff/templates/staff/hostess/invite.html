@@ -1,0 +1,17 @@
+{% extends 'staff-partials/base.html' %}
+{% load static %}
+
+{% block title %}お嬢一覧{% endblock %}
+
+{% block content %}
+
+<h3>お嬢の招待URL</h3>
+
+<p>{{ invitation_url }}</p>
+
+<!-- <a href="http://line.me/R/msg/text/?CABABA(キャババ) こちらからログインして、CABABAでお嬢デビューしよう！ {{ invitation_url }}"> -->
+<a href="https://social-plugins.line.me/lineit/share?url={{ invitation_url }}">
+    <img src="{% static 'images/wide-default.png' %}" alt="LINEで送る" />
+</a>
+
+{% endblock %}

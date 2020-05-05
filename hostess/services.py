@@ -4,7 +4,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import authenticate, login
 
 from lib import line
-from users.models import User, HostessProfile
+from users.models import User, HostessProfile, Group
 from . import bot
 
 
@@ -13,8 +13,8 @@ class LineLoginService:
         self.request = request
 
     # LINEログインページへのURLを作成
-    def login_url(self):
-        url = line.login_url(self.request, is_guest=False)
+    def login_url(self, context={}):
+        url = line.login_url(self.request, is_guest=False, context=context)
         return url
     
     # LINEログイン時に取得されるコードからユーザー情報を取得
@@ -48,6 +48,15 @@ class LineLoginService:
 
     def send_welcome(self):
         line.send_welcome(self.request.user.line_user_id, is_guest=False)
+
+    def get_invitation_group(self):
+        state = self.request.GET.get("state")
+        state = json.loads(state)
+        group_id = state.get('invitation')
+        if not group_id:
+            return None
+        group = Group.objects.get(group_id=group_id)
+        return group
 
 
 class HostessService:

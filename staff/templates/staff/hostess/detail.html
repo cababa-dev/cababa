@@ -1,0 +1,19 @@
+{% extends 'staff-partials/base.html' %}
+
+{% block title %}{{ staff.last_name }}{{ staff.first_name }}{% endblock %}
+
+{% block content %}
+
+<p>名前 - {{ hostess.user_id }}</p>
+<p>名前 - {{ hostess.display_name }}</p>
+<p>写真</p>
+{% if hostess.hostess_profile.image %}<img src="{{ hostess.hostess_profile.image }}" height=200>{% else %}未登録{% endif %}
+<p>LINE登録済み - {{ hostess.hostess_profile|yesno:"はい,いいえ,いいえ" }}</p>
+
+<a class="btn btn-success" href="{% url 'staff:hostess_edit' hostess.user_id %}">編集</a>
+<!-- <form method="POST" action="{% url 'staff:hostess_edit' hostess.user_id %}">
+    {% csrf_token %}
+    <button class="btn btn-danger" type="submit">削除</button>
+</form> -->
+
+{% endblock %}

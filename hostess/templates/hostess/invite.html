@@ -1,0 +1,15 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block title %}ホステス登録{% endblock %}
+
+{% block content %}
+
+{% if error %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+{% endif %}
+
+<h2>{{ group.name }}からの招待を受け取りました</h2>
+<p>LINEログインして登録を完了させましょう</p>
+
+<a href="{{ login_url }}"><img src="{% static 'images/btn_login_base.png' %}" width=200></a>
+{% endblock %}

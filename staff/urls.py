@@ -20,6 +20,7 @@ urlpatterns = [
 
     path('hostess/', views.HostessListView.as_view(), name='hostess_list'),
     path('hostess/new', views.HostessCreateView.as_view(), name='hostess_create'),
+    path('hostess/invite', views.HostessInviteView.as_view(), name='hostess_invite'),
     path('hostess/<str:hostess_id>/', views.HostessDetailView.as_view(), name='hostess_detail'),
     path('hostess/<str:hostess_id>/edit', views.HostessEditView.as_view(), name='hostess_edit'),
 ]

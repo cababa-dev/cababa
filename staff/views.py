@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic.base import View
 from django.contrib.auth import logout
+from django.conf import settings
 
 from lib import mixins
 from users import models as user_models
@@ -234,3 +235,12 @@ class HostessEditView(mixins.StaffPageMixin, View):
             return render(request, self.template, context)
         hostess = form.update()
         return redirect(reverse('staff:hostess_detail', kwargs=dict(hostess_id=querysets.user_id)))
+
+
+class HostessInviteView(mixins.StaffPageMixin, View):
+    template = 'staff/hostess/invite.html'
+
+    def get(self, request):
+        invitation_url = 'https://' + settings.HOST_NAME + reverse('hostess:invite', kwargs=dict(group_id=request.user.group.group_id))
+        context = dict(invitation_url=invitation_url)
+        return render(request, self.template, context)

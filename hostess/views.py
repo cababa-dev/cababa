@@ -52,6 +52,12 @@ class HostessLoginCallbackView(View):
             return redirect(url)
         # ユーザー作成処理
         user, signup_done = service.do_login(id_token, profile)
+        # 招待の場合
+        group = service.get_invitation_group()
+        if group:
+            user.group = group
+            user.save()
+        # 初回登録が完了していない場合
         if not signup_done:
             # 初回登録時のプロフィール設定ページへ移動
             return redirect(reverse('hostess:signup'))
@@ -105,3 +111,18 @@ class LineBotWebhookView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
+
+
+class HostessInviteView(View):
+    template = 'hostess/invite.html'
+
+    def get_queryset(self, group_id):
+        querysets = user_models.Group.objects.get(group_id=group_id)
+        return querysets
+
+    def get(self, request, group_id):
+        group = self.get_queryset(group_id)
+        service = services.LineLoginService(request)
+        login_url = service.login_url(context=dict(invitation=str(group.group_id)))
+        context = dict(group=group, login_url=login_url)
+        return render(request, self.template, context)
