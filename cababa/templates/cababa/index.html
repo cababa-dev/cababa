@@ -1,13 +1,47 @@
-{% extends 'partials/base.html' %}
-{% block title %}TOP{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>CABABA</title>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+<body>
+    <header>
+        <a href="{% url 'reservations:hostess_search' %}">
+            <button>今すぐお話する</button>
+        </a>
+    </header>
 
-{% block content %}
-<h2>トップページ</h2>
+    <img class="flyer" src="{% static 'images/about.png' %}" alt="about">
+    <img class="flyer" src="{% static 'images/flows.png' %}" alt="flows">
+    <img class="flyer" src="{% static 'images/plans.png' %}" alt="plans">
 
-<div class="top-button">
-    <a class="btn btn-outline-info" href="{% url 'reservations:hostess_search' %}" role="button">嬢とおしゃべりしたい方はこちら</a>
-</div>
-<div class="top-button">
-    <a class="btn btn-outline-info" href="{% url 'hostess:login' %}" role="button">嬢になりたい方はこちら</a>
-</div>
-{% endblock %}
+    <div class="faq">
+        <h3 class="faq-title">FAQ</h3>
+
+        {% for faq in faqs %}
+            <div class="faq-content">
+                <div class="question" id="faq-{{ forloop.counter }}">
+                    <span>Q</span>
+                    <p>{{ faq.question }}</p>
+                </div>
+                <div class="answer" aria-labelledby="faq-{{ forloop.counter }}">
+                    <span>A</span>
+                    <p>{{ faq.answer }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <footer>
+        <p>©CABABA  All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'main.js' %}"></script>
+</body>
+</html>

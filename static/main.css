@@ -1,0 +1,127 @@
+body {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "YuMincho", "Yu Mincho" sans-serif;
+}
+
+header {
+    margin: 0;
+    margin-bottom: 100px;
+    padding: 0;
+    width: 100%;
+    height: 540px;
+    background-image: url('/static/images/header.png');
+    background-size: cover;
+}
+
+header a:hover {
+    text-decoration: inherit;
+}
+
+header button {
+    font-size: 15px;
+    font-family: YuGothic, "Yu Gothic", sans-serif;
+    font-weight: bold;
+    color: #A08A60;
+    background-color: #FFFFFF;
+    border: 2px solid #A08A60;
+    border-radius: 4px;
+    width: 300px;
+    height: 50px;
+    position: absolute;
+    top: 450px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+img.flyer {
+    width: 100%;
+}
+
+.faq {
+    margin-bottom: 30px;
+}
+
+.faq h3.faq-title {
+    margin: 60px 0;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-family: YuMincho, "Yu Mincho", sans-serif;
+}
+
+.faq-content {
+    position: relative;
+}
+
+.faq-content .question {
+    height: 64px;
+    width: 100%;
+    background: linear-gradient(#FFFFFF, #ECECEC);
+}
+
+.faq-content .question span {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: YuMincho, "Yu Mincho", sans-serif;
+    position: absolute;
+    top: 10px;
+    left: 24px;
+}
+
+.faq-content .question p {
+    font-size: 14px;
+    font-weight: 700;
+    font-family: YuGothic, "Yu Gothic", sans-serif;
+    position: absolute;
+    top: 5px;
+    left: 60px;
+}
+
+.faq-content .answer {
+    top: 84px;
+    width: 100%;
+    display: none;
+}
+
+.faq-content .answer p {
+    font-size: 12px;
+    font-weight: 500;
+    font-family: YuGothic, "Yu Gothic", sans-serif;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 60px;
+    margin-right: 20px;
+}
+
+.faq-content .answer span {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: YuMincho, "Yu Mincho", sans-serif;
+    color: #A08A60;
+    position: absolute;
+    top: 80px;
+    left: 24px;
+}
+
+footer {
+    font-family: YuGothic, "Yu Gothic", sans-serif;
+    font-weight: bold;
+    color: #000000;
+    background-color: #C4C4C4;
+    height: 40px;
+    position: relative;
+}
+
+footer p {
+    position: absolute;
+    font-size: 10px;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
