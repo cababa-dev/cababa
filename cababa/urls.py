@@ -22,6 +22,9 @@ from . import views
 
 urlpatterns = [
     path('', views.top_view, name='top_view'),
+    path('user_agreement', views.user_agreement_view, name='user_agreement_view'),
+    path('cast_agreement', views.cast_agreement_view, name='cast_agreement_view'),
+    path('privacy_policy', views.privacy_policy_view, name='privacy_policy_view'),
     path('system/', views.system_view, name='system_view'),
     path('admin/', admin.site.urls),
     path('guest/', include('guest.urls')),

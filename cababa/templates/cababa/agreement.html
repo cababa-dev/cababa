@@ -1,0 +1,39 @@
+{% load markdownify %}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>CABABA</title>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+<body>
+    <nav>
+        <a href="/">
+            <img src="{% static 'images/title.svg' %}" alt="">
+        </a>
+    </nav>
+    <div class="markdown">
+        {{ md_text|safe }}
+    </div>
+
+    <footer>
+        <p>&copy;CABABA  All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'main.js' %}"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168806928-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-168806928-1');
+    </script>
+</body>
+</html>

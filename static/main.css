@@ -125,3 +125,62 @@ footer p {
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
 }
+
+
+nav {
+    height: 45px;
+    width: 100%;
+    position: relative;
+}
+
+nav img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+.markdown {
+    font-family: YuGothic, "Yu Gothic", sans-serif;
+    font-weight: 400;
+    margin: 5px;
+}
+
+.markdown > h1 {
+    font-size: 20px;
+    text-align: center;
+}
+
+.markdown > h2 {
+    font-size: 17px;
+    font-weight: bold;
+    padding-left: 5px;
+}
+
+.markdown > p {
+    font-size: 12px;
+    padding-left: 5px;
+}
+
+.markdown > ul {
+    font-size: 12px;
+    list-style: none;
+    padding-left: 8px;
+}
+
+.markdown > ul li {
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.markdown > ul li ul{
+    font-size: 12px;
+    list-style: none;
+    padding-left: 7px;
+}
+
+.markdown > ul li ul li{
+    font-size: 12px;
+}
