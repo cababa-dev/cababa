@@ -112,18 +112,27 @@ footer {
     font-weight: bold;
     color: #000000;
     background-color: #C4C4C4;
-    height: 40px;
-    position: relative;
+    height: 100px;
+    padding-top: 2px;
 }
 
 footer p {
-    position: absolute;
     font-size: 10px;
-    top: 25%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 0;
+    margin: 3px;
+}
+
+footer p:last-child {
+    margin-top: 7px;
+}
+
+footer p a {
+    color: #000000;
+}
+
+footer p a:hover {
+    color: #000000;
 }
 
 
