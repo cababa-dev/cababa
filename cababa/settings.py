@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'reservations',
     'staff',
     'users',
+    'pre_register',
 ]
 
 MIDDLEWARE = [
@@ -172,6 +173,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+AWS_STORAGE_BUCKET_NAME = 'cababa-' + env('STAGE')
+
 if env('STAGE') == 'local':
     STATIC_URL = '/static/'
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -181,7 +184,6 @@ else:
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     MEDIA_URL = '/media/'  # or any prefix you choose
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    AWS_STORAGE_BUCKET_NAME = 'cababa-' + env('STAGE')
 
 # Media files
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -202,3 +204,6 @@ FROM_EMAIL = env('FROM_EMAIL')
 BUSINESS_START_HOUR = 18
 # 営業終了時間
 BUSINESS_END_HOUR = 1
+
+# スプレッドシート
+SPREADSHEET_KEY = '1w46J1C0v9lpZVHx_bIGPVrWjL8KlP9P39uOf1Msp_Vs'

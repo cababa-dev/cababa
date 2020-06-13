@@ -11,7 +11,7 @@
 <body>
     <header>
         <!-- <a href="{% url 'reservations:hostess_search' %}"> -->
-        <a href="https://forms.gle/4qHyEYCxU2atUKqd7">
+        <a href="{% url 'pre_register:form' %}">
             <!-- <button>今すぐお話する</button> -->
             <button>キャスト事前登録はコチラ</button>
         </a>
@@ -43,14 +43,6 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'main.js' %}"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168806928-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-168806928-1');
-    </script>
+    {% include 'cababa/partials/google_tag.html' %}
 </body>
 </html>

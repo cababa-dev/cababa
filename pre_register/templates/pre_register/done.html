@@ -1,5 +1,3 @@
-{% load markdownify %}
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
@@ -8,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>CABABA</title>
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
     <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link rel="stylesheet" href="{% static 'pre_registration.css' %}">
 </head>
 <body>
     <nav>
@@ -16,8 +16,11 @@
             <img src="{% static 'images/title.svg' %}" alt="">
         </a>
     </nav>
-    <div class="markdown">
-        {{ md_text|safe }}
+
+    <div class="container">
+        <h2>申込が完了しました</h2>
+        <p>サービス開始予定日は2020年7月6日を予定しております</p>
+        <p>サービス公開時に入力頂いたLINE IDにご連絡差し上げますので、今しばらくお待ちください</p>
     </div>
 
     {% include 'cababa/partials/footer.html' %}

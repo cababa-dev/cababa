@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>CABABA</title>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link rel="stylesheet" href="{% static 'pre_registration.css' %}">
+</head>
+<body>
+    <nav>
+        <a href="/">
+            <img src="{% static 'images/title.svg' %}" alt="">
+        </a>
+    </nav>
+
+    <div class="container">
+        <h2>CABABA事前登録フォーム</h2>
+        <form enctype="multipart/form-data" action="{% url 'pre_register:form' %}" method="POST">
+            <div class="form-field">
+                <label for="{{ form.real_name.id_for_label }}">名前（本名）<span>*</span></label><br/>
+                {{ form.real_name }}
+            </div>
+            <div class="form-field">
+                <label for="{{ form.display_name.id_for_label }}">名前（源氏名）<span>*</span></label><br/>
+                {{ form.display_name }}
+            </div>
+            <div class="form-field">
+                <label for="{{ form.age.id_for_label }}">年齢<span>*</span></label><br/>
+                {{ form.age }}
+            </div>
+            <div class="form-field">
+                <label for="{{ form.line_id.id_for_label }}">LINE ID<span>*</span></label><br/>
+                {{ form.line_id }}
+            </div>
+            <div class="form-field">
+                <label for="{{ form.line_qrcode.id_for_label }}">LINE QRコード</label><br/>
+                {{ form.line_qrcode }}
+            </div>
+            <div class="form-field">
+                <label for="{{ form.area.id_for_label }}">キャスト経験エリア（複数可）<span>*</span></label><br/>
+                {{ form.area }}
+            </div>
+            <div class="form-field">
+                <label for="{{ form.style.id_for_label }}">雰囲気/スタイル（任意）</label><br/>
+                <select name="{{ form.style.id_for_label }}">
+                    <option value="celeb">お姉さん・セレブ</option>
+                    <option value="sexy">セクシー・ナイスバディ</option>
+                    <option value="slim">モデル・スレンダー</option>
+                    <option value="business">ビジネスパーソン</option>
+                    <option value="young">ロリータ・妹</option>
+                    <option value="school">女子大生</option>
+                    <option value="girl">ギャル</option>
+                    <option value="fat">ぽっちゃり</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="{{ form.profile_image.id_for_label }}">プロフィール画像（任意）</label><br/>
+                {{ form.profile_image }}
+            </div>
+            {% csrf_token %}
+            <button type="submit">送信</button>
+        </form>
+    </div>
+
+    {% include 'cababa/partials/footer.html' %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'main.js' %}"></script>
+    {% include 'cababa/partials/google_tag.html' %}
+</body>
+</html>

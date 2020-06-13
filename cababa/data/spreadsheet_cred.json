@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "cababa",
+  "private_key_id": "0ce8ee63f486d086b8a01425d16c13ce0442afd6",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQC5uQU9S78OBRFK\nMuUg/1sbJ5QasOvyzsPvmO6kcYRG/+bODEdkDhJrIB/Gsum91bvouy9h633VhT0S\nVNDtQAcwcdNjMO1RVgKnIfbx09p9Gf6FBKZ+ouA1vz+YBGwigS9jfut9ug+Wl1pQ\njasv5PJPjIF4juxsLILMbEIgRunyTwDGXKPTeypSd4nDVvR10jUfPjmFAF3OenaA\n96PQYF0xc/5XfxY3UvpCv1SZI5RTK2sVIbYkjpzLZemcquhPDeSkBaGD+rl3Py/l\n+lWPmKI5F0Nh74nagG1+aTbM4oDRuZcyN9AIO1f0UdN/i843CuF4yeU604mkJ8Hn\ngI/nNk/FAgMBAAECgf8teKh9dOB/4IbkUX9si6sVBBKRLUAFYIgYc8/58xpCI1Mf\nMfS2bylKI3ftW/Lw7DXn8xEdqFzmvIrAe18ZktOdf66mWoIJXtfsAW392bMbtzhr\n/YnGHCz/1zfodyy5aoxLIj7hbhEsH/S81oUKGXrMfzWhjspmH3/CMb9IFYJox5X4\nCmYdtFy3/Tgfl8ydFjOjsA5Y4SfyW5VjLlRTXHspEOz8kpP97UiCW/p0NBs7YGku\nHUcmxZEeMtyYxaGqZRBQ1AYbFJiMSvtltlC+3m5mBOYQnZ0wqYLk5OLV4EAbFD1h\nmRtCfZx/UcSyJ3uqKeP0PpDrugzaIMl/TRwkGikCgYEA8ZMsE5RgUz8heSC75Q2V\nEa1HYTjTtm80MGY7fTTrzg+f4IDB7IqdN0zbYyEs8IzvPBZovLTduIGCISWipSPp\nNOUzbhEXJIR9lZj3yZUwWefEaZrz1/hpIBYOxx0dgWUgfT4LgD//tNq+ltDxPqsw\nJxv+s0NtiLOecrO5ZR1nJ5kCgYEAxNAQ3crcyfgVHXMXEqXS0ys7VZovjti6Hbfs\nIZ7oJbnsRUzA+5vE1EnEMdSTo+Rahkjd55NfMEyZCQuQcmSneC9KLUzUK9XkDQ1Y\n6FcCw8wzu9KYEJ23qj4ABSPU+/90iR9Ig7V06CUXCdto9q+TnEUyGKPJUB3Bxpg2\ndwWf1Q0CgYB1uPOUwwzB5JTqU0JdV+YaDCgpv6ikUcLMBzXcSSrUaxbNL9HQ9Key\nqDiNMUCWJQf8bysxMq6N2EbS4mVFNp/R0BPlAl0VxZ7xhO7ThGlglqpHkGReDccl\nBLrE23JieSaBAfhW0llJCAQyuLWnhYLcvC69qxE4uddwLBcfqFl5mQKBgGDVkobd\nyhYhVpo/xylopzs4+R+cFiwtXB1FIgxEuCnfuW07X3QsZwKgLMTrt5yavSN29J98\n9ge4mE9H/lEaTv+mHNP/CiFrQqJdX9IpBXY6oXWXHzSFtRkxGidtQtyeCsNwvef3\nvsZ9gUFbT+CX8IOh1A0lgOZHTdEdkSasgMB9AoGBAMZ80GrFZ/cEbufVGpkNagZh\noOnzfmtKWCP8GcIIb1fL56B6haqTCPxNqpeBITsMyKoQRNWcoiIQAJ9maFzLu47S\no5ocarq9I6VO8Nj3ZKOlqcyQ+kFpRiNF4bY8V2yE//8j6JiqqNyiDLkWhgv5co2G\nOubzIqUfUihIavw8nnE7\n-----END PRIVATE KEY-----\n",
+  "client_email": "cababa-form@cababa.iam.gserviceaccount.com",
+  "client_id": "107418368408100154198",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cababa-form%40cababa.iam.gserviceaccount.com"
+}
