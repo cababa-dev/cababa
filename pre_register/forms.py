@@ -46,7 +46,7 @@ class PreRegistrationForm(forms.Form):
 
     real_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': '回答を入力'}))
     display_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': '回答を入力'}))
-    age = forms.IntegerField(required=True, widget=forms.TextInput(attrs={'placeholder': '回答を入力'}))
+    age = forms.IntegerField(required=True, widget=forms.TextInput(attrs={'placeholder': '回答を入力', 'type': 'number'}))
     line_id = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': '回答を入力'}))
     line_qrcode = forms.FileField(required=False)
     area = forms.MultipleChoiceField(choices=AREA_CHOICES, required=True)

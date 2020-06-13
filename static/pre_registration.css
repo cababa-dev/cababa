@@ -3,17 +3,19 @@
 }
 
 .container > h2 {
-    font-family: 'YuMincho';
+    font-family: 'Noto Sans';
     font-weight: 600;
     font-size: 20px;
     color: #94805B;
     text-align: center;
+    letter-spacing: 2px;
 }
 
 .container > p {
-    font-family: 'YuMincho';
+    font-family: 'Noto Sans';
     font-weight: 500;
     color: #4B4B4B;
+    letter-spacing: 2px;
 }
 
 .container > p:last-child {
@@ -33,9 +35,13 @@ form .form-field label {
     font-family: 'Noto Sans';
     font-weight: 400;
     font-size: 16px;
+    letter-spacing: 2px;
 }
 
-form .form-field input[type=text], form .form-field input[type=text]::placeholder {
+form .form-field input[type=text],
+form .form-field input[type=text]::placeholder,
+form .form-field input[type=number],
+form .form-field input[type=number]::placeholder {
     font-family: 'Noto Sans';
     font-weight: 400;
     font-size: 14px;
@@ -49,7 +55,7 @@ form .form-field input[type=text], form .form-field input[type=text]::placeholde
     padding: 5px;
     padding-bottom: 0px;
     line-height: 35px;
-    width: 100%;
+    width: 90%;
     height: 40px;
 }
 
