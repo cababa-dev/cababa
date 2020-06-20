@@ -8,6 +8,20 @@ from hostess import models as hostess_models
 from . import models, services
 
 
+class HostessListView(View):
+    template = 'reservation/hostess/index.html'
+
+    def get_queryset(self):
+        querysets = hostess_models.AvailableTime.objects.all()
+        return querysets
+	
+    # ホステス検索
+    def get(self, request):
+        page_obj = self.get_queryset()
+        tag_groups = user_models.TagGroup.objects.all()
+        context = dict(page_obj=page_obj, tag_groups=tag_groups)
+        return render(request, self.template, context=context)
+
 class HostessSearchView(View):
     template = 'reservation/hostess/search.html'
 

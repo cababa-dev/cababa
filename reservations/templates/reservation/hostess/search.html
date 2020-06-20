@@ -1,30 +1,122 @@
-{% extends 'partials/base.html' %}
+{% extends 'cababa/partials/base.html' %}
+{% load static %}
 {% block title %}HOSTES{% endblock %}
 
 {% block content %}
-<h2>出勤予定のキャスト</h2>
 
-<form method="GET">
-    {% for group in tag_groups %}
-        <label for="{{ group.name }}">{{ group.title }}</label>
-        <select id="{{ group.name }}" class="form-control">
-            {% for tag in group.tag_set.all %}
-                <option value="{{ tag.name }}">{{ tag.value }}</option>
-            {% endfor %}
-        </select>
-    {% endfor %}
-</form>
+<div class="search">
+    <form method="GET" action="{% url 'reservations:hostess_list' %}">
+        <div class="condition-block">
+            <div class="condition-title">
+                <img src="{% static 'images/keyword.svg' %}">
+                <h3>フリーワードで探す</h3>
+            </div>
+            <div class="condition-body">
+                <div class="keyword">
+                    <input type="text" name="keyword" placeholder="20代　スリム　お姉さん">
+                    <img src="{% static 'images/remove.svg' %}" alt="">
+                </div>
+            </div>
+        </div>
 
-{% for available in page_obj %}
-    <div class="list">
-        <a href="{% url 'reservations:hostess_detail' available.hostess.user_id %}">
-            <figure><img src="{{ available.hostess.hostess_profile.image }}" alt="profile-image"></figure>
-            <h4>{{ available.hostess.display_name }}</h4>
-            <p>楽しくおしゃべりしましょ！</p>
-            <p>お酒大好きなので、一緒にお酒飲める人募集中！</p>
-            <span class="mark1">本日出勤</span>
-        </a>
-    </div>
-{% endfor %}
+        <div class="condition-block">
+            <div class="condition-title">
+                <img src="{% static 'images/clock.svg' %}">
+                <h3>出勤日時で探す</h3>
+            </div>
+            <div class="condition-body">
+                <div class="date">
+                    <p>終日</p>
+                    <div class="switch">
+                        <input type="checkbox" name="whole_date" class="switch-checkbox" id="whole_date" tabindex="0">
+                        <label class="switch-label" for="whole_date"></label>
+                    </div>
+                </div>
+                <div class="date">
+                    <select name="date">
+                        <option value="">選択してください</option>
+                        <option value="2020-01-01">2020年1月1日</option>
+                        <option value="2020-01-02">2020年1月2日</option>
+                        <option value="2020-01-03">2020年1月3日</option>
+                        <option value="2020-01-04">2020年1月4日</option>
+                    </select>
+                    <select name="time">
+                        <option value="">選択してください</option>
+                        <option value="1700-1730">17:00 ~ 17:30</option>
+                        <option value="1730-1800">17:30 ~ 18:00</option>
+                        <option value="1800-1830">18:00 ~ 18:30</option>
+                        <option value="1830-1900">18:30 ~ 19:00</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="condition-block">
+            <div class="condition-title">
+                <img src="{% static 'images/body.svg' %}">
+                <h3>体型から探す</h3>
+            </div>
+            <div class="condition-body">
+                <div class="body">
+                    <select name="body" multiple style="display: none;">
+                        <option value="slim"></option>
+                        <option value="little-slim"></option>
+                        <option value="normal"></option>
+                        <option value="glamorous"></option>
+                        <option value="musclur"></option>
+                        <option value="semi-fat"></option>
+                        <option value="fat"></option>
+                    </select>
+                    <div class="body-block">
+                        <h4>細め</h4>
+                        <div class="condition-option" data-target="body" data-value="slim">スリム</div>
+                        <div class="condition-option" data-target="body" data-value="little-slim">やや細め</div>
+                    </div>
+                    <div class="body-block">
+                        <h4>標準</h4>
+                        <div class="condition-option" data-target="body" data-value="normal">普通</div>
+                        <div class="condition-option" data-target="body" data-value="glamorous">グラマー</div>
+                        <div class="condition-option" data-target="body" data-value="musclur">筋肉質</div>
+                    </div>
+                    <div class="body-block">
+                        <h4>ぽっちゃりめ</h4>
+                        <div class="condition-option" data-target="body" data-value="semi-fat">ぽっちゃり</div>
+                        <div class="condition-option" data-target="body" data-value="fat">太め</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="condition-block">
+            <div class="condition-title">
+                <img src="{% static 'images/age.svg' %}">
+                <h3>年齢から探す</h3>
+            </div>
+            <div class="condition-body">
+                <div class="age">
+                    <select name="age" multiple style="display: none;">
+                        <option value="20-25"></option>
+                        <option value="25-30"></option>
+                        <option value="30-35"></option>
+                        <option value="35-40"></option>
+                        <option value="40-45"></option>
+                        <option value="45-50"></option>
+                    </select>
+                    <div class="condition-option" data-target="age" data-value="20-25">20-25歳</div>
+                    <div class="condition-option" data-target="age" data-value="25-30">25-30歳</div>
+                    <div class="condition-option" data-target="age" data-value="30-35">30-35歳</div>
+                    <div class="condition-option" data-target="age" data-value="35-40">35-40歳</div>
+                    <div class="condition-option" data-target="age" data-value="40-45">40-45歳</div>
+                    <div class="condition-option" data-target="age" data-value="45-50">45-50歳</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="condition-buttons">
+            <button type="submit"><img src="{% static 'images/search-button.svg' %}" alt="">キャストを探す</button>
+            <button type="button" id="condition-clear">条件をクリア</button>
+        </div>
+    </form>
+</div>
 
 {% endblock %}

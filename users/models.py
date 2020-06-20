@@ -95,10 +95,16 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class HostessProfile(BaseModel, models.Model):
+    class RankTypes(models.TextChoices):
+        SILVER = "SR", "シルバー"
+        GOLD = "GD", "ゴールド"
+        PLATINUM = "PM", "プラチナ"
+
     image = models.URLField(_('image'), max_length=1024)
     birthday = models.DateField(_('birthday'), null=True, default=None, db_index=True)
     prefecture_code = models.IntegerField(_('prefecture_code'), default=-1, db_index=True)
     height = models.IntegerField(_('height'), null=True, default=None, db_index=True)
+    rank = models.CharField(_('rank'), max_length=2, choices=RankTypes.choices, default=RankTypes.SILVER, db_index=True)
 
     hostess = models.OneToOneField(
         'users.User',

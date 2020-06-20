@@ -5,6 +5,7 @@ from . import views
 app_name = 'reservations'
 
 urlpatterns = [
+    path('hostess/', views.HostessListView.as_view(), name='hostess_list'),
     path('hostess/search/', views.HostessSearchView.as_view(), name='hostess_search'),
     path('hostess/<str:hostess_id>/', views.HostessDetailView.as_view(), name='hostess_detail'),
     path('<str:available_id>/new/', views.CreateReserveView.as_view(), name='create_reserve'),

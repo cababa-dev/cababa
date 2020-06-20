@@ -1,0 +1,98 @@
+{% extends 'cababa/partials/base.html' %}
+{% load static %}
+{% block title %}HOSTES{% endblock %}
+
+{% block content %}
+
+<form method="GET" class="hostess-search">
+    <img src="{% static 'images/search.svg' %}" alt="">
+    <input type="text" name="keyword" placeholder="キャストを探す" value="{{ request.GET.keyword }}">
+    <a href="{% url 'reservations:hostess_search' %}">
+        <img src="{% static 'images/menubar.svg' %}" alt="">    
+    </a>
+</form>
+
+
+<div class="hostess-index">
+    <h2>キャスト一覧</h2>
+
+    <div class="rank-block">
+        <h3>Platinum rank</h3>
+        <div class="hostess-list">
+            <div class="hostess-block">
+                <img src="{% static 'sample/profile1.png' %}" alt="">
+                <h4 class="title">みさき (25)</h4>
+                <p>銀座 Club Lucente</p>
+            </div>
+            <div class="hostess-block">
+                <img src="{% static 'sample/profile1.png' %}" alt="">
+                <h4 class="title">みさき (25)</h4>
+                <p>銀座 Club Lucente</p>
+            </div>
+            <div class="hostess-block">
+                <img src="{% static 'sample/profile1.png' %}" alt="">
+                <h4 class="title">みさき (25)</h4>
+                <p>銀座 Club Lucente</p>
+            </div>
+            <div class="hostess-block">
+                <img src="{% static 'sample/profile1.png' %}" alt="">
+                <h4 class="title">みさき (25)</h4>
+                <p>銀座 Club Lucente</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="rank-block">
+        <h3>Gold rank</h3>
+        <div class="hostess-list">
+            <div class="hostess-block">
+                <img src="{% static 'sample/profile2.png' %}" alt="">
+                <h4 class="title">かのん (25)</h4>
+                <p>六本木 MUSERVA</p>
+            </div>
+            <div class="hostess-block">
+                <img src="{% static 'sample/profile2.png' %}" alt="">
+                <h4 class="title">かのん (25)</h4>
+                <p>六本木 MUSERVA</p>
+            </div>
+            <div class="hostess-block">
+                <img src="{% static 'sample/profile2.png' %}" alt="">
+                <h4 class="title">かのん (25)</h4>
+                <p>六本木 MUSERVA</p>
+            </div>
+            <div class="hostess-block">
+                <img src="{% static 'sample/profile2.png' %}" alt="">
+                <h4 class="title">かのん (25)</h4>
+                <p>六本木 MUSERVA</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+<h2>出勤予定のキャスト</h2>
+
+<form method="GET">
+    {% for group in tag_groups %}
+        <label for="{{ group.name }}">{{ group.title }}</label>
+        <select id="{{ group.name }}" class="form-control">
+            {% for tag in group.tag_set.all %}
+                <option value="{{ tag.name }}">{{ tag.value }}</option>
+            {% endfor %}
+        </select>
+    {% endfor %}
+</form>
+
+{% for available in page_obj %}
+    <div class="list">
+        <a href="{% url 'reservations:hostess_detail' available.hostess.user_id %}">
+            <figure><img src="{{ available.hostess.hostess_profile.image }}" alt="profile-image"></figure>
+            <h4>{{ available.hostess.display_name }}</h4>
+            <p>楽しくおしゃべりしましょ！</p>
+            <p>お酒大好きなので、一緒にお酒飲める人募集中！</p>
+            <span class="mark1">本日出勤</span>
+        </a>
+    </div>
+{% endfor %} -->
+
+{% endblock %}

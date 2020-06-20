@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <title>{% block title %}{% endblock %} | CABABA</title>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    {% block css %}{% endblock %}
+</head>
+<body>
+    {% include 'cababa/partials/header.html' %}
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% include 'cababa/partials/footer.html' %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'main.js' %}"></script>
+    {% include 'cababa/partials/google_tag.html' %}
+    {% block js %}{% endblock %}
+</body>
+</html>
