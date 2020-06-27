@@ -91,6 +91,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    def line_logined(self):
+        if not self.hostess_profile:
+            return False
+        if not self.id_token:
+            return False
+        return True
+
     def __str__(self):
         return self.display_name
 
@@ -102,12 +109,17 @@ class HostessProfile(BaseModel, models.Model):
         PLATINUM = "PM", "プラチナ"
 
     class AreaTypes(models.TextChoices):
-        KABUKI = "kabuki", "歌舞伎町"
+        KABUKI = "kabukicho", "歌舞伎町"
         ROPPONGI = "roppongi", "六本木"
         GINZA = "ginza", "銀座"
         SHIBUYA = "shibuya", "渋谷"
+        IKEBUKURO = "ikebukuro", "池袋"
+        UENO = "ueno", "上野"
         KITASHINCHI = "kitashinchi", "北新地"
         MINAMI = "minami", "ミナミ"
+        NAKASU = "nakasu", "中州"
+        KOKUBUNCHO = "kokubuncho", "国分町"
+        SUSUKINO = "susukino", "ススキノ"
         OTHER = "other", "その他"
 
     class StyleTypes(models.TextChoices):
@@ -142,24 +154,26 @@ class HostessProfile(BaseModel, models.Model):
 
 
     # 属性情報
+    # 本名
+    name = models.CharField(_('name'), max_length=100, null=True, default=None)
     # 身長
-    height = models.IntegerField(_('height'), null=True, default=None, db_index=True)
+    height = models.IntegerField(_('height'), null=True, default=None, db_index=True, blank=True)
     # 出身地
     prefecture_code = models.IntegerField(_('prefecture_code'), default=-1, db_index=True)
     # キャスト経験エリア
-    area = ArrayField(models.CharField(_('area'), max_length=20, choices=AreaTypes.choices, db_index=True), size=10, default=list)
+    area = ArrayField(models.CharField(max_length=20, choices=AreaTypes.choices), db_index=True, size=10, default=list, blank=True)
     # 体型
-    body = models.CharField(_('body'), max_length=20, choices=BodyTypes.choices, null=True, default=None, db_index=True)
+    body = models.CharField(_('body'), max_length=20, choices=BodyTypes.choices, null=True, default=None, db_index=True, blank=True)
     # 年齢
     age = models.IntegerField(_('age'), default=None, null=True)
     # 雰囲気/スタイル
-    style = ArrayField(models.CharField(_('style'), max_length=20, choices=StyleTypes.choices, db_index=True), size=10, default=list)
+    style = ArrayField(models.CharField(max_length=20, choices=StyleTypes.choices), db_index=True, size=10, default=list, blank=True)
     # 性格
-    personality = ArrayField(models.CharField(_('personality'), max_length=20, choices=PersonalityTypes.choices, db_index=True), size=10, default=list)
+    personality = ArrayField(models.CharField(max_length=20, choices=PersonalityTypes.choices), db_index=True, size=10, default=list, blank=True)
     # メッセージ
     message = models.TextField(_('message'), null=True, default=None)
     # プロフィール画像
-    image = models.URLField(_('image'), max_length=1024)
+    images = ArrayField(models.URLField(max_length=1024), size=10, default=list)
 
     # 料金モデル
     rank = models.CharField(_('rank'), max_length=2, choices=RankTypes.choices, default=RankTypes.SILVER, db_index=True)

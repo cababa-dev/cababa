@@ -126,3 +126,18 @@ class HostessInviteView(View):
         login_url = service.login_url(context=dict(invitation=str(group.group_id)))
         context = dict(group=group, login_url=login_url)
         return render(request, self.template, context)
+    
+
+class HostessGroupInviteView(View):
+    template = 'hostess/group_invite.html'
+
+    def get_queryset(self, group_id):
+        querysets = user_models.Group.objects.get(group_id=group_id)
+        return querysets
+
+    def get(self, request, group_id):
+        group = self.get_queryset(group_id)
+        service = services.LineLoginService(request)
+        login_url = service.login_url(context=dict(invitation=str(group.group_id)))
+        context = dict(group=group, login_url=login_url)
+        return render(request, self.template, context)

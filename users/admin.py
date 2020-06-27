@@ -22,6 +22,7 @@ class HostessProfileAdmin(admin.ModelAdmin):
     )
     list_display = (
         'hostess',
+        'name',
         'image_tag',
         'height',
         'prefecture_code',
@@ -31,7 +32,6 @@ class HostessProfileAdmin(admin.ModelAdmin):
         'style',
         'personality',
         'message',
-        'image',
         'rank',
         'created_at',
         'updated_at',
@@ -40,7 +40,7 @@ class HostessProfileAdmin(admin.ModelAdmin):
         'hostess__display_name',
     )
     def image_tag(self, obj):
-        return format_html('<img src={} width=50, height=50 />'.format(escape(obj.image)))
+        return format_html('<img src={} width=50, height=50 />'.format(escape(obj.images[0])))
     image_tag.short_description = "image"
     image_tag.allow_tags = True
 

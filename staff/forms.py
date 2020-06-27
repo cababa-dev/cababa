@@ -1,9 +1,16 @@
+import os
+import uuid
+
 from django import forms
 from django.contrib.auth import authenticate, login
+from django.core.files.storage import default_storage
+from django.conf import settings
 
-from users.models import User, Group
+from users.models import User, Group, HostessProfile
 from . import models
 
+
+upload_dir = os.path.join(settings.MEDIA_ROOT, 'hostess/profile_image/')
 
 
 class LoginForm(forms.Form):
@@ -180,5 +187,74 @@ class StaffEditMeForm(forms.Form):
         return user
 
 
-class HostessForm(forms.Form):
-    pass
+class HostessForm(forms.ModelForm):
+    display_name = forms.CharField()
+    profile_image1 = forms.FileField()
+    profile_image2 = forms.FileField(required=False)
+    profile_image3 = forms.FileField(required=False)
+    profile_image4 = forms.FileField(required=False)
+
+    area = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=HostessProfile.AreaTypes.choices, required=False)
+    style = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=HostessProfile.StyleTypes.choices, required=False)
+    personality = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=HostessProfile.PersonalityTypes.choices, required=False)
+
+    line_id = forms.CharField()
+
+    class Meta:
+        model = HostessProfile
+        fields = ('name', 'height', 'prefecture_code', 'body', 'age', 'message', 'rank',)
+    
+    def __init__(self, *args, **kwargs):
+        self.context = kwargs.pop('context', {})
+        super(HostessForm, self).__init__(*args, **kwargs)
+    
+    def upload(self, image_file):
+        filename = image_file.name.split('.')
+        filename[0] = str(uuid.uuid4())
+        filename = '.'.join(filename)
+        if not os.path.exists(upload_dir):
+            os.makedirs(upload_dir)
+        filename = default_storage.save('hostess/profile_image/'+filename, image_file)
+        image_url = default_storage.url(filename)
+        return image_url
+
+    def create(self):
+        data = self.cleaned_data
+
+        # ホステスを作成
+        # 登録したグループ情報を保存
+        user = User.objects.create(
+            username=str(uuid.uuid4()),
+            display_name=data['display_name'],
+            group=self.context['request'].user.group,
+            line_user_id=data['line_id'],
+            user_type=User.UserTypes.HOSTESS,
+        )
+        # プロフィールを作成
+        hostess_profile = HostessProfile(
+            hostess=user,
+            name=data['name'],
+            height=data['height'],
+            prefecture_code=data['prefecture_code'],
+            area=data['area'],
+            body=data['body'],
+            age=data['age'],
+            style=data['style'],
+            personality=data['personality'],
+            message=data['message'],
+            rank=data['rank'],
+        )
+        # 画像アップロード
+        profile_images = []
+        if data.get('profile_image1'):
+            profile_images.append(self.upload(data.get('profile_image1')))
+        if data.get('profile_image2'):
+            profile_images.append(self.upload(data.get('profile_image2')))
+        if data.get('profile_image3'):
+            profile_images.append(self.upload(data.get('profile_image3')))
+        if data.get('profile_image4'):
+            profile_images.append(self.upload(data.get('profile_image4')))
+        hostess_profile.images = profile_images
+        hostess_profile.save()
+        
+        return hostess_profile

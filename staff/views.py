@@ -1,3 +1,5 @@
+import japanmap
+
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -140,7 +142,6 @@ class StaffEditView(mixins.StaffPageMixin, View):
         querysets = self.get_queryset(staff_id)
         form = forms.StaffForm(request.POST, context={'request': request, 'staff': querysets})
         if not form.is_valid():
-            print(form.errors)
             context = dict(form=form)
             return render(request, self.template, context)
         user = form.update()
@@ -178,7 +179,7 @@ class HostessListView(mixins.StaffPageMixin, View):
     template = 'staff/hostess/list.html'
 
     def get_queryset(self):
-        querysets = user_models.User.objects.filter(user_type=user_models.User.UserTypes.HOSTESS, group=self.request.user.group)
+        querysets = user_models.User.objects.filter(user_type=user_models.User.UserTypes.HOSTESS, group=self.request.user.group).order_by('-date_joined')
         return querysets
 
     def get(self, request):
@@ -190,14 +191,25 @@ class HostessListView(mixins.StaffPageMixin, View):
 class HostessCreateView(mixins.StaffPageMixin, View):
     template = 'staff/hostess/new.html'
 
+    def get_prefectures(self):
+        prefectures = []
+        for name, code in zip(japanmap.pref_names, list(range(len(japanmap.pref_names)))):
+            prefectures.append(dict(
+                name=name,
+                code=code
+            ))
+        prefectures[0]['name'] = '非公開'
+        return prefectures
+
     def get(self, request):
-        context = {}
+        form = forms.HostessForm()
+        context = dict(form=form, prefectures=self.get_prefectures())
         return render(request, self.template, context)
     
     def post(self, request):
-        form = forms.HostessForm(request.POST, context={'request': request})
+        form = forms.HostessForm(request.POST, request.FILES, context={'request': request})
         if not form.is_valid():
-            context = dict(form=form)
+            context = dict(form=form, prefectures=self.get_prefectures())
             return render(request, self.template, context)
         hostess = form.create()
         return redirect(reverse('staff:hostess_list'))

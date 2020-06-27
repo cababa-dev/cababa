@@ -1,4 +1,5 @@
 {% extends 'staff-partials/base.html' %}
+{% load cababa %}
 
 {% block title %}お嬢一覧{% endblock %}
 
@@ -8,18 +9,28 @@
 <!-- お嬢を一覧表示 -->
     <table class="table">
         <thead class="thead-dark">
-            <th scope="col">ID</th>
             <th scope="col">名前</th>
-            <th scope="col">写真</th>
+            <th scope="col">名前(源氏名)</th>
+            <th scope="col">画像</th>
+            <th scope="col">年齢</th>
+            <th scope="col">身長</th>
+            <th scope="col">出身地</th>
+            <th scope="col">ランク</th>
+            <th scope="col">LINE ID</th>
             <th scope="col">LINE登録済み？</th>
         </thead>
         <tbody>
             {% for hostess in page_obj %}
                 <tr>
-                    <td scope="row"><a href="{% url 'staff:hostess_detail' hostess.user_id %}">{{ hostess.user_id }}</a></td>
+                    <td scope="row"><a href="{% url 'staff:hostess_detail' hostess.user_id %}">{{ hostess.hostess_profile.name }}</a></td>
                     <td>{{ hostess.display_name }}</td>
-                    <td>{% if hostess.hostess_profile.image %}<img src="{{ hostess.hostess_profile.image }}" height=50>{% else %}未登録{% endif %}</td>
-                    <td>{{ hostess.hostess_profile|yesno:"はい,いいえ,いいえ" }}</td>
+                    <td>{% if hostess.hostess_profile.images.0 %}<img src="{{ hostess.hostess_profile.images.0 }}" height=50>{% else %}未登録{% endif %}</td>
+                    <td>{{ hostess.hostess_profile.age }}</td>
+                    <td>{{ hostess.hostess_profile.height }}</td>
+                    <td>{{ hostess.hostess_profile.prefecture_code|prefecture_str }}</td>
+                    <td>{{ hostess.hostess_profile.get_rank_display }}</td>
+                    <td>{{ hostess.line_user_id }}</td>
+                    <td>{{ hostess.line_logined|yesno:"はい,いいえ,いいえ" }}</td>
                 </tr>
             {% endfor %}
         </tbody>

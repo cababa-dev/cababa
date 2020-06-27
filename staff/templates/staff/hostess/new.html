@@ -7,22 +7,50 @@
 <div class="staff-form">
     <h2>お嬢の新規追加</h4>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="name"><strong>名前</strong> <span class="text-danger">*</span></label>
-                <input type="text" name="name" class="form-control" id="name" placeholder="" value="{{ form.name.value }}" required>
-                {% if form.name.errors  %}
-                    <p class="text-danger">{{ form.name.errors.0 }}</p>
-                {% endif %}
+                <input type="text" name="name" class="form-control" id="name" placeholder="" value="{% if form.name.value %}{{ form.name.value }}{% endif %}" required>
             </div>
             <div class="form-group col-md-4">
                 <label for="display_name"><strong>名前 (源氏名)</strong> <span class="text-danger">*</span></label>
-                <input type="text" name="display_name" class="form-control" id="display_name" placeholder="" value="{{ form.display_name.value }}" required>
-                {% if form.display_name.errors  %}
-                    <p class="text-danger">{{ form.display_name.errors.0 }}</p>
-                {% endif %}
+                <input type="text" name="display_name" class="form-control" id="display_name" placeholder="" value="{% if form.display_name.value %}{{ form.display_name.value }}{% endif %}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label><strong>プロフィール画像1</strong> <span class="text-danger">*</span></label>
+                <div class="custom-file">
+                    <input type="file" name="profile_image1" class="custom-file-input" id="profile_image1" lang="ja" required>
+                    <label class="custom-file-label" for="profile_image1">ファイルを追加</label>
+                </div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label>プロフィール画像2</label>
+                <div class="custom-file">
+                    <input type="file" name="profile_image2" class="custom-file-input" id="profile_image2" lang="ja">
+                    <label class="custom-file-label" for="profile_image2">ファイルを追加</label>
+                </div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label>プロフィール画像3</label>
+                <div class="custom-file">
+                    <input type="file" name="profile_image3" class="custom-file-input" id="profile_image3" lang="ja">
+                    <label class="custom-file-label" for="profile_image3">ファイルを追加</label>
+                </div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label>プロフィール画像4</label>
+                <div class="custom-file">
+                    <input type="file" name="profile_image4" class="custom-file-input" id="profile_image4" lang="ja">
+                    <label class="custom-file-label" for="profile_image4">ファイルを追加</label>
+                </div>
             </div>
         </div>
 
@@ -30,16 +58,25 @@
             <div class="form-group col-md-1">
                 <label for="age"><strong>年齢</strong> <span class="text-danger">*</span></label>
                 <input type="number" name="age" class="form-control" id="age" placeholder="" value="{{ form.age.value }}" required>歳
-                {% if form.age.errors  %}
-                    <p class="text-danger">{{ form.age.errors.0 }}</p>
-                {% endif %}
+            </div>
+            <div class="form-group col-md-1">
+                <label for="height"><strong>身長</strong></label>
+                <input type="number" name="height" class="form-control" id="height" placeholder="" value="{{ form.height.value }}">cm
+            </div>
+            <div class="form-group col-md-2">
+                <label for="prefecture_code">出身地</label>
+                <select name="prefecture_code" id="prefecture_code" class="form-control">
+                    {% for prefecture in prefectures %}
+                        <option value="{{ prefecture.code }}">{{ prefecture.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group col-md-3">
                 <label for="rank">ランク</label>
                 <select name="rank" id="rank" class="form-control">
-                    <option value="silver">シルバー - ￥1,000</option>
-                    <option value="gold">ゴールド - ￥3,000</option>
-                    <option value="platinum">プラチナ - ￥9,000</option>
+                    <option value="SR">シルバー - ￥1,000</option>
+                    <option value="GD">ゴールド - ￥3,000</option>
+                    <option value="PM">プラチナ - ￥9,000</option>
                 </select>
             </div>
         </div>
@@ -47,79 +84,69 @@
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label for="line_id"><strong>LINE ID</strong> <span class="text-danger">*</span></label>
-                <input type="text" name="line_id" class="form-control" id="line_id" placeholder="" value="{{ form.line_id.value }}" required>
-                {% if form.line_id.errors  %}
-                    <p class="text-danger">{{ form.line_id.errors.0 }}</p>
-                {% endif %}
-            </div>
-            <div class="form-group col-md-4">
-                <label>LINE QRコード</label>
-                <div class="custom-file">
-                    <input type="file" name="line_qrcode" class="custom-file-input" id="line_qrcode" lang="ja">
-                    <label class="custom-file-label" for="line_qrcode">ファイルを追加</label>
-                </div>
+                <input type="text" name="line_id" class="form-control" id="line_id" placeholder="" value="{% if form.line_id.value %}{{ form.line_id.value }}{% endif %}" required>
             </div>
         </div>
 
         <div class="form-group">
-            <label><strong>キャスト経験エリア</strong> <span class="text-danger">*</span></label>
+            <label for="area"><strong>キャスト経験エリア</strong> <span class="text-danger">*</span></label>
             <div class="row">
                 <div class="col-md-2">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="kabukicho">
+                        <input class="form-check-input" type="checkbox" name="area" value="kabukicho">
                         <label class="form-check-label" for="kabukicho">歌舞伎町</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="roppongi">
+                        <input class="form-check-input" type="checkbox" name="area" value="roppongi">
                         <label class="form-check-label" for="roppongi">六本木</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="ginza">
+                        <input class="form-check-input" type="checkbox" name="area" value="ginza">
                         <label class="form-check-label" for="ginza">銀座</label>
                     </div>
                 </div>
 
                 <div class="col-md-2">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="shibuya">
+                        <input class="form-check-input" type="checkbox" name="area" value="shibuya">
                         <label class="form-check-label" for="shibuya">渋谷</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="ikebukuro">
+                        <input class="form-check-input" type="checkbox" name="area" value="ikebukuro">
                         <label class="form-check-label" for="ikebukuro">池袋</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="ueno">
+                        <input class="form-check-input" type="checkbox" name="area" value="ueno">
                         <label class="form-check-label" for="ueno">上野</label>
                     </div>
                 </div>
 
                 <div class="col-md-2">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="kitashinchi">
+                        <input class="form-check-input" type="checkbox" name="area" value="kitashinchi">
                         <label class="form-check-label" for="kitashinchi">北新地</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="minami">
+                        <input class="form-check-input" type="checkbox" name="area" value="minami">
                         <label class="form-check-label" for="minami">ミナミ</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="nakasu">
+                        <input class="form-check-input" type="checkbox" name="area" value="nakasu">
                         <label class="form-check-label" for="nakasu">中州</label>
                     </div>
                 </div>
 
                 <div class="col-md-2">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="kokubuncho">
+                        <input class="form-check-input" type="checkbox" name="area" value="kokubuncho">
                         <label class="form-check-label" for="kokubuncho">国分町</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="susukino">
+                        <input class="form-check-input" type="checkbox" name="area" value="susukino">
                         <label class="form-check-label" for="susukino">ススキノ</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="others">
+                        <input class="form-check-input" type="checkbox" name="area" value="others">
                         <label class="form-check-label" for="others">その他</label>
                     </div>
                 </div>
@@ -129,28 +156,118 @@
 
         <div class="form-row">
             <div class="form-group">
-                <label for="style">雰囲気/スタイル（任意）</label>
-                <select name="style" id="style" class="form-control">
-                    <option value="">-</option>
-                    <option value="celeb">お姉さん・セレブ</option>
-                    <option value="sexy">セクシー・ナイスバディ</option>
-                    <option value="slim">モデル・スレンダー</option>
-                    <option value="business">ビジネスパーソン</option>
-                    <option value="young">ロリータ・妹</option>
-                    <option value="school">女子大生</option>
-                    <option value="girl">ギャル</option>
-                    <option value="fat">ぽっちゃり</option>
+                <label for="body">体型</label>
+                <select name="body" id="body" class="form-control">
+                    {% for value, text in form.body.field.choices %}
+                        <option value="{{ value }}">{{ text }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
 
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label>プロフィール画像（任意）</label>
-                <div class="custom-file">
-                    <input type="file" name="profile_image" class="custom-file-input" id="profile_image" lang="ja">
-                    <label class="custom-file-label" for="profile_image">ファイルを追加</label>
+        <div class="form-group">
+            <label for="style">雰囲気/スタイル（任意）</label>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="celeb">
+                        <label class="form-check-label" for="style">お姉さん・セレブ</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="sexy">
+                        <label class="form-check-label" for="style">セクシー・ナイスバディ</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="slim">
+                        <label class="form-check-label" for="style">モデル・スレンダー</label>
+                    </div>
                 </div>
+
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="business">
+                        <label class="form-check-label" for="style">ビジネスパーソン</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="young">
+                        <label class="form-check-label" for="style">ロリータ・妹</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="school">
+                        <label class="form-check-label" for="style">女子大生</label>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="girl">
+                        <label class="form-check-label" for="style">ギャル</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="fat">
+                        <label class="form-check-label" for="style">ぽっちゃり</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="personality">性格</label>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="heal">
+                        <label class="form-check-label" for="personality">癒し</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="goody">
+                        <label class="form-check-label" for="personality">天然</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="evil">
+                        <label class="form-check-label" for="personality">小悪魔</label>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="pure">
+                        <label class="form-check-label" for="personality">ピュア/素直</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="smart">
+                        <label class="form-check-label" for="personality">知的</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="groovy">
+                        <label class="form-check-label" for="personality">ノリノリ</label>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="friendly">
+                        <label class="form-check-label" for="personality">フレンドリー</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="outdoor">
+                        <label class="form-check-label" for="personality">アウトドア</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="indoor">
+                        <label class="form-check-label" for="personality">インドア</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="message"><strong>メッセージ</strong> <span class="text-danger">*</span></label>
+                <textarea name="message" class="form-control"  cols="40" rows="8" required></textarea>
             </div>
         </div>
 
