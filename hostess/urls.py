@@ -11,5 +11,5 @@ urlpatterns = [
     path('signup/done/', views.SignUpDoneView.as_view(), name='signup_done'),
     path('bot/webhook/', views.LineBotWebhookView.as_view(), name='bot_webhook'),
     path('invite/groups/<str:group_id>/', views.HostessGroupInviteView.as_view(), name='invite_group'),
-    path('invite/<str:group_id>/', views.HostessInviteView.as_view(), name='invite'),
+    path('invite/<str:user_id>/', views.HostessInviteView.as_view(), name='invite'),
 ]

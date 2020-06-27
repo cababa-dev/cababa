@@ -116,15 +116,15 @@ class LineBotWebhookView(View):
 class HostessInviteView(View):
     template = 'hostess/invite.html'
 
-    def get_queryset(self, group_id):
-        querysets = user_models.Group.objects.get(group_id=group_id)
+    def get_queryset(self, user_id):
+        querysets = user_models.User.objects.get(user_id=user_id)
         return querysets
 
-    def get(self, request, group_id):
-        group = self.get_queryset(group_id)
+    def get(self, request, user_id):
+        hostess = self.get_queryset(user_id)
         service = services.LineLoginService(request)
-        login_url = service.login_url(context=dict(invitation=str(group.group_id)))
-        context = dict(group=group, login_url=login_url)
+        login_url = service.login_url(context=dict(invitation_hostess=str(hostess.user_id)))
+        context = dict(hostess=hostess, login_url=login_url)
         return render(request, self.template, context)
     
 

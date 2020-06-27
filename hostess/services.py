@@ -32,10 +32,23 @@ class LineLoginService:
     
     # LINEプロフィールからユーザーを作成してログイン実行
     def do_login(self, id_token, profile):
-        # ユーザーの取得/作成
-        user_id = profile.get('sub')
-        username = user_id + '_hostess'
-        user, created = User.objects.get_or_create(username=username, line_user_id=user_id, user_type=User.UserTypes.HOSTESS)
+        line_user_id = profile.get('sub')
+        username = line_user_id + '_hostess'
+
+        state = self.request.GET.get("state")
+        state = json.loads(state)
+        user_id = state.get('invitation_hostess')
+
+        if user_id:
+            # もし作成済みのユーザーに招待を受けた場合は
+            # ユーザーを取得する
+            user = User.objects.get(user_id=user_id)
+            user.line_user_id = line_user_id
+            user.username = username
+        else:
+            # ユーザーの取得/作成
+            user, created = User.objects.get_or_create(username=username, line_user_id=line_user_id, user_type=User.UserTypes.HOSTESS)
+
         user.id_token = id_token
         user.save()
         # ログイン実行

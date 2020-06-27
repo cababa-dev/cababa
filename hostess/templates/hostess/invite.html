@@ -1,15 +1,20 @@
-{% extends 'partials/base.html' %}
+{% extends 'cababa/partials/base.html' %}
 {% load static %}
-{% block title %}ホステス登録{% endblock %}
+{% block title %}キャスト招待{% endblock %}
 
 {% block content %}
 
 {% if error %}
-    <div class="alert alert-danger" role="alert">{{ error }}</div>
+    <div class="alert">{{ error }}</div>
 {% endif %}
 
-<h2>{{ group.name }}からの招待を受け取りました</h2>
-<p>LINEログインして登録を完了させましょう</p>
+<div class="hostess-invite">
+    <h2>{{ hostess.group.name }}から招待を受け取りました</h2>
+    <p>まずはLINE連携して、お客様からの予約通知を受け取れるようにしましょう</p>
 
-<a href="{{ login_url }}"><img src="{% static 'images/btn_login_base.png' %}" width=200></a>
+    <h3>
+        <a class="hostess_agreement" href="{% url 'cast_agreement_view' %}">CABABAキャストアカウント規約</a>
+        <a href="{{ login_url }}"><img src="{% static 'images/btn_login_base.png' %}"></a>
+    </h3>
+</div>
 {% endblock %}

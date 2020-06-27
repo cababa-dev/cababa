@@ -1,4 +1,5 @@
 {% extends 'staff-partials/base.html' %}
+{% load static %}
 {% load cababa %}
 
 {% block title %}お嬢一覧{% endblock %}
@@ -18,6 +19,7 @@
             <th scope="col">ランク</th>
             <th scope="col">LINE ID</th>
             <th scope="col">LINE登録済み？</th>
+            <th scope="col">招待URL</th>
         </thead>
         <tbody>
             {% for hostess in page_obj %}
@@ -31,6 +33,17 @@
                     <td>{{ hostess.hostess_profile.get_rank_display }}</td>
                     <td>{{ hostess.line_user_id }}</td>
                     <td>{{ hostess.line_logined|yesno:"はい,いいえ,いいえ" }}</td>
+
+                    {% url 'hostess:invite' hostess.user_id as invitation_url %}
+                    <input id="{{ hostess.user_id }}" type="text" value="{{ invitation_url|absolute_url:request }}" readonly style="top: -100px; position: fixed;">
+                    <td>
+                        <button class="btn btn-primary copy-button" data-id="{{ hostess.user_id }}">コピー</button>
+                        <a href="http://line.me/R/msg/text/?こちらからCABABAに登録お願いします {{ invitation_url|absolute_url:request }}">
+                        <!-- <a href="https://social-plugins.line.me/lineit/share?url={{ invitation_url|absolute_url:request }}"> -->
+                            <img src="{% static 'images/wide-default.png' %}" alt="LINEで送る" style="height: 30px;" />
+                        </a>
+                    </td>
+
                 </tr>
             {% endfor %}
         </tbody>
@@ -41,4 +54,18 @@
 <p><a href="{% url 'staff:hostess_create' %}">追加する場合はこちらから</a></p>
 {% endif %}
 
+{% endblock %}
+
+{% block js %}
+<script>
+    $(".copy-button").on('click', function (e) {
+        e.preventDefault();
+        var targetId = $(e.currentTarget).attr('data-id');
+        var copyTarget = $('input#'+targetId);
+        console.log(copyTarget);
+        copyTarget.select();
+        document.execCommand("Copy");
+        alert("招待URLをクリップボードにコピーしました");
+    })
+</script>
 {% endblock %}

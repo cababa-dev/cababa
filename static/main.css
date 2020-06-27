@@ -639,6 +639,66 @@ ul.available_date li.active {
     -ms-transform: translate(-150%, 0%);
 }
 
+
+/* ホステス招待ページ */
+.hostess-invite h2 {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #9D8860;
+    margin: 40px 0;
+}
+
+.hostess-invite p {
+    font-size: 12px;
+    font-weight: 500;
+    color: #4B4B4B;
+    margin: 0 30px;
+    letter-spacing: 2px;
+}
+
+.hostess-invite h3 {
+    text-align: center;
+    margin: 40px auto;
+}
+
+.hostess-invite a {
+    font-size: 12px;
+    font-weight: 400;
+    color: #9D8860;
+    letter-spacing: 2px;
+}
+
+.hostess-invite img {
+    width: 200px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+
+/* ホステス招待ページ */
+.hostess-signup-done {
+    margin-bottom: 100px;
+}
+
+.hostess-signup-done h2 {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #9D8860;
+    margin: 40px 0;
+}
+
+.hostess-signup-done p {
+    font-size: 12px;
+    font-weight: 500;
+    color: #4B4B4B;
+    margin: 0 30px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+
 /* 利用規約 */
 .markdown {
     font-family: YuGothic, "Yu Gothic", sans-serif;
