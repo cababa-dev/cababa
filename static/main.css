@@ -467,6 +467,170 @@ form.hostess-search a img {
     margin-left: 40px;
 }
 
+
+/* キャスト詳細ページ */
+.swiper-container-horizontal > .swiper-scrollbar {
+    top: 3px;
+}
+
+.swiper-wrapper .swiper-slide img {
+    height: 100%;
+}
+
+.hostess-detail .hostess-profile {
+    border-bottom: solid 1px #9D8860;
+    padding: 10px 25px;
+    font-family: YuMincho, "Yu Mincho", sans-serif;
+    color: #4B4B4B;
+}
+
+.hostess-detail .hostess-profile h3 {
+    height: 20px;
+    line-height: 20px;
+    font-size: 18px;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    letter-spacing: 4px;
+}
+
+.hostess-detail .hostess-profile h3 img {
+    height: 18px;
+    margin-right: 15px;
+}
+
+.hostess-detail .hostess-profile h4 {
+    font-size: 14px;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: 3px;
+}
+
+.hostess-detail .hostess-profile p {
+    margin-left: 35px;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+
+.hostess-profile .title-block {
+    text-align: center;
+}
+
+.hostess-profile .title-block h2 {
+    font-size: 22px;
+    font-weight: 500;
+    color: #4B4B4B;
+    margin-bottom: 0px;
+}
+
+.hostess-profile .title-block h5 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 8px;
+}
+
+.hostess-profile dl.profile-block {
+    margin: 0 auto;
+    margin-top: 40px;
+}
+
+dl.profile-block dt {
+    float: left;
+    font-size: 13px;
+    font-weight: 400;
+    text-align: left;
+    width: 120px;
+    margin: 0;
+    margin-right: 15px;
+    padding-top: 8px;
+}
+
+dl.profile-block dd {
+    display: flex;
+    font-size: 13px;
+    font-weight: 400;
+    text-align: left;
+    width: 120px;
+    margin: 0;
+    padding-top: 8px;
+}
+
+.hostess-profile ul.style-block {
+    margin-top: 40px;
+    list-style: none;
+    padding: 0;
+}
+
+ul.style-block li {
+    font-size: 15px;
+    font-weight: 500;
+    border: solid 1px #4B4B4B;
+    border-radius: 25px;
+    display: inline-block;
+    padding: 1px 23px;
+    margin: 6px;
+}
+
+.hostess-profile select[name=available_date] {
+    border: none;
+    background-color: #FFFFFF;
+    border-bottom: solid 1px #C4C4C4;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 16px;
+    color: #B39B6D;
+    margin: 10px auto;
+    height: 40px;
+    letter-spacing: 3px;
+}
+
+.hostess-profile select[name=available_time] {
+    display: none;
+}
+
+.hostess-profile ul.available_date {
+    list-style: none;
+    padding: 0;
+}
+
+ul.available_date li {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #94805B;
+    border: solid 1px #94805B;
+    display: inline-block;
+    padding: 12px;
+    margin: 7px;
+}
+
+ul.available_date li.active {
+    color: #94805B;
+    background-color: rgba(148, 128, 91, .3);
+}
+
+.hostess-detail button[type=submit] {
+    background-color: #94805B;
+    color: #FFFFFF;
+    width: 100%;
+    height: 55px;
+    margin: 25px auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    font-weight: 700;
+    font-size: 18px;
+    border: none;
+}
+
+.hostess-detail button[type=submit] img {
+    height: 25px;
+    position: absolute;
+    transform: translate(-150%, 0%);
+    -webkit-transform: translate(-150%, 0%);
+    -ms-transform: translate(-150%, 0%);
+}
+
 /* 利用規約 */
 .markdown {
     font-family: YuGothic, "Yu Gothic", sans-serif;

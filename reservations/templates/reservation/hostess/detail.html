@@ -1,48 +1,107 @@
-{% extends 'partials/base.html' %}
-{% block title %}予約時間{% endblock %}
+{% extends 'cababa/partials/base.html' %}
+{% load static %}
+{% block title %}ホステス名{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+{% endblock %}
 
 {% block content %}
 
-<article>
-    <h2>{{ hostess.display_name }}</h2>
-    <div class="staff">
-        <h3>プロフィール</h3>
-
-        <div class="left">
-            <figure><img src="{{ hostess.hostess_profile.image }}" alt="profile-image"></figure>
+<div class="hostess-detail">
+    <!-- Slider main container -->
+    <div class="swiper-container">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            <img class="swiper-slide" src="{% static 'sample/profile1.png' %}" alt="">
+            <img class="swiper-slide" src="{% static 'sample/profile2.png' %}" alt="">
+            <img class="swiper-slide" src="{% static 'sample/profile1.png' %}" alt="">
+            <img class="swiper-slide" src="{% static 'sample/profile2.png' %}" alt="">
         </div>
-        <!--/left-->
-
-        <div class="right">   
-            <table class="ta1">
-                <tr>
-                    <th>名前</th>
-                    <td>{{ hostess.display_name }}</td>
-                </tr>
-                <tr>
-                    <th>年齢</th>
-                    <td>20</td>
-                    </tr>
-                <tr>
-            </table>
-
-            <h3>出勤可能時間</h3>
-            <div id="sub">
-                <nav class="box1">
-                    <ul class="submenu">
-                        {% for available in available_times %}
-                            <li><a href="{% url 'reservations:create_reserve' available.available_id %}">{{ available.start_at|date:'Y年m月d日 H:i' }}-{{ available.end_at|date:'H:i' }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </nav>
-            </div>
-        </div>
-        <!--/right-->
-
-        <p class="c">&lt;&lt; <a href="javascript:history.back()">前のページに戻る</a></p>
+        <!-- If we need scrollbar -->
+        <div class="swiper-scrollbar"></div>
     </div>
-    <!--/staff-->
-    
-</article>
 
+    <form action="" method="post">
+
+        <div class="hostess-profile">
+            <div class="title-block">
+                <h2>かのん (25)</h2>
+                <h5>銀座 Club lucente</h5>
+            </div>
+            <dl class="profile-block">
+                <dt>身長</dt>
+                <dd>166.5cm</dd>
+                <dt>出身地</dt>
+                <dd>埼玉県</dd>
+                <dt>キャスト経験エリア</dt>
+                <dd>東京都 埼玉県</dd>
+            </dl>
+            <ul class="style-block">
+                <li>細め</li>
+                <li>お姉さん/セレブ</li>
+                <li>ギャル</li>
+                <li>知的</li>
+                <li>インドア</li>
+            </ul>
+        </div>
+
+        <div class="hostess-profile">
+            <h3><img src="{% static 'images/heart.svg' %}" alt="">メッセージ</h3>
+            <p>貴方にお会いできることを楽しみにしております。</p>
+        </div>
+
+        <div class="hostess-profile">
+            <h3><img src="{% static 'images/calendar.svg' %}" alt="">出勤情報</h3>
+            <h4>予約したい時間帯を選択してください。</h4>
+
+            <select name="available_date">
+                <option value="20200526">2020年5月26日 (火)</option>
+                <option value="20200527">2020年5月27日 (水)</option>
+                <option value="20200528">2020年5月28日 (木)</option>
+                <option value="20200529">2020年5月29日 (金)</option>
+                <option value="20200530">2020年5月30日 (土)</option>
+                <option value="20200531">2020年5月31日 (日)</option>
+            </select>
+
+            <select name="available_time">
+                <option value="1800-1830">18:00 - 18:30</option>
+                <option value="1830-1900">18:30 - 19:00</option>
+                <option value="1900-1930">19:00 - 19:30</option>
+                <option value="1930-2000">19:30 - 20:00</option>
+                <option value="2000-2030">20:00 - 20:30</option>
+                <option value="2030-2100">20:30 - 21:00</option>
+            </select>
+
+            <ul class="available_date">
+                <li data-value="1800-1830">18:00 - 18:30</li>
+                <li data-value="1830-1900">18:30 - 19:00</li>
+                <li class="active" data-value="1900-1930">19:00 - 19:30</li>
+                <li data-value="1930-2000">19:30 - 20:00</li>
+                <li data-value="2000-2030">20:00 - 20:30</li>
+                <li data-value="2030-2100">20:30 - 21:00</li>
+            </ul>
+        </div>
+
+        <div class="hostess-profile">
+            <button type="submit"><img src="{% static 'images/reservation.svg' %}" alt="">この子を指名する</button>
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            scrollbar: {
+              el: '.swiper-scrollbar',
+              hide: true,
+              draggable: true,
+            },
+          });
+    </script>
 {% endblock %}

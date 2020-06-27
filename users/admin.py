@@ -23,9 +23,16 @@ class HostessProfileAdmin(admin.ModelAdmin):
     list_display = (
         'hostess',
         'image_tag',
-        'birthday',
-        'prefecture_code',
         'height',
+        'prefecture_code',
+        'area',
+        'body',
+        'age',
+        'style',
+        'personality',
+        'message',
+        'image',
+        'rank',
         'created_at',
         'updated_at',
     )

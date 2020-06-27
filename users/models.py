@@ -6,6 +6,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
+from django.contrib.postgres.fields import ArrayField
 
 from lib.models import BaseModel
 from . import managers
@@ -100,10 +101,67 @@ class HostessProfile(BaseModel, models.Model):
         GOLD = "GD", "ゴールド"
         PLATINUM = "PM", "プラチナ"
 
-    image = models.URLField(_('image'), max_length=1024)
-    birthday = models.DateField(_('birthday'), null=True, default=None, db_index=True)
-    prefecture_code = models.IntegerField(_('prefecture_code'), default=-1, db_index=True)
+    class AreaTypes(models.TextChoices):
+        KABUKI = "kabuki", "歌舞伎町"
+        ROPPONGI = "roppongi", "六本木"
+        GINZA = "ginza", "銀座"
+        SHIBUYA = "shibuya", "渋谷"
+        KITASHINCHI = "kitashinchi", "北新地"
+        MINAMI = "minami", "ミナミ"
+        OTHER = "other", "その他"
+
+    class StyleTypes(models.TextChoices):
+        STYLE_CELEB = "celeb", "お姉さん・セレブ"
+        STYLE_SEXY = "sexy", "セクシー・ナイスバディ"
+        STYLE_SLIM = "slim", "モデル・スレンダー"
+        STYLE_BUSINESS = "business", "ビジネスパーソン"
+        STYLE_YOUNG = "young", "ロリータ・妹"
+        STYLE_SCHOOL = "school", "女子大生"
+        STYLE_GIRL = "girl", "ギャル"
+        STYLE_FAT = "fat", "ぽっちゃり"
+
+    class BodyTypes(models.TextChoices):
+        BODY_SLIM = "slim", "スリム"
+        BODY_SEMI_SLIM = "semi-slim", "やや細目"
+        BODY_NORMAL = "normal", "普通"
+        BODY_GRAMMER = "glamorous", "グラマー"
+        BODY_MUSCLAR = "musclar", "筋肉質"
+        BODY_SEMI_FAT = "semi-fat", "ややぽっちゃり"
+        BODY_FAT = "fat", "太め"
+
+    class PersonalityTypes(models.TextChoices):
+        PERSONALITY_HEAL = "heal", "癒し"
+        PERSONALITY_GOODY = "goody", "天然"
+        PERSONALITY_EVIL = "evil", "小悪魔"
+        PERSONALITY_PURE = "pure", "ピュア/素直"
+        PERSONALITY_SMART = "smart", "知的"
+        PERSONALITY_GROOVY = "groovy", "ノリノリ"
+        PERSONALITY_FRIENDLY = "friendly", "フレンドリー"
+        PERSONALITY_OUTDOOR = "outdoor", "アウトドア"
+        PERSONALITY_INDOOR = "indoor", "インドア"
+
+
+    # 属性情報
+    # 身長
     height = models.IntegerField(_('height'), null=True, default=None, db_index=True)
+    # 出身地
+    prefecture_code = models.IntegerField(_('prefecture_code'), default=-1, db_index=True)
+    # キャスト経験エリア
+    area = ArrayField(models.CharField(_('area'), max_length=20, choices=AreaTypes.choices, db_index=True), size=10, default=list)
+    # 体型
+    body = models.CharField(_('body'), max_length=20, choices=BodyTypes.choices, null=True, default=None, db_index=True)
+    # 年齢
+    age = models.IntegerField(_('age'), default=None, null=True)
+    # 雰囲気/スタイル
+    style = ArrayField(models.CharField(_('style'), max_length=20, choices=StyleTypes.choices, db_index=True), size=10, default=list)
+    # 性格
+    personality = ArrayField(models.CharField(_('personality'), max_length=20, choices=PersonalityTypes.choices, db_index=True), size=10, default=list)
+    # メッセージ
+    message = models.TextField(_('message'), null=True, default=None)
+    # プロフィール画像
+    image = models.URLField(_('image'), max_length=1024)
+
+    # 料金モデル
     rank = models.CharField(_('rank'), max_length=2, choices=RankTypes.choices, default=RankTypes.SILVER, db_index=True)
 
     hostess = models.OneToOneField(

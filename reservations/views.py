@@ -36,6 +36,15 @@ class HostessSearchView(View):
         context = dict(page_obj=page_obj, tag_groups=tag_groups)
         return render(request, self.template, context=context)
 
+
+class HostessDetailTestView(View):
+    template = 'reservation/hostess/detail.html'
+
+    def get(self, request):
+        context = dict()
+        return render(request, self.template, context=context)
+
+
 class HostessDetailView(View):
     template = 'reservation/hostess/detail.html'
 
