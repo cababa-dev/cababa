@@ -184,6 +184,8 @@ class HostessProfile(BaseModel, models.Model):
         primary_key=True,
     )
 
+    objects = managers.HostessProfileManager()
+
 
 class GuestProfile(BaseModel, models.Model):
     prefecture_code = models.IntegerField(_('prefecture_code'), default=-1, db_index=True)

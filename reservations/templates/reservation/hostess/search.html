@@ -95,19 +95,13 @@
             <div class="condition-body">
                 <div class="age">
                     <select name="age" multiple style="display: none;">
-                        <option value="20-25"></option>
-                        <option value="25-30"></option>
-                        <option value="30-35"></option>
-                        <option value="35-40"></option>
-                        <option value="40-45"></option>
-                        <option value="45-50"></option>
+                        {% for value, text in form.age.field.choices %}
+                            <option value="{{ value }}"></option>
+                        {% endfor %}
                     </select>
-                    <div class="condition-option" data-target="age" data-value="20-25">20-25歳</div>
-                    <div class="condition-option" data-target="age" data-value="25-30">25-30歳</div>
-                    <div class="condition-option" data-target="age" data-value="30-35">30-35歳</div>
-                    <div class="condition-option" data-target="age" data-value="35-40">35-40歳</div>
-                    <div class="condition-option" data-target="age" data-value="40-45">40-45歳</div>
-                    <div class="condition-option" data-target="age" data-value="45-50">45-50歳</div>
+                    {% for value, text in form.age.field.choices %}
+                        <div class="condition-option" data-target="age" data-value="{{ value }}">{{ text }}</div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

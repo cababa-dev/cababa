@@ -1,5 +1,8 @@
+from functools import reduce
+
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
+from django.db.models import Q
 
 
 class UserManager(BaseUserManager):
@@ -53,3 +56,25 @@ class GroupManager(models.Manager):
 
     def get_by_natural_key(self, name):
         return self.get(name=name)
+
+
+class HostessProfileManager(models.Manager):
+    def search(self, keyword=None, body=[], age=[], datetime_start=None, datetime_end=None, **kwargs):
+        query_list = []
+        if keyword:
+            # キーワード -> 名前で検索
+            query_list.append(Q(hostess__display_name__icontains=keyword))
+        if body:
+            # 体型で検索
+            query_list.append(Q(body__in=body))
+        for age_q in age:
+            # 年齢で検索
+            query_list.append(Q(age__gte=age_q[0], age__lte=age_q[1]))
+        if datetime_start and datetime_end:
+            # 出勤日で検索
+            pass
+        print(query_list)
+        if len(query_list) == 0:
+            return self.all()
+        q = reduce(lambda x, y: x | y, query_list[1:], query_list[0])
+        return self.filter(q)

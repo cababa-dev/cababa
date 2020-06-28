@@ -16,99 +16,32 @@
 <div class="hostess-index">
     <h2>キャスト一覧</h2>
 
-    <div class="rank-block">
-        <h3>Platinum rank</h3>
-        <div class="hostess-list">
-            <a href="{% url 'reservations:hostess_detail_test' %}">
-                <div class="hostess-block">
-                    <img src="{% static 'sample/profile1.png' %}" alt="">
-                    <h4 class="title">みさき (25)</h4>
-                    <p>銀座 Club Lucente</p>
-                </div>
-            </a>
-            <a href="{% url 'reservations:hostess_detail_test' %}">
-                <div class="hostess-block">
-                    <img src="{% static 'sample/profile1.png' %}" alt="">
-                    <h4 class="title">みさき (25)</h4>
-                    <p>銀座 Club Lucente</p>
-                </div>
-            </a>
-            <a href="{% url 'reservations:hostess_detail_test' %}">
-                <div class="hostess-block">
-                    <img src="{% static 'sample/profile1.png' %}" alt="">
-                    <h4 class="title">みさき (25)</h4>
-                    <p>銀座 Club Lucente</p>
-                </div>
-            </a>
-            <a href="{% url 'reservations:hostess_detail_test' %}">
-                <div class="hostess-block">
-                    <img src="{% static 'sample/profile1.png' %}" alt="">
-                    <h4 class="title">みさき (25)</h4>
-                    <p>銀座 Club Lucente</p>
-                </div>
-            </a>
-        </div>
-    </div>
+    {% regroup page_obj by rank as hostess_group %}
 
-    <div class="rank-block">
-        <h3>Gold rank</h3>
-        <div class="hostess-list">
-            <a href="{% url 'reservations:hostess_detail_test' %}">
-                <div class="hostess-block">
-                    <img src="{% static 'sample/profile2.png' %}" alt="">
-                    <h4 class="title">かのん (25)</h4>
-                    <p>六本木 MUSERVA</p>
-                </div>
-            </a>
-            <a href="{% url 'reservations:hostess_detail_test' %}">
-                <div class="hostess-block">
-                    <img src="{% static 'sample/profile2.png' %}" alt="">
-                    <h4 class="title">かのん (25)</h4>
-                    <p>六本木 MUSERVA</p>
-                </div>
-            </a>
-            <a href="{% url 'reservations:hostess_detail_test' %}">
-                <div class="hostess-block">
-                    <img src="{% static 'sample/profile2.png' %}" alt="">
-                    <h4 class="title">かのん (25)</h4>
-                    <p>六本木 MUSERVA</p>
-                </div>
-            </a>
-            <a href="{% url 'reservations:hostess_detail_test' %}">
-                <div class="hostess-block">
-                    <img src="{% static 'sample/profile2.png' %}" alt="">
-                    <h4 class="title">かのん (25)</h4>
-                    <p>六本木 MUSERVA</p>
-                </div>
-            </a>
+    {% for group in hostess_group %}
+        <div class="rank-block">
+            {% if group.grouper == 'PM' %}
+                <h3>Platinum rank</h3>
+            {% elif group.grouper == 'GD' %}
+                <h3>Gold rank</h3>
+            {% elif group.grouper == 'SR' %}
+                <h3>Silver rank</h3>
+            {% endif %}
+            <div class="hostess-list">
+                {% for hostess_profile in group.list %}
+                    <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
+                        <div class="hostess-block">
+                            <img src="{{ hostess_profile.images.0 }}" alt="">
+                            <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
+                            <p>{{ hostess_profile.hostess.group.name }}</p>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
         </div>
+    {% endfor %}
+
     </div>
 </div>
-
-<!-- 
-<h2>出勤予定のキャスト</h2>
-
-<form method="GET">
-    {% for group in tag_groups %}
-        <label for="{{ group.name }}">{{ group.title }}</label>
-        <select id="{{ group.name }}" class="form-control">
-            {% for tag in group.tag_set.all %}
-                <option value="{{ tag.name }}">{{ tag.value }}</option>
-            {% endfor %}
-        </select>
-    {% endfor %}
-</form>
-
-{% for available in page_obj %}
-    <div class="list">
-        <a href="{% url 'reservations:hostess_detail' available.hostess.user_id %}">
-            <figure><img src="{{ available.hostess.hostess_profile.image }}" alt="profile-image"></figure>
-            <h4>{{ available.hostess.display_name }}</h4>
-            <p>楽しくおしゃべりしましょ！</p>
-            <p>お酒大好きなので、一緒にお酒飲める人募集中！</p>
-            <span class="mark1">本日出勤</span>
-        </a>
-    </div>
-{% endfor %} -->
 
 {% endblock %}

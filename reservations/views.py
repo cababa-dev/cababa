@@ -1,39 +1,38 @@
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
+from django.core.paginator import Paginator
 
 from lib import mixins, line
 from users import models as user_models
 from hostess import models as hostess_models
-from . import models, services
+from . import models, forms, services
 
 
 class HostessListView(View):
     template = 'reservation/hostess/index.html'
 
-    def get_queryset(self):
-        querysets = hostess_models.AvailableTime.objects.all()
-        return querysets
+    def get_queryset(self, page=1, page_size=24, **query):
+        querysets = user_models.HostessProfile.objects.search(**query)
+        page_obj = Paginator(querysets, page_size)
+        return page_obj.page(page)
 	
     # ホステス検索
     def get(self, request):
-        page_obj = self.get_queryset()
-        tag_groups = user_models.TagGroup.objects.all()
-        context = dict(page_obj=page_obj, tag_groups=tag_groups)
+        form = forms.HostessSearchForm(request.GET)
+        if not form.is_valid():
+            querysets = self.get_queryset()
+        else:
+            querysets = self.get_queryset(**form.cleaned_data)
+        context = dict(page_obj=querysets)
         return render(request, self.template, context=context)
 
 class HostessSearchView(View):
     template = 'reservation/hostess/search.html'
 
-    def get_queryset(self):
-        querysets = hostess_models.AvailableTime.objects.all()
-        return querysets
-	
     # ホステス検索
     def get(self, request):
-        page_obj = self.get_queryset()
-        tag_groups = user_models.TagGroup.objects.all()
-        context = dict(page_obj=page_obj, tag_groups=tag_groups)
+        context = dict()
         return render(request, self.template, context=context)
 
 

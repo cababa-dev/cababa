@@ -1,5 +1,6 @@
 {% extends 'cababa/partials/base.html' %}
 {% load static %}
+{% load cababa %}
 {% block title %}ホステス名{% endblock %}
 
 {% block css %}
@@ -14,10 +15,9 @@
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper">
             <!-- Slides -->
-            <img class="swiper-slide" src="{% static 'sample/profile1.png' %}" alt="">
-            <img class="swiper-slide" src="{% static 'sample/profile2.png' %}" alt="">
-            <img class="swiper-slide" src="{% static 'sample/profile1.png' %}" alt="">
-            <img class="swiper-slide" src="{% static 'sample/profile2.png' %}" alt="">
+            {% for image in hostess.hostess_profile.images %}
+                <img class="swiper-slide" src="{{ image }}" alt="">
+            {% endfor %}
         </div>
         <!-- If we need scrollbar -->
         <div class="swiper-scrollbar"></div>
@@ -27,29 +27,36 @@
 
         <div class="hostess-profile">
             <div class="title-block">
-                <h2>かのん (25)</h2>
-                <h5>銀座 Club lucente</h5>
+                <h2>{{ hostess.display_name }}{% if hostess.hostess_profile.age %} ({{ hostess.hostess_profile.age }}){% endif %}</h2>
+                <h5>{{ hostess.group.name }}</h5>
             </div>
             <dl class="profile-block">
-                <dt>身長</dt>
-                <dd>166.5cm</dd>
-                <dt>出身地</dt>
-                <dd>埼玉県</dd>
-                <dt>キャスト経験エリア</dt>
-                <dd>東京都 埼玉県</dd>
+                {% if hostess.hostess_profile.height %}
+                    <dt>身長</dt>
+                    <dd>{{ hostess.hostess_profile.height }}cm</dd>
+                {% endif %}
+                {% if hostess.hostess_profile.prefecture_code %}
+                    <dt>出身地</dt>
+                    <dd>{{ hostess.hostess_profile.prefecture_code|prefecture_str }}</dd>
+                {% endif %}
+                {% if hostess.hostess_profile.area %}
+                    <dt>キャスト経験エリア</dt>
+                    <dd> {% for area in hostess.hostess_profile.area %}{{ area|get_area_display }} {% endfor %}</dd>
+                {% endif %}
             </dl>
             <ul class="style-block">
-                <li>細め</li>
-                <li>お姉さん/セレブ</li>
-                <li>ギャル</li>
-                <li>知的</li>
-                <li>インドア</li>
+                {% if hostess.hostess_profile.body %}
+                    <li>{{ hostess.hostess_profile.get_body_display }}</li>
+                {% endif %}
+                {% for style in hostess.hostess_profile.style %}
+                    <li>{{ style|get_style_display }}</li>
+                {% endfor %}
             </ul>
         </div>
 
         <div class="hostess-profile">
             <h3><img src="{% static 'images/heart.svg' %}" alt="">メッセージ</h3>
-            <p>貴方にお会いできることを楽しみにしております。</p>
+            <p>{{ hostess.hostess_profile.message|line_break }}</p>
         </div>
 
         <div class="hostess-profile">
@@ -85,6 +92,7 @@
         </div>
 
         <div class="hostess-profile">
+            {% csrf_token %}
             <button type="submit"><img src="{% static 'images/reservation.svg' %}" alt="">この子を指名する</button>
         </div>
     </form>
