@@ -596,12 +596,12 @@ ul.style-block li {
     display: none;
 }
 
-.hostess-profile ul.available_date {
+.hostess-profile ul.available_time {
     list-style: none;
     padding: 0;
 }
 
-ul.available_date li {
+ul.available_time li {
     font-family: 'Noto Sans', sans-serif;
     font-size: 14px;
     letter-spacing: 1px;
@@ -612,7 +612,7 @@ ul.available_date li {
     margin: 7px;
 }
 
-ul.available_date li.active {
+ul.available_time li.active {
     color: #94805B;
     background-color: rgba(148, 128, 91, .3);
 }

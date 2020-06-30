@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
@@ -57,9 +59,12 @@ class HostessDetailView(View):
     # ホステス詳細
     def get(self, request, hostess_id):
         hostess = self.get_queryset(hostess_id)
-        available_times = hostess_models.AvailableTime.objects.filter(hostess=hostess)
+        start_at = datetime.datetime.today()
+        end_at = start_at + datetime.timedelta(days=7)
+        available_times = hostess_models.AvailableTime.objects.filter(hostess=hostess, start_at__gt=start_at, end_at__lt=end_at)
         available_times = [a for a in available_times if not models.Reservation.objects.filter(time=a).exists()]
-        context = {'hostess': hostess, 'available_times': available_times}
+        available_date = [start_at + datetime.timedelta(days=i) for i in range(7)]
+        context = {'hostess': hostess, 'available_times': available_times, 'available_date': available_date}
         return render(request, self.template, context=context)
 
 

@@ -44,3 +44,55 @@ $('#condition-clear').on('click', function (e) {
         $(option).removeClass('selected');
     }
 });
+
+
+// お嬢詳細画面の出勤情報：時間の表示設定
+function switchAvailbleTime(selectedDate=undefined, timeValues=[]) {
+    console.log(timeValues);
+    
+    // 空の場合に表示するパラグラフ
+    var emptyParagraph = $('p#empty-available-time');
+    // 一旦すべての時間を非表示にする
+    var listItems = $('ul.available_time li');
+    for (var item of listItems) {
+        $(item).css('display', 'none');
+    }
+
+    if (timeValues.length == 0 ) {
+        // 空の場合
+        emptyParagraph.css('display', '');
+    } else {
+        // 予約できる日時がある場合
+        for (var item of timeValues) {   
+            emptyParagraph.css('display', 'none');  
+            $('ul.available_time li.date-'+selectedDate).css('display', '')
+        }
+    }
+}
+
+// お嬢詳細画面の出勤情報：日付を選択したとき
+$('select[name=available_date]').on('change', function (e) {
+    var selectedValue = $(e.currentTarget).val();
+    var timeItems = $('li.date-'+selectedValue);
+    
+    var timeValues = [];
+    for (var item of timeItems) {
+        var value = $(item).data("value");
+        timeValues.push(value);
+    }
+    switchAvailbleTime(selectedValue, timeValues);
+});
+
+// お嬢詳細画面の出勤情報：日時ボタンをクリックしたとき
+$('ul.available_time li').on('click', function (e) {
+    var selectedItem = $(e.currentTarget);
+    // 他のボタンからactiveを削除
+    var listItems = $('ul.available_time li');
+    for (var item of listItems) {
+        $(item).removeClass('active');
+    }
+    selectedItem.addClass('active');
+    // selectフォームの値を変更
+    var value = selectedItem.data('value');
+    $('select[name=available_time]').value = value;
+})

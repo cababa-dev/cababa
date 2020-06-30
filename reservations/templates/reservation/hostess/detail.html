@@ -64,30 +64,24 @@
             <h4>予約したい時間帯を選択してください。</h4>
 
             <select name="available_date">
-                <option value="20200526">2020年5月26日 (火)</option>
-                <option value="20200527">2020年5月27日 (水)</option>
-                <option value="20200528">2020年5月28日 (木)</option>
-                <option value="20200529">2020年5月29日 (金)</option>
-                <option value="20200530">2020年5月30日 (土)</option>
-                <option value="20200531">2020年5月31日 (日)</option>
+                <option value="">選択してください</option>
+                {% for d in available_date %}
+                    <option value="{{ d|date:'Ymd' }}">{{ d|date:'Y年n月j日 (D)' }}</option>
+                {% endfor %}
             </select>
+
+            <p id="empty-available-time">予約出来る時間がありません</p>
 
             <select name="available_time">
-                <option value="1800-1830">18:00 - 18:30</option>
-                <option value="1830-1900">18:30 - 19:00</option>
-                <option value="1900-1930">19:00 - 19:30</option>
-                <option value="1930-2000">19:30 - 20:00</option>
-                <option value="2000-2030">20:00 - 20:30</option>
-                <option value="2030-2100">20:30 - 21:00</option>
+                {% for available_time in available_times %}
+                    <option value="{{ available_time.start_at|date:'Hi' }}-{{ available_time.end_at|date:'Hi' }}"></option>
+                {% endfor %}
             </select>
 
-            <ul class="available_date">
-                <li data-value="1800-1830">18:00 - 18:30</li>
-                <li data-value="1830-1900">18:30 - 19:00</li>
-                <li class="active" data-value="1900-1930">19:00 - 19:30</li>
-                <li data-value="1930-2000">19:30 - 20:00</li>
-                <li data-value="2000-2030">20:00 - 20:30</li>
-                <li data-value="2030-2100">20:30 - 21:00</li>
+            <ul class="available_time">
+                {% for available_time in available_times %}
+                    <li class="date-{{ available_time.start_at|date:'Ymd' }}" data-value="{{ available_time.start_at|date:'Hi' }}-{{ available_time.end_at|date:'Hi' }}">{{ available_time.start_at|date:'H:i' }} - {{ available_time.end_at|date:'H:i' }}</li>
+                {% endfor %}
             </ul>
         </div>
 
@@ -111,5 +105,9 @@
               draggable: true,
             },
           });
+
+        $(function () {
+            switchAvailbleTime(undefined, []);
+        });
     </script>
 {% endblock %}
