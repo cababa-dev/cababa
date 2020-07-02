@@ -2,7 +2,9 @@ import datetime
 
 from django import forms
 
+from hostess.models import AvailableTime
 from users.models import HostessProfile
+from .models import Reservation
 
 
 class HostessSearchForm(forms.Form):
@@ -46,3 +48,17 @@ class HostessSearchForm(forms.Form):
             cleaned_data['datetime_start'] = datetime.datetime.strptime('{}T{}'.format(date_str, start_time), '%Y-%m-%dT%H-%M')
             cleaned_data['datetime_end'] = datetime.datetime.strptime('{}T{}'.format(date_str, end_time), '%Y-%m-%dT%H-%M')
         return cleaned_data
+
+
+class HostessDetailForm(forms.Form):
+    available_time = forms.CharField()
+
+    def clean_available_time(self):
+        available_time_id = self.cleaned_data.get('available_time')
+        try:
+            available_time = AvailableTime.objects.get(available_id=available_time_id)
+        except AvailableTime.DoesNotExist:
+            raise forms.ValidationError('この時間は予約できません')
+        if Reservation.objects.filter(time=available_time).exists():
+            raise forms.ValidationError('この時間は予約できません')
+        return available_time

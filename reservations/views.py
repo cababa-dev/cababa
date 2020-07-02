@@ -67,6 +67,16 @@ class HostessDetailView(View):
         context = {'hostess': hostess, 'available_times': available_times, 'available_date': available_date}
         return render(request, self.template, context=context)
 
+    # ホステス予約時間選択
+    def post(self, request, hostess_id):
+        hostess = self.get_queryset(hostess_id)
+        form = forms.HostessDetailForm(request.POST)
+        if not form.is_valid():
+            return redirect('reservations:detail', hostess_id=hostess_id)
+        # 予約画面へ遷移する -> ログインしてなければ自動的にプロフィール登録ページへリダイレクトする
+        available_id = form.cleaned_data.get('available_time').available_id
+        return redirect('reservations:create_reserve', available_id=available_id)
+
 
 class CreateReserveView(mixins.GuestPageMixin, View):
     template = 'reservation/new.html'

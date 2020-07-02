@@ -1,12 +1,13 @@
-{% extends 'partials/base.html' %}
+{% extends 'cababa/partials/base.html' %}
 {% block title %}プロフィール設定{% endblock %}
 
 {% block content %}
 
-<h2>登録完了</h2>
+<div class="hostess-signup-done">
+    <h2>登録が完了しました</h2>
+    <p>ご登録ありがとうございました</p>
+    <p>連携したLINEに招待メッセージを送信しました</p>
+    <p>引き続きCABABAをよろしくお願いいたします</p>
+</div>
 
-<p>登録は完了しました</p>
-<p>LINE@のメニューから操作してください</p>
-
-{{ login_url }}
 {% endblock %}

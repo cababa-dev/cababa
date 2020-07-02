@@ -1,4 +1,4 @@
-{% extends 'partials/base.html' %}
+{% extends 'cababa/partials/base.html' %}
 {% load static %}
 {% block title %}プロフィール設定{% endblock %}
 
@@ -22,41 +22,41 @@
 {% endblock %}
 
 {% block content %}
-<h5>登録完了まであともう少しです</h5>
-<p class="text-danger">* 必須入力</p>
-<hr>
+<div class="profile-edit">
+    <h2>登録完了まであともう少しです</h2>
+    <p><span>*</span> 必須入力</p>
 
-{% if form.non_field_errors %}
-    <div class="alert alert-danger" role="alert">{{ form.non_field_errors.0 }}</div>
-{% endif %}
+    <form  method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
 
-<form method="POST" id="signup-form" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-group" id="profile-name">
-        <label for="display_name"><span class="text-danger">*</span>おなまえ</label>
-        {% if form.display_name.errors %}
-            <p class="text-danger">{{ form.display_name.errors.0|escape }}</p>
-        {% endif %}
-        <input type="text" class="form-control" name="display_name" aria-describedby="nameHelp" placeholder="風俗太郎" value="{{ form.display_name.value }}" required>
-        <small id="nameHelp" class="form-text text-muted">この名前はお嬢のみに共有されます</small>
-    </div>
-    <div class="form-group" id="profile-prefecture-code">
-        <label for="prefecture_code">お住まいの都道府県</label>
-        <select name="prefecture_code" class="form-control">
-            {% for prefecture in prefectures %}
-                <option value="{{ prefecture.code }}">{{ prefecture.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="form-group">
-        <label>連絡用LINEチャンネル</label>
-        <p>
-            <a href="https://lin.ee/2S0np0FlU"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="36" border="0"></a>
+        <p>この情報はキャストのみに共有されます</p>
+
+        <div class="form-field">
+            <label for="display_name"><span>*</span> お名前</label>
+            <input type="text" name="display_name" placeholder="" required>
+        </div>
+
+        <div class="form-field">
+            <label for="prefecture_code"><span>*</span> お住まいの都道府県</label>
+            <br/>
+            <select name="prefecture_code" class="single">
+                {% for prefecture in prefectures %}
+                    <option value="{{ prefecture.code }}">{{ prefecture.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- LINEボット登録 -->
+        <div class="form-field">
+            <h3><span>*</span> 連絡用LINEチャンネル</h3>
+            <p>こちらのチャンネルを友達登録してください</p>
+            <a href="https://lin.ee/2S0np0FlU"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" width="150" border="0"></a>
+        </div>
+        
+        <p class="agreement">
+            <a href="{% url 'user_agreement_view' %}">CABABA会員規約</a>
         </p>
-        <small class="form-text text-muted">こちらのチャンネルを友達登録してください</small>
-    </div>
-    <div class="form-grou">
-        <button class="btn btn-primary" type="submit">登録</button>
-    </div>
-</form>
+        <button type="submit">規約に同意して送信</button>
+    </form>
+</div>
 {% endblock %}
