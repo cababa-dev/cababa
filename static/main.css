@@ -521,6 +521,11 @@ form.hostess-search a img {
     letter-spacing: 2px;
 }
 
+.hostess-detail .hostess-profile p.date {
+    font-weight: 700;
+    color: #9D8860;
+}
+
 .hostess-profile .title-block {
     text-align: center;
 }

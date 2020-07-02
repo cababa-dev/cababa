@@ -1,35 +1,88 @@
 {% extends 'cababa/partials/base.html' %}
+{% load static %}
+{% load cababa %}
 {% block title %}予約確認{% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+{% endblock %}
+
 {% block content %}
-<h2>予約確認</h2>
 
-<p>こちらの内容で予約しますか？</p>
-
-<h3>{{ available_time.hostess.display_name }}</h3>
-
-<div class="staff">
-    <div class="left">
-        <figure>
-            <img src="{{ available_time.hostess.hostess_profile.image }}" alt="profile-image">
-        </figure>
-    </div>
-
-    <div class="right">
-        <h3>予約内容</h3>
-        <div id="sub">
-            <nav class="box1">
-                <ul class="submenu">
-                    <li>{{ available_time.start_at|date:'Y年m月d日 H:i' }}-{{ available_time.end_at|date:'H:i' }}</li>
-                </ul>
-            </nav>
+<div class="hostess-detail">
+    <!-- Slider main container -->
+    <div class="swiper-container">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            {% for image in available_time.hostess.hostess_profile.images %}
+                <img class="swiper-slide" src="{{ image }}" alt="">
+            {% endfor %}
         </div>
+        <!-- If we need scrollbar -->
+        <div class="swiper-scrollbar"></div>
     </div>
+
+    <form method="post">
+
+        <div class="hostess-profile">
+            <div class="title-block">
+                <h2>{{ available_time.hostess.display_name }}{% if available_time.hostess.hostess_profile.age %} ({{ available_time.hostess.hostess_profile.age }}){% endif %}</h2>
+                <h5>{{ available_time.hostess.group.name }}</h5>
+            </div>
+            <dl class="profile-block">
+                {% if available_time.hostess.hostess_profile.height %}
+                    <dt>身長</dt>
+                    <dd>{{ available_time.hostess.hostess_profile.height }}cm</dd>
+                {% endif %}
+                {% if available_time.hostess.hostess_profile.prefecture_code %}
+                    <dt>出身地</dt>
+                    <dd>{{ available_time.hostess.hostess_profile.prefecture_code|prefecture_str }}</dd>
+                {% endif %}
+                {% if available_time.hostess.hostess_profile.area %}
+                    <dt>キャスト経験エリア</dt>
+                    <dd> {% for area in available_time.hostess.hostess_profile.area %}{{ area|get_area_display }} {% endfor %}</dd>
+                {% endif %}
+            </dl>
+            <ul class="style-block">
+                {% if available_time.hostess.hostess_profile.body %}
+                    <li>{{ available_time.hostess.hostess_profile.get_body_display }}</li>
+                {% endif %}
+                {% for style in available_time.hostess.hostess_profile.style %}
+                    <li>{{ style|get_style_display }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="hostess-profile">
+            <h3><img src="{% static 'images/calendar.svg' %}" alt="">予約情報</h3>
+            <p>こちらの予約でお間違いなければ<br/>確定ボタンを押してください</p>
+            <p class="date">{{ available_time.start_at|date:"Y年m月d日" }} {{ available_time.start_at|date:"H:i" }} - {{ available_time.end_at|date:"H:i" }}</p>
+        </div>
+
+        <div class="hostess-profile">
+            {% csrf_token %}
+            <button type="submit"><img src="{% static 'images/reservation.svg' %}" alt="">予約を確定する</button>
+        </div>
+    </form>
+
 </div>
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">予約確定</button>
-</form>
+{% endblock %}
 
+{% block js %}
+    <script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            scrollbar: {
+              el: '.swiper-scrollbar',
+              hide: true,
+              draggable: true,
+            },
+          });
+
+        $(function () {
+            switchAvailbleTime(undefined, []);
+        });
+    </script>
 {% endblock %}
