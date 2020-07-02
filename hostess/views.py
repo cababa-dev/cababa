@@ -79,8 +79,9 @@ class SignUpView(mixins.HostessPageMixin, View):
         return prefectures
 
     def get(self, request):
+        form = forms.SignupForm()
         prefectures = self.get_prefectures()
-        context = dict(prefectures=prefectures)
+        context = dict(prefectures=prefectures, form=form)
         return render(request, self.template, context)
     
     def post(self, request):

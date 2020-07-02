@@ -197,36 +197,6 @@ class GuestProfile(BaseModel, models.Model):
     )
 
 
-class TagGroup(BaseModel, models.Model):
-    tag_group_id = models.UUIDField(_('tag_group_id'), default=uuid.uuid4, unique=True, db_index=True)
-    name = models.CharField(_('name'), max_length=50, db_index=True, unique=True) # 英字名
-    title = models.CharField(_('title'), max_length=100)
-    description = models.TextField(_('description'), null=True, default=None)
-
-    def __str__(self):
-        return self.title
-
-
-class Tag(BaseModel, models.Model):
-    tag_id = models.UUIDField(_('tag_id'), default=uuid.uuid4, unique=True, db_index=True)
-    name = models.CharField(_('name'), max_length=50, db_index=True, unique=True) # 英字名
-    value = models.CharField(_('value'), max_length=100)
-    group = models.ForeignKey('users.TagGroup', on_delete=models.CASCADE, db_index=True)
-
-    hostes = models.ManyToManyField(User, through='HostessTagRelationship')
-
-
-class HostessTagRelationship(BaseModel, models.Model):
-    hostess_tag_id = models.UUIDField(_('hostess_tag_id'), default=uuid.uuid4, unique=True, db_index=True)
-    hostess = models.ForeignKey('users.User', on_delete=models.CASCADE, db_index=True)
-    tag = models.ForeignKey('users.Tag', on_delete=models.CASCADE, db_index=True)
-
-    class Meta:
-        unique_together = (
-            ('hostess', 'tag'),
-        )
-
-
 class Group(BaseModel, models.Model):
     group_id = models.UUIDField(_('group_id'), default=uuid.uuid4, unique=True, db_index=True)
     name = models.CharField(_('name'), max_length=50, db_index=True, unique=True) # 英字名

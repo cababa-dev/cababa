@@ -1,81 +1,136 @@
-{% extends 'partials/base.html' %}
+{% extends 'cababa/partials/base.html' %}
 {% load static %}
 {% block title %}プロフィール設定{% endblock %}
 
-{% block script %}
-<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script>
-<script src="{% static 'cababa.js' %}"></script>
-<script>
-    // 画像選択時のプレビュー
-    var boxes = document.querySelectorAll('#profile-image');
-
-    for (let i = 0; i < boxes.length; i++) {
-        if (window.CP.shouldStopExecution(1)) {
-            break;
-        }
-        let box = boxes[i];
-        initDropEffect(box);
-        initImageUpload(box);
-    }
-    window.CP.exitedLoop(1);
-</script>
-{% endblock %}
-
 {% block content %}
-<h2>登録完了まであともう少しです</h2>
-<p><span style="color:red">※</span> 必須入力</p>
 
-<form method="POST" id="signup-form" enctype="multipart/form-data">
-    {% csrf_token %}
-    <table class="ta1">
-        <!-- 名前 -->
-        <tr>
-            <th width="150"><label for="display_name">おなまえ<span style="color:red">※</span></label></th>
-            <td>
-                <input type="text" size="40" maxlength="500" class="ws" name="display_name" placeholder="風俗花子" value="{{ form.display_name.value }}" required>
-            </td>
-        </tr>
-        
-        <!-- 写真 -->
-        <tr>
-            <th width="150"><label for="image">プロフィール写真<span style="color:red">※</span></label></th>
-            <td>
-                <input name="image" type="file" class="image-upload" required>
-                <!-- <input type="text" size="40" maxlength="500" class="ws" name="display_name" placeholder="風俗花子" value="{{ form.display_name.value }}" required> -->
-            </td>
-        </tr>
+<div class="profile-edit">
+    <h2>登録完了まであともう少しです</h2>
+    <p><span>*</span> 必須入力</p>
 
-        <!-- 誕生日 -->
-        <tr>
-            <th width="150"><label for="birthday">誕生日</label></th>
-            <td>
-                <input type="date" class="form-control" name="birthday">
-            </td>
-        </tr>
+    <form  method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
 
-        <!-- お住まいの都道府県 -->
-        <tr>
-            <th width="150"><label for="birthday">都道府県</label></th>
-            <td>
-                <select name="prefecture_code" class="form-control">
-                    {% for prefecture in prefectures %}
-                        <option value="{{ prefecture.code }}">{{ prefecture.name }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
+        <div class="form-field">
+            <label for="name"><span>*</span> 名前（本名）</label>
+            <input type="text" name="name" placeholder="山田花子" required>
+        </div>
+
+        <div class="form-field">
+            <label for="display_name"><span>*</span> 名前（源氏名）</label>
+            <input type="text" name="display_name" placeholder="あゆみ" required>
+        </div>
+
+        <div class="form-field">
+            <label for="profile_image1"><span>*</span> プロフィール画像1</label>
+            <input type="file" name="profile_image1" required>
+        </div>
+
+        <div class="form-field">
+            <label for="profile_image2">プロフィール画像2</label>
+            <input type="file" name="profile_image2">
+        </div>
+
+        <div class="form-field">
+            <label for="profile_image3">プロフィール画像3</label>
+            <input type="file" name="profile_image3">
+        </div>
+
+        <div class="form-field">
+            <label for="profile_image4">プロフィール画像4</label>
+            <input type="file" name="profile_image4">
+        </div>
+
+        <div class="form-field">
+            <label for="age"><span>*</span> 年齢</label>
+            <br/>
+            <input type="number" name="age" placeholder="27" required>
+        </div>
+
+        <div class="form-field">
+            <label for="height">身長 （任意）</label>
+            <br/>
+            <input type="number" name="height" placeholder="158">
+        </div>
+
+        <div class="form-field">
+            <label for="prefecture_code">出身地</label>
+            <br/>
+            <select name="prefecture_code" class="single" required>
+                {% for prefecture in prefectures %}
+                    <option value="{{ prefecture.code }}">{{ prefecture.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="body">体型</label>
+            <br/>
+            <select name="body" class="single" required>
+                {% for value, text in form.body.field.choices %}
+                    <option value="{{ value }}">{{ text }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.area.id_for_label }}">キャスト経験エリア（複数可）</label>
+            <br/>
+            <select name="area" multiple style="display: none;">
+                {% for value, text in form.area.field.choices %}
+                    <option value="{{ value }}"></option>
+                {% endfor %}
+            </select>
+            {% for value, text in form.area.field.choices %}
+                <div class="condition-option" data-target="area" data-value="{{ value }}">{{ text }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.style.id_for_label }}">雰囲気/スタイル（複数可）</label>
+            <br/>
+            <select name="style" multiple style="display: none;">
+                {% for value, text in form.style.field.choices %}
+                    <option value="{{ value }}"></option>
+                {% endfor %}
+            </select>
+            {% for value, text in form.style.field.choices %}
+                <div class="condition-option" data-target="style" data-value="{{ value }}">{{ text }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.personality.id_for_label }}">性格（複数可）</label>
+            <br/>
+            <select name="personality" multiple style="display: none;">
+                {% for value, text in form.personality.field.choices %}
+                    <option value="{{ value }}"></option>
+                {% endfor %}
+            </select>
+            {% for value, text in form.personality.field.choices %}
+                <div class="condition-option" data-target="personality" data-value="{{ value }}">{{ text }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-field">
+            <label for="message"><span>*</span> お客さんに一言メッセージ</label>
+            <textarea name="message"cols="30" rows="5" required></textarea>
+        </div>
 
         <!-- LINEボット登録 -->
-        <tr>
-            <th width="150"><label for="birthday">連絡用LINEチャンネル</label></th>
-            <td>
-                <small>こちらのチャンネルを友達登録してください</small>
-                <br>
-                <a href="https://lin.ee/1cPblm7wU"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" width=100 border="0"></a>
-            </td>
-        </tr>
+        <div class="form-field">
+            <h3><span>*</span> 連絡用LINEチャンネル</h3>
+            <p>こちらのチャンネルを友達登録してください</p>
+            <a href="https://lin.ee/1cPblm7wU"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" width=150 border="0"></a>
+        </div>
+        
+        <p class="agreement">
+            <a href="{% url 'cast_agreement_view' %}">CABABAキャストアカウント規約</a>
+        </p>
+        <button type="submit">規約に同意して送信</button>
+    </form>
+</div>
 
-    </table>
 
 <!--    
     <div class="form-group" id="profile-image">
@@ -92,8 +147,5 @@
             </div>
         </div>
     </div> -->
-    <div class="c">
-        <input type="submit" value="登録" class="btn">
-    </div>
-</form>
+
 {% endblock %}

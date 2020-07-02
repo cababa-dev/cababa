@@ -59,37 +59,3 @@ class GuestProfileAdmin(admin.ModelAdmin):
     search_fields = (
         'guest__display_name',
     )
-
-
-@admin.register(models.TagGroup)
-class TagGroupAdmin(admin.ModelAdmin):
-    date_heirarchy = (
-        'updated_at',
-    )
-    list_display = (
-        'name',
-        'title',
-        'created_at',
-        'updated_at',
-    )
-    search_fields = (
-        'name',
-        'title',
-    )
-
-@admin.register(models.Tag)
-class TagAdmin(admin.ModelAdmin):
-    date_heirarchy = (
-        'updated_at',
-    )
-    list_display = (
-        'group',
-        'value',
-        'name',
-        'created_at',
-        'updated_at',
-    )
-    search_fields = (
-        'name',
-        'value',
-    )

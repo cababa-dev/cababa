@@ -7,7 +7,7 @@ from django.core.files.storage import default_storage
 from django.conf import settings
 
 from lib import line
-from users.models import GuestProfile, TagGroup, Tag
+from users.models import GuestProfile
 
 
 

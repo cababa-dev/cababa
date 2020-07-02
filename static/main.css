@@ -418,6 +418,7 @@ form.hostess-search a img {
     margin: 0;
     padding: 5px;
     margin-left: -5px;
+    background-color: #FFFFFF;
 }
 
 .condition-body .date select::-ms-expand {
@@ -675,8 +676,142 @@ ul.available_time li.active {
     margin-top: 30px;
 }
 
+/* プロフィールの編集ページ */
+.profile-edit > h2 {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: #94805B;
+    text-align: center;
+    letter-spacing: 2px;
+}
 
-/* ホステス招待ページ */
+.profile-edit > p {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 600;
+    color: #4B4B4B;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.profile-edit > p:last-child {
+    margin-bottom: 400px;
+}
+
+.profile-edit span {
+    color: #FF0000;
+}
+
+.profile-edit form {
+    width: 90%;
+    margin: 0px auto;
+}
+
+.profile-edit form .form-field {
+    margin: 30px 0;
+}
+
+.profile-edit form .form-field label {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: #4B4B4B;
+}
+
+.profile-edit form .form-field input[type=text],
+.profile-edit form .form-field input[type=text]::placeholder,
+.profile-edit form .form-field input[type=number],
+.profile-edit form .form-field input[type=number]::placeholder {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #B39B6D;
+    opacity: 1;
+
+    border: none;
+    text-shadow: none;
+    box-shadow: none;
+    border-bottom: 1px solid #C4C4C4;
+    padding: 5px;
+    padding-bottom: 0px;
+    line-height: 35px;
+    width: 90%;
+    height: 40px;
+}
+
+.profile-edit form input[type=file] {
+    margin-top: 10px;
+}
+
+.profile-edit form button[type=submit] {
+    width: 80%;
+    height: 45px;
+    border: none;
+    background-color: #94805B;
+    color: #FFFFFF;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
+    margin: 50px auto;
+}
+
+.profile-edit form select {
+    margin-top: 15px!important;
+}
+
+/* .profile-edit .form-field > .condition-option:first-child {
+    margin-top: 15px;
+} */
+
+.profile-edit form textarea {
+    width: 100%;
+    border: 1px solid #C4C4C4;
+    margin-top: 15px;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #94805B;
+    padding: 5px;
+}
+
+.profile-edit select.single {
+    display: inline-block;
+    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 13px;
+    color: #B39B6D;
+    letter-spacing: 1px;
+    margin: 0;
+    padding: 5px;
+    margin-left: -5px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #C4C4C4;
+}
+
+.profile-edit select.single::-ms-expand {
+    display: none;
+}
+
+.profile-edit p.agreement {
+    text-align: center;
+}
+
+.profile-edit p.agreement a {
+    font-size: 12px;
+    font-weight: 400;
+    color: #9D8860;
+    letter-spacing: 2px;
+}
+
+
+/* ホステス登録完了 */
 .hostess-signup-done {
     margin-bottom: 100px;
 }

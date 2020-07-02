@@ -1,4 +1,4 @@
-{% extends 'partials/base.html' %}
+{% extends 'cababa/partials/base.html' %}
 {% load static %}
 {% block title %}ホステス登録{% endblock %}
 
@@ -8,8 +8,15 @@
     <div class="alert alert-danger" role="alert">{{ error }}</div>
 {% endif %}
 
-<h2>ホステス登録</h2>
-<p>LINEログインしてホステスデビューしましょう</p>
+<div class="hostess-invite">
+    <h2>ホステス登録</h2>
+    <p>LINEログインしてホステスデビューしましょう</p>
 
-<a href="{{ login_url }}"><img src="{% static 'images/btn_login_base.png' %}" width=200></a>
+    <h3>
+        <a class="hostess_agreement" href="{% url 'cast_agreement_view' %}">CABABAキャストアカウント規約</a>
+        <a href="{{ login_url }}"><img src="{% static 'images/btn_login_base.png' %}"></a>
+    </h3>
+</div>
+
+
 {% endblock %}
