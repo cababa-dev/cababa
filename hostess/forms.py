@@ -60,12 +60,12 @@ class SignupForm(forms.Form):
             os.makedirs(upload_dir)
         filename = default_storage.save('hostess/profile_image/'+filename, image_file)
         image_url = default_storage.url(filename)
-        print(image_url)
+        # アクセストークンを削除
+        image_url = image_url.split('?')[0]
         return image_url
 
     def save(self):
         data = self.cleaned_data
-        print(data)
         user = self.context['request'].user
         profile, created = HostessProfile.objects.get_or_create(hostess=user)
 

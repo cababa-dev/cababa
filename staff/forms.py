@@ -216,6 +216,7 @@ class HostessForm(forms.ModelForm):
             os.makedirs(upload_dir)
         filename = default_storage.save('hostess/profile_image/'+filename, image_file)
         image_url = default_storage.url(filename)
+        image_url = image_url.split('?')[0]
         return image_url
 
     def create(self):
