@@ -1,4 +1,5 @@
 import datetime
+import pytz
 
 import linebot
 from linebot import WebhookHandler, LineBotApi
@@ -48,16 +49,39 @@ class AvailableTimeMemu(Menu):
     """設定済みの出勤時間検索
     """
     def action_list_date(self, event, query): 
+        # 本日から1週間で検索
         # 出勤時間を取得
         hostess = self.get_hostess(event)
-        availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess) if not Reservation.objects.filter(time=a).exists()]
+        availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess).order_by('start_at') if not Reservation.objects.filter(time=a).exists()]
+        # 日付ごとに分ける
+        available_dates = {}
+        for available in availables:
+            available_dates[available.start_at.day] = available
+        answers = [
+            SimpleSelectionItem(text=available.start_at.strftime('%Y-%m-%d'), key='day', value=available.start_at.strftime('%Y-%m-%d'))
+            for available in available_dates.values()
+        ]
+        message = SimpleSelection(self, title='どの日付で検索しますか？', action='list_datetime', answers=answers)
+        return line_bot_api.reply_message(event.reply_token, message)
+
+    """出勤可能日を選択
+    """
+    def action_list_datetime(self, event, query):
+        # 本日から1週間で検索
+        # 出勤時間を取得
+        hostess = self.get_hostess(event)
+        start_date = make_aware(datetime.datetime.strptime(query['day'], '%Y-%m-%d'))
+        print(start_date)
+        end_date = start_date + datetime.timedelta(days=1)
+        availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess, start_at__gte=start_date, end_at__lte=end_date).order_by('start_at') if not Reservation.objects.filter(time=a).exists()]
+        print(availables[0].start_at)
         # 出勤時間が無ければエラーメッセージを返す
         if len(availables) == 0:
             return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='設定されていません'))
         # カルーセルで表示
         columns = [
             CarouselColumn(
-                title=localtime(available.start_at).strftime('%Y-%m-%d'), text='{}-{}'.format(localtime(available.start_at).strftime('%H:00'), localtime(available.end_at).strftime('%H:00')), actions=[
+                title=localtime(available.start_at).strftime('%Y-%m-%d'), text='{}-{}'.format(localtime(available.start_at).strftime('%H:%M'), localtime(available.end_at).strftime('%H:%M')), actions=[
                 PostbackAction(label='キャンセルする', display_text='キャンセルする', data='menu={}&action=cancel&id={}'.format(self.name, available.available_id))
             ])
             for available in availables
@@ -105,7 +129,7 @@ class AvailableTimeMemu(Menu):
         for available in availables:
             candidate_hours = [d for d in candidate_hours if d[0] != available.start_at]
         answers = [
-            SimpleSelectionItem(text='{}-{}'.format(d[0].strftime('%H:00'), d[1].strftime('%H:00')), key='start_hour', value=d[0].strftime('%Y-%m-%dT%H'))
+            SimpleSelectionItem(text='{}-{}'.format(d[0].strftime('%H:%M'), d[1].strftime('%H:%M')), key='start_hour', value=d[0].strftime('%Y-%m-%dT%H'))
             for d in candidate_hours
         ]
         message = SimpleSelection(self, title='出勤したい時間を選択してください', action='set_available', answers=answers)
@@ -117,9 +141,11 @@ class AvailableTimeMemu(Menu):
         hostess = self.get_hostess(event)
         start_hour = query.get('start_hour')
         start_hour = make_aware(datetime.datetime.strptime(start_hour, '%Y-%m-%dT%H'))
-        end_hour = start_hour + datetime.timedelta(hours=1)
+        end_hour_half = start_hour + datetime.timedelta(minutes=30)
+        end_hour = end_hour_half + datetime.timedelta(minutes=30)
         # 出勤可能時間を作成
-        available = models.AvailableTime.objects.create(start_at=start_hour, end_at=end_hour, hostess=hostess)
+        available = models.AvailableTime.objects.create(start_at=start_hour, end_at=end_hour_half, hostess=hostess)
+        available = models.AvailableTime.objects.create(start_at=end_hour_half, end_at=end_hour, hostess=hostess)
         return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='設定が完了しました'))
     
     def get_weekly(self):
@@ -143,7 +169,7 @@ class UnconfirmReservationMenu(Menu):
         # カルーセルで表示
         columns = []
         for reservation in reservations:
-            date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:00'), localtime(reservation.time.end_at).strftime('%m-%d %H:00'))
+            date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
             column = CarouselColumn(
                 title=reservation.guest.display_name,
                 text=date,
