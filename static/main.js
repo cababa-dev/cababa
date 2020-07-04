@@ -48,8 +48,6 @@ $('#condition-clear').on('click', function (e) {
 
 // お嬢詳細画面の出勤情報：時間の表示設定
 function switchAvailbleTime(selectedDate=undefined, timeValues=[]) {
-    console.log(timeValues);
-    
     // 空の場合に表示するパラグラフ
     var emptyParagraph = $('p#empty-available-time');
     // 一旦すべての時間を非表示にする
@@ -74,6 +72,12 @@ function switchAvailbleTime(selectedDate=undefined, timeValues=[]) {
 $('select[name=available_date]').on('change', function (e) {
     var selectedValue = $(e.currentTarget).val();
     var timeItems = $('li.date-'+selectedValue);
+
+    // すべて選択されていない状態にする
+    var listItems = $('ul.available_time li');
+    for (var item of listItems) {
+        $(item).removeClass('active');
+    }
     
     var timeValues = [];
     for (var item of timeItems) {
@@ -81,6 +85,7 @@ $('select[name=available_date]').on('change', function (e) {
         timeValues.push(value);
     }
     switchAvailbleTime(selectedValue, timeValues);
+    $('.hostess-detail button[type=submit]').prop('disabled', true);
 });
 
 // お嬢詳細画面の出勤情報：日時ボタンをクリックしたとき
@@ -95,4 +100,5 @@ $('ul.available_time li').on('click', function (e) {
     // selectフォームの値を変更
     var value = selectedItem.data('value');
     $('select[name=available_time]').value = value;
+    $('.hostess-detail button[type=submit]').prop('disabled', false);
 })

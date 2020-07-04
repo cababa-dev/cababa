@@ -637,6 +637,10 @@ ul.available_time li.active {
     border: none;
 }
 
+.hostess-detail button[type=submit]:disabled {
+    background: #C4C4C4;;
+}
+
 .hostess-detail button[type=submit] img {
     height: 25px;
     position: absolute;
