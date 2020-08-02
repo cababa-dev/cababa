@@ -1,6 +1,7 @@
 import datetime
 
 from django import forms
+from django.db.models import Q
 
 from hostess.models import AvailableTime
 from users.models import HostessProfile
@@ -59,6 +60,6 @@ class HostessDetailForm(forms.Form):
             available_time = AvailableTime.objects.get(available_id=available_time_id)
         except AvailableTime.DoesNotExist:
             raise forms.ValidationError('この時間は予約できません')
-        if Reservation.objects.filter(time=available_time).exists():
+        if Reservation.objects.filter(time=available_time).filter(Q(is_approval=True) | Q(is_approval=None)).exists():
             raise forms.ValidationError('この時間は予約できません')
         return available_time

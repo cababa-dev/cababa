@@ -4,6 +4,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 from lib import mixins, line
 from users import models as user_models
@@ -62,7 +63,8 @@ class HostessDetailView(View):
         start_at = datetime.datetime.today()
         end_at = start_at + datetime.timedelta(days=7)
         available_times = hostess_models.AvailableTime.objects.filter(hostess=hostess, start_at__gt=start_at, end_at__lt=end_at)
-        available_times = [a for a in available_times if not models.Reservation.objects.filter(time=a).exists()]
+        # 予約済みの場合は表示しない。ただし、拒否された予約の場合は表示する
+        available_times = [a for a in available_times if not models.Reservation.objects.filter(time=a).filter(Q(is_approval=True) | Q(is_approval=None)).exists()]
         available_date = [start_at + datetime.timedelta(days=i) for i in range(7)]
         context = {'hostess': hostess, 'available_times': available_times, 'available_date': available_date}
         return render(request, self.template, context=context)
@@ -72,7 +74,7 @@ class HostessDetailView(View):
         hostess = self.get_queryset(hostess_id)
         form = forms.HostessDetailForm(request.POST)
         if not form.is_valid():
-            return redirect('reservations:detail', hostess_id=hostess_id)
+            return redirect('reservations:hostess_detail', hostess_id=hostess_id)
         # 予約画面へ遷移する -> ログインしてなければ自動的にプロフィール登録ページへリダイレクトする
         available_id = form.cleaned_data.get('available_time').available_id
         return redirect('reservations:create_reserve', available_id=available_id)

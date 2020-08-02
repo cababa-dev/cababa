@@ -54,6 +54,11 @@ class Menu:
         line_user_id = event.source.user_id
         hostess = User.objects.get_hostess(line_user_id=line_user_id)
         return hostess
+    
+    def get_guest(self, event):
+        line_user_id = event.source.user_id
+        guest = User.objects.get_guest(line_user_id=line_user_id)
+        return guest
 
 
 class MenuHandler:

@@ -11,11 +11,6 @@ class Reservation(BaseModel, models.Model):
     guest = models.ForeignKey('users.User', db_index=True, on_delete=models.CASCADE)
     time = models.ForeignKey('hostess.AvailableTime', db_index=True, on_delete=models.CASCADE)
     is_approval = models.BooleanField(_('is_approval'), db_index=True, null=True, default=None)
-    
-    class Meta:
-        unique_together = (
-            ('guest', 'time'),
-        )
 
 
 class LinePayTransaction(BaseModel, models.Model):
@@ -41,3 +36,4 @@ class ZoomMeeting(BaseModel, models.Model):
     join_url = models.URLField(_('join_url'), max_length=1024)
     start_url = models.URLField(_('start_url'), max_length=1024)
     reservation = models.ForeignKey('reservations.Reservation', db_index=True, on_delete=models.CASCADE)
+    context = models.TextField(_('context'), default='')

@@ -1,3 +1,4 @@
+import json
 from linebot.models import TextSendMessage, PostbackAction, TemplateSendMessage, ButtonsTemplate
 
 from django.utils.timezone import localtime
@@ -53,7 +54,7 @@ class ReservationService:
             start_time=reservation.time.start_at,
             timezone=settings.TIME_ZONE,
             duration=(reservation.time.end_at - reservation.time.start_at).seconds, # [sec]
-            user_id="u651601f@gmail.com",
+            user_id=settings.ZOOM_ADMIN_EMAIL,
             settings=dict(join_before_host=True, participant_video=True)
         )
         response = client.meeting.create(**request_params)
@@ -61,11 +62,13 @@ class ReservationService:
         meeting_id = data['id']
         join_url = data['join_url']
         start_url = data['start_url']
+        context = json.dumps(data)
         meeting = models.ZoomMeeting.objects.create(
             meeting_id=meeting_id,
             join_url=join_url,
             start_url=start_url,
             reservation=reservation,
+            context=context,
         )
         return meeting
 

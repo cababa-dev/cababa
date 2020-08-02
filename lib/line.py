@@ -114,10 +114,17 @@ def get_line_pay_api():
 
 
 def pay_request(reservation):
+    # LINE PAYの支払い情報作成
     api = get_line_pay_api()
     LINE_PAY_REQEST_BASE_URL = "https://{}".format(settings.HOST_NAME)
     hostess = reservation.time.hostess
+
+    # テスト用に1円決済
     amount = 1
+    # 本番はランクに合わせて金額設定
+    # rank_price = settings.RANK_PRICES[hostess.hostess_profile.rank]
+    # amount = settings.BASE_PRICE + rank_price
+
     currency = 'JPY'
     request_options = {
 		"amount": amount,
@@ -132,7 +139,7 @@ def pay_request(reservation):
 					{
 						"id": str(reservation.reservation_id),
 						"name": hostess.display_name,
-						"imageUrl": hostess.hostess_profile.image,
+						"imageUrl": hostess.hostess_profile.images[0],
 						"quantity": 1,
 						"price": amount
 					}

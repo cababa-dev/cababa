@@ -13,6 +13,7 @@ from linebot.models import (
 from django.conf import settings
 from django.utils import timezone
 from django.utils.timezone import make_aware, localtime
+from django.db.models import Q
 
 from lib.bot import (
     parse_query,
@@ -52,7 +53,11 @@ class AvailableTimeMemu(Menu):
         # 本日から1週間で検索
         # 出勤時間を取得
         hostess = self.get_hostess(event)
-        availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess).order_by('start_at') if not Reservation.objects.filter(time=a).exists()]
+        now = datetime.datetime.now()
+        availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess, start_at__gte=now).order_by('start_at') if not Reservation.objects.filter(time=a).exists()]
+        # 出勤時間が無ければエラーメッセージを返す
+        if len(availables) == 0:
+            return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='設定されていません'))
         # 日付ごとに分ける
         available_dates = {}
         for available in availables:
@@ -71,13 +76,8 @@ class AvailableTimeMemu(Menu):
         # 出勤時間を取得
         hostess = self.get_hostess(event)
         start_date = make_aware(datetime.datetime.strptime(query['day'], '%Y-%m-%d'))
-        print(start_date)
         end_date = start_date + datetime.timedelta(days=1)
         availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess, start_at__gte=start_date, end_at__lte=end_date).order_by('start_at') if not Reservation.objects.filter(time=a).exists()]
-        print(availables[0].start_at)
-        # 出勤時間が無ければエラーメッセージを返す
-        if len(availables) == 0:
-            return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='設定されていません'))
         # カルーセルで表示
         columns = [
             CarouselColumn(
@@ -157,15 +157,16 @@ class AvailableTimeMemu(Menu):
 リッチメニュー: 未承認の予約一覧
 """
 class UnconfirmReservationMenu(Menu):
-    title = '予約依頼'
+    title = '予約一覧'
     name = 'unconfirm_reservations'
 
     def main_action(self, event):
         hostess = self.get_hostess(event)
-        reservations = Reservation.objects.filter(time__hostess=hostess, is_approval=False)
+        now = datetime.datetime.now()
+        reservations = Reservation.objects.filter(time__hostess=hostess, time__start_at__gte=now, is_approval=None)
         # 依頼が無い場合
         if len(reservations) == 0:
-            return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='未承認の予約はありません'))
+            return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='新規予約はありません'))
         # カルーセルで表示
         columns = []
         for reservation in reservations:

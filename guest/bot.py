@@ -4,7 +4,7 @@ import linebot
 from linebot import WebhookHandler, LineBotApi
 from linebot.models import (
     MessageEvent, PostbackEvent,
-    PostbackAction,
+    PostbackAction, URIAction, 
     TextMessage, TextSendMessage, TemplateSendMessage,
     ButtonsTemplate, CarouselTemplate, CarouselColumn, QuickReply, QuickReplyButton,
 )
@@ -19,26 +19,46 @@ from lib.bot import (
     SimpleMenu, SimpleSelection, SimpleSelectionItem,
 )
 
+from reservations.models import Reservation, LinePayTransaction
+
 
 handler = WebhookHandler(settings.GUEST_LINE_CHANNEL_SECRET)
 line_bot_api = LineBotApi(settings.GUEST_LINE_ACCESS_TOKEN)
 
 
 """
-リッチメニュー: 予約一覧
+リッチメニュー: キャスト予約一覧
 """
 class ReservationMenu(Menu):
-    title = '予約一覧'
-    name = 'reservations'
+    title = 'キャスト予約一覧'
+    name = 'guest_reservations'
 
-    """予約メニューを表示
+    """予約情報一覧を表示する
     """
     def main_action(self, event):
-        actions = {
-            self.action_list_date: '設定済みの出勤時間',
-            self.action_new_date: '出勤時間を設定'
-        }
-        message = SimpleMenu(self, actions=actions)
+        guest = self.get_guest(event)
+        now = datetime.datetime.now()
+        reservations = Reservation.objects.filter(guest=guest, time__start_at__gte=now, is_approval=True)
+        # 予約が無い場合
+        if len(reservations) == 0:
+            return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='予約はありません'))
+        # カルーセルで表示
+        columns = []
+        for reservation in reservations:
+            date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
+            column = CarouselColumn(
+                title=reservation.guest.display_name,
+                text=date,
+                actions=[
+                    URIAction(
+                        label='キャスト詳細',
+                        uri='https://{}reservations/hostess/{}'.format(settings.HOST_NAME, reservation.time.hostess.user_id)
+                    ),
+                ]
+            )
+            columns.append(column)
+            
+        message = TemplateSendMessage(alt_text='alt text', template=CarouselTemplate(columns=columns))
         return line_bot_api.reply_message(event.reply_token, message)
 
 
@@ -46,16 +66,49 @@ class ReservationMenu(Menu):
 リッチメニュー: 領収書
 """
 class InvoiceMenu(Menu):
-    title = '領収書'
+    title = '支払履歴'
     name = 'invoices'
 
     def main_action(self, event):
-        pass
+        # 支払い履歴を取得
+        guest = self.get_guest(event)
+        transactions = LinePayTransaction.objects.filter(reservation__guest=guest)[:5]
+
+        if len(transactions) == 0:
+            return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='支払履歴はありません'))
+
+        columns = []
+        for transaction in transactions:
+            title = '{date} {start}-{end}'.format(
+                date=localtime(transaction.reservation.time.start_at).strftime('%m/%d'),
+                start=localtime(transaction.reservation.time.start_at).strftime('%H:%M'),
+                end=localtime(transaction.reservation.time.end_at).strftime('%H:%M'),
+            )
+            text = '合計金額:\9,000\n■内訳\nベース料金：2,500円\n指名料：1,000円\nオプション料金：6,000円'.format(
+                hostess=transaction.reservation.time.hostess.display_name,
+            )
+            column = CarouselColumn(
+                title=title,
+                text=text,
+                actions=[
+                    URIAction(
+                        label='再予約',
+                        uri='https://{}reservations/hostess/{}'.format(settings.HOST_NAME, transaction.reservation.time.hostess.user_id)
+                    ),
+                ]
+            )
+            columns.append(column)
+            
+        message = TemplateSendMessage(alt_text='alt text', template=CarouselTemplate(columns=columns))
+        return line_bot_api.reply_message(event.reply_token, message)
 
 
-menu_handler = MenuHandler()
-menu_handler.add(ReservationMenu())
-menu_handler.add(InvoiceMenu())
+        return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='ご利用履歴一覧を返す'))
+
+
+guest_menu_handler = MenuHandler()
+guest_menu_handler.add(ReservationMenu())
+guest_menu_handler.add(InvoiceMenu())
 
 
 # テキストメッセージに対する反応
@@ -64,7 +117,7 @@ menu_handler.add(InvoiceMenu())
 def handle_message(event):
     # リッチメニュー制御
     text = event.message.text
-    menu = menu_handler.search_menu(text)
+    menu = guest_menu_handler.search_menu(text)
     if menu:
         return menu.main_action(event)
 
