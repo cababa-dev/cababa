@@ -38,7 +38,7 @@ class ReservationMenu(Menu):
     def main_action(self, event):
         guest = self.get_guest(event)
         now = datetime.datetime.now()
-        reservations = Reservation.objects.filter(guest=guest, time__start_at__gte=now, is_approval=True)
+        reservations = Reservation.objects.filter(guest=guest, time__start_at__gte=now, is_approval=True)[:5]
         # 予約が無い場合
         if len(reservations) == 0:
             return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='予約はありません'))

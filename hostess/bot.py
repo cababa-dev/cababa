@@ -5,7 +5,7 @@ import linebot
 from linebot import WebhookHandler, LineBotApi
 from linebot.models import (
     MessageEvent, PostbackEvent,
-    PostbackAction,
+    PostbackAction, URIAction,
     TextMessage, TextSendMessage, TemplateSendMessage,
     ButtonsTemplate, CarouselTemplate, CarouselColumn, QuickReply, QuickReplyButton,
 )
@@ -20,7 +20,7 @@ from lib.bot import (
     Menu, ActionHandler, MenuHandler,
     SimpleMenu, SimpleSelection, SimpleSelectionItem,
 )
-from reservations.models import Reservation
+from reservations.models import Reservation, ZoomMeeting
 from reservations.services import ReservationService
 from . import models
 
@@ -237,7 +237,75 @@ class ReservationMenu(Menu):
     name = 'reservations'
 
     def main_action(self, event):
-        pass
+        hostess = self.get_hostess(event)
+        now = datetime.datetime.now()
+        reservations = Reservation.objects.filter(time__hostess=hostess, time__start_at__gte=now, is_approval=True)
+        # reservations = Reservation.objects.filter(time__hostess=hostess, is_approval=True)
+        # 依頼が無い場合
+        if len(reservations) == 0:
+            return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='確定された予約はありません'))
+        # カルーセルで表示
+        columns = []
+        for reservation in reservations:
+            date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
+            column = CarouselColumn(
+                title=reservation.guest.display_name,
+                text=date,
+                actions=[
+                    PostbackAction(
+                        label='詳細',
+                        display_text='詳細',
+                        data='menu=reservations&action=detail&reservation_id={}'.format(reservation.reservation_id)
+                    ),
+                    PostbackAction(
+                        label='キャンセル',
+                        display_text='キャンセル',
+                        data='menu=reservations&action=cancel_menu&reservation_id={}'.format(reservation.reservation_id)
+                    )
+                ]
+            )
+            columns.append(column)
+            
+        message = TemplateSendMessage(alt_text='alt text', template=CarouselTemplate(columns=columns))
+        return line_bot_api.reply_message(event.reply_token, message)
+
+    def action_detail(self, event, query):
+        reservation = Reservation.objects.get(reservation_id=query.get('reservation_id'))
+        meeting = ZoomMeeting.objects.get(reservation=reservation)
+        text = "ZOOM参加のURLはこちら\n\n{}".format(meeting.join_url)
+        line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=text))
+
+    def action_cancel_menu(self, event, query):
+        reservation = Reservation.objects.get(reservation_id=query.get('reservation_id'))
+        template = ButtonsTemplate(
+            title='キャンセルしますか？',
+            text='キャンセルポリシーを表示',
+            actions=[
+                URIAction(
+                    label='キャンセルポリシー',
+                    uri='https://google.com'
+                ),
+                PostbackAction(
+                    label='キャンセルする',
+                    display_text='キャンセルする',
+                    data='menu=reservations&action=cancel_yes&reservation_id={}'.format(reservation.reservation_id)
+                ),
+                PostbackAction(
+                    label='キャンセルしない',
+                    display_text='キャンセルしない',
+                    data='menu=reservations&action=cancel_no&reservation_id={}'.format(reservation.reservation_id)
+                ),
+            ]
+        )
+        message = TemplateSendMessage(alt_text='キャンセルしますか？', template=template)
+        return line_bot_api.reply_message(event.reply_token, message) 
+
+    def action_cancel_yes(self, event, query):
+        return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='キャンセルしました'))
+
+    def action_cancel_no(self, event, query):
+        return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='キャンセルをやめました'))
+
 
 
 """
@@ -248,7 +316,7 @@ class SalesMenu(Menu):
     name = 'sales'
 
     def main_action(self, event):
-        pass
+        return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='こちらは現在準備中です。9月にリリース予定です'))
 
 
 
