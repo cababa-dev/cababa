@@ -1,5 +1,6 @@
 import json
 from linebot.models import TextSendMessage, PostbackAction, TemplateSendMessage, ButtonsTemplate
+from zoomus import ZoomClient
 
 from django.utils.timezone import localtime
 from django.conf import settings
@@ -49,7 +50,11 @@ class ReservationService:
         return transaction
     
     def create_meeting(self, reservation):
+        # 1. 同じ時刻に使用されていないZOOMアカウントを探す
         client = zoom.get_client()
+        # client = ZoomClient(settings.ZOOM_API_KEY, settings.ZOOM_API_SECRET)
+
+        # 2. ZOOMのルームを作成する
         request_params = dict(
             start_time=reservation.time.start_at,
             timezone=settings.TIME_ZONE,
@@ -82,3 +87,23 @@ class ReservationService:
         line_bot_api = line.get_line_bot_api(is_guest=False)
         text = "ZOOM参加のURLはこちら\n\n{}".format(meeting.join_url)
         line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=text))
+
+
+class ZoomService:
+    def import_accounts(self, filepath):
+        wb = xlrd.open_workbook(filepath)
+        sheet = wb.sheet_by_name('ZOOMアカウント')
+        tag_groups = dict()
+        # ignore header
+        for row in range(1, sheet.nrows-1):
+            cols = sheet.row_values(row)
+            
+            api_key = cols[13]
+            zoom_account = models.ZoomAccount.objects.get_or_create(api_key=api_key)
+            
+            zoom_account.admin_email = cols[12]
+            zoom_account.api_secret = cols[14]
+            zoom_account.imchat_history_token = cols[14]
+
+            zoom_account.save()
+            

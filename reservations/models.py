@@ -31,9 +31,17 @@ class LinePayTransaction(BaseModel, models.Model):
         )
 
 
+class ZoomAccount(BaseModel, models.Model):
+    api_key = models.CharField(_('api_key'), max_length=50, unique=True)
+    api_secret = models.CharField(_('api_secret'), max_length=100)
+    api_imchat_history_token = models.CharField(_('api_imchat_history_token'), max_length=500)
+    admin_email = models.CharField(_('admin_email'), max_length=200)
+
+
 class ZoomMeeting(BaseModel, models.Model):
     meeting_id = models.CharField(_('meeting_id'), max_length=100, db_index=True)
     join_url = models.URLField(_('join_url'), max_length=1024)
     start_url = models.URLField(_('start_url'), max_length=1024)
     reservation = models.ForeignKey('reservations.Reservation', db_index=True, on_delete=models.CASCADE)
     context = models.TextField(_('context'), default='')
+    account = models.ForeignKey('reservations.ZoomAccount', null=True, default=None, on_delete=models.CASCADE)
