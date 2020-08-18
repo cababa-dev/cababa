@@ -87,11 +87,15 @@ class ReservationService:
         meeting_id = data['id']
         join_url = data['join_url']
         start_url = data['start_url']
+        zoom_meeting_id = data['id']
+        password = data['password']
         context = json.dumps(data)
         meeting = models.ZoomMeeting.objects.create(
             meeting_id=meeting_id,
             join_url=join_url,
             start_url=start_url,
+            password=password,
+            zoom_meeting_id=zoom_meeting_id,
             reservation=reservation,
             context=context,
             account=usable_account,
@@ -101,14 +105,14 @@ class ReservationService:
         return meeting
 
     def send_meeting(self, meeting):
+        text = "ZOOM参加のURLはこちら\n\n{}\n\nパスワード: {}".format(meeting.join_url, meeting.password)
+
         # ゲストに通知
         line_bot_api = line.get_line_bot_api(is_guest=True)
-        text = "ZOOM参加のURLはこちら\n\n{}".format(meeting.join_url)
         line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=text))
 
         # お嬢に通知
         line_bot_api = line.get_line_bot_api(is_guest=False)
-        text = "ZOOM参加のURLはこちら\n\n{}".format(meeting.join_url)
         line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=text))
 
 
