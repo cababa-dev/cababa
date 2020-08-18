@@ -90,6 +90,18 @@ class ReservationService:
         zoom_meeting_id = data['id']
         password = data['password']
         context = json.dumps(data)
+        print(dict(
+            meeting_id=meeting_id,
+            join_url=join_url,
+            start_url=start_url,
+            password=password,
+            zoom_meeting_id=zoom_meeting_id,
+            reservation=reservation,
+            context=context,
+            account=usable_account,
+            start_at=reservation.time.start_at,
+            end_at=reservation.time.end_at,
+        ))
         meeting = models.ZoomMeeting.objects.create(
             meeting_id=meeting_id,
             join_url=join_url,
@@ -105,15 +117,21 @@ class ReservationService:
         return meeting
 
     def send_meeting(self, meeting):
-        text = "ZOOM参加のURLはこちら\n\n{}\n\nパスワード: {}".format(meeting.join_url, meeting.password)
+        join_text = "ZOOM参加のURLはこちら\n\n{}".format(meeting.join_url)
+        password_text = meeting.password
+        password_help_text = "↑パスワードはこちら"
 
         # ゲストに通知
         line_bot_api = line.get_line_bot_api(is_guest=True)
-        line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=text))
+        line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=join_text))
+        line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=password_text))
+        line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=password_help_text))
 
         # お嬢に通知
         line_bot_api = line.get_line_bot_api(is_guest=False)
-        line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=text))
+        line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=join_text))
+        line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=password_text))
+        line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=password_help_text))
 
 
 class ZoomService:
