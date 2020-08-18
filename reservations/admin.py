@@ -47,8 +47,11 @@ class ZoomMeetingAdmin(admin.ModelAdmin):
     list_display = (
         'meeting_id',
         'join_url',
-        'start_url',
+        # 'start_url',
         'reservation',
+        'account',
+        'start_at',
+        'end_at',
         'created_at',
         'updated_at',
     )
