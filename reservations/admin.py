@@ -52,3 +52,18 @@ class ZoomMeetingAdmin(admin.ModelAdmin):
         'created_at',
         'updated_at',
     )
+
+
+@admin.register(models.ZoomAccount)
+class ZoomAccountAdmin(admin.ModelAdmin):
+    date_heirarchy = (
+        'updated_at',
+    )
+    list_display = (
+        'api_key',
+        'api_secret',
+        'api_imchat_history_token',
+        'admin_email',
+        'created_at',
+        'updated_at',
+    )

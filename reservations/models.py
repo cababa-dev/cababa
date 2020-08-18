@@ -45,3 +45,5 @@ class ZoomMeeting(BaseModel, models.Model):
     reservation = models.ForeignKey('reservations.Reservation', db_index=True, on_delete=models.CASCADE)
     context = models.TextField(_('context'), default='')
     account = models.ForeignKey('reservations.ZoomAccount', null=True, default=None, on_delete=models.CASCADE)
+    start_at = models.DateTimeField(_('start_at'), db_index=True, null=True, default=None)
+    end_at = models.DateTimeField(_('end_at'), db_index=True, null=True, default=None)

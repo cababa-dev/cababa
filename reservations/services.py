@@ -1,7 +1,9 @@
 import json
+import xlrd
 from linebot.models import TextSendMessage, PostbackAction, TemplateSendMessage, ButtonsTemplate
 from zoomus import ZoomClient
 
+from django.db.models import Q
 from django.utils.timezone import localtime
 from django.conf import settings
 
@@ -51,19 +53,37 @@ class ReservationService:
     
     def create_meeting(self, reservation):
         # 1. 同じ時刻に使用されていないZOOMアカウントを探す
-        client = zoom.get_client()
-        # client = ZoomClient(settings.ZOOM_API_KEY, settings.ZOOM_API_SECRET)
+        start_at = reservation.time.start_at
+        end_at = reservation.time.end_at
+        # クエリに該当するものは、同じ時刻に被ることの無いルーム
+        query = Q(start_at__gte=end_at) # 本ルームの終了時刻の後に開始されるルーム
+        query = query | Q(end_at__lte=start_at) # 本ルームの開始時刻より前に終了するルーム
+        # 逆に同じ時刻に被るルームを検索
+        concurrent_meetings = models.ZoomMeeting.objects.filter(~query)
+        # ルームに該当するミーティングIDを取得
+        unusable_accounts = [meeting.account.api_key for meeting in concurrent_meetings if meeting.account]
+        # 使用可能なアカウントを探す
+        query = Q(api_key__in=unusable_accounts)
+        usable_account = models.ZoomAccount.objects.filter(~query).first()
+        
+        # もし使用可能なアカウントが無い場合はエラーを返す
+        if not usable_account:
+            raise ValueError('使用可能なZOOMアカウントが見つかりませんでした')
+
+        # 使用可能なアカウントを使ってZOOMのクライアントを作成
+        client = ZoomClient(usable_account.api_key, usable_account.api_secret)
 
         # 2. ZOOMのルームを作成する
         request_params = dict(
             start_time=reservation.time.start_at,
             timezone=settings.TIME_ZONE,
             duration=(reservation.time.end_at - reservation.time.start_at).seconds, # [sec]
-            user_id=settings.ZOOM_ADMIN_EMAIL,
+            user_id=usable_account.admin_email,
             settings=dict(join_before_host=True, participant_video=True)
         )
         response = client.meeting.create(**request_params)
         data = response.json()
+        print(data)
         meeting_id = data['id']
         join_url = data['join_url']
         start_url = data['start_url']
@@ -74,6 +94,9 @@ class ReservationService:
             start_url=start_url,
             reservation=reservation,
             context=context,
+            account=usable_account,
+            start_at=reservation.time.start_at,
+            end_at=reservation.time.end_at,
         )
         return meeting
 
@@ -95,15 +118,15 @@ class ZoomService:
         sheet = wb.sheet_by_name('ZOOMアカウント')
         tag_groups = dict()
         # ignore header
-        for row in range(1, sheet.nrows-1):
+        for row in range(1, sheet.nrows):
             cols = sheet.row_values(row)
             
             api_key = cols[13]
-            zoom_account = models.ZoomAccount.objects.get_or_create(api_key=api_key)
+            zoom_account, created = models.ZoomAccount.objects.get_or_create(api_key=api_key)
             
             zoom_account.admin_email = cols[12]
             zoom_account.api_secret = cols[14]
-            zoom_account.imchat_history_token = cols[14]
+            zoom_account.api_imchat_history_token = cols[15]
 
             zoom_account.save()
             

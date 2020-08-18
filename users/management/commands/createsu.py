@@ -24,5 +24,6 @@ class Command(BaseCommand):
         user.is_superuser = True
         user.is_staff = True
         user.group = group
+        user.set_password(password)
         user.save()
         self.stdout.write(self.style.SUCCESS('super user was created successfully'))
