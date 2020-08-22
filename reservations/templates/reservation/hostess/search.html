@@ -35,17 +35,18 @@
                 <div class="date">
                     <select name="date">
                         <option value="">選択してください</option>
-                        <option value="2020-01-01">2020年1月1日</option>
-                        <option value="2020-01-02">2020年1月2日</option>
-                        <option value="2020-01-03">2020年1月3日</option>
-                        <option value="2020-01-04">2020年1月4日</option>
+                        {% for d in date_select %}
+                            <option value="{{ d|date:'Y-m-d' }}">{{ d|date:'Y年n月j日' }}</option>
+                        {% endfor %}
                     </select>
                     <select name="time">
                         <option value="">選択してください</option>
-                        <option value="1700-1730">17:00 ~ 17:30</option>
-                        <option value="1730-1800">17:30 ~ 18:00</option>
-                        <option value="1800-1830">18:00 ~ 18:30</option>
-                        <option value="1830-1900">18:30 ~ 19:00</option>
+                        <option value="1700-1800">17:00 ~ 18:00</option>
+                        <option value="1800-1900">18:00 ~ 19:00</option>
+                        <option value="1900-2000">19:00 ~ 20:00</option>
+                        <option value="2000-2100">20:00 ~ 21:00</option>
+                        <option value="2100-2200">21:00 ~ 22:00</option>
+                        <option value="2200-2300">22:00 ~ 23:00</option>
                     </select>
                 </div>
             </div>

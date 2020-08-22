@@ -282,8 +282,19 @@ form.hostess-search a img {
     padding: 5px;
 }
 
-.hostess-block img {
+.hostess-block .img-wrap {
+    position: relative;
     width: 100%;
+    padding-top: 100%;
+}
+
+.hostess-block img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
 }
 
 .hostess-block {
@@ -482,8 +493,19 @@ form.hostess-search a img {
     top: 3px;
 }
 
-.swiper-wrapper .swiper-slide img {
+.swiper-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+}
+
+.swiper-wrapper img.swiper-slide {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
     height: 100%;
+    text-align: center;
 }
 
 .hostess-detail .hostess-profile {

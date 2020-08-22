@@ -35,7 +35,9 @@ class HostessSearchView(View):
 
     # ホステス検索
     def get(self, request):
-        context = dict()
+        today = datetime.date.today()
+        date_select = [today + datetime.timedelta(days=i) for i in range(7)]
+        context = dict(date_select=date_select)
         return render(request, self.template, context=context)
 
 

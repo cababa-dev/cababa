@@ -16,7 +16,7 @@ class ReservationService:
         # ゲストに通知
         line_bot_api = line.get_line_bot_api(is_guest=True)
         hostess_name = reservation.time.hostess.display_name
-        date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:00'), localtime(reservation.time.end_at).strftime('%m-%d %H:00'))
+        date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
         text = "予約が完了しました！\n\n【予約情報】\nお嬢おなまえ: {}\n{}".format(hostess_name, date)
         line_bot_api.push_message(reservation.guest.line_user_id, TextSendMessage(text=text))
 
@@ -74,12 +74,19 @@ class ReservationService:
         client = ZoomClient(usable_account.api_key, usable_account.api_secret)
 
         # 2. ZOOMのルームを作成する
+        settings = dict(
+            host_video=False,
+            join_before_host=True,
+            participant_video=True,
+            approval_type=0,
+            waiting_room=False,
+        )
         request_params = dict(
             start_time=reservation.time.start_at,
             timezone=settings.TIME_ZONE,
             duration=(reservation.time.end_at - reservation.time.start_at).seconds, # [sec]
             user_id=usable_account.admin_email,
-            settings=dict(join_before_host=True, participant_video=True)
+            settings=settings
         )
         response = client.meeting.create(**request_params)
         data = response.json()
@@ -90,18 +97,6 @@ class ReservationService:
         zoom_meeting_id = data['id']
         password = data['password']
         context = json.dumps(data)
-        print(dict(
-            meeting_id=meeting_id,
-            join_url=join_url,
-            start_url=start_url,
-            password=password,
-            zoom_meeting_id=zoom_meeting_id,
-            reservation=reservation,
-            context=context,
-            account=usable_account,
-            start_at=reservation.time.start_at,
-            end_at=reservation.time.end_at,
-        ))
         meeting = models.ZoomMeeting.objects.create(
             meeting_id=meeting_id,
             join_url=join_url,

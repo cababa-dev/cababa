@@ -31,7 +31,9 @@
                 {% for hostess_profile in group.list %}
                     <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
                         <div class="hostess-block">
-                            <img src="{{ hostess_profile.images.0 }}" alt="">
+                            <div class="img-wrap">
+                                <img src="{{ hostess_profile.images.0 }}" alt="">
+                            </div>
                             <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
                             <p>{{ hostess_profile.hostess.group.name }}</p>
                         </div>
