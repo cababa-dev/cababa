@@ -120,10 +120,11 @@ def pay_request(reservation):
     hostess = reservation.time.hostess
 
     # テスト用に1円決済
-    amount = 1
+    # amount = 1
     # 本番はランクに合わせて金額設定
-    # rank_price = settings.RANK_PRICES[hostess.hostess_profile.rank]
-    # amount = settings.BASE_PRICE + rank_price
+    rank_price = settings.RANK_PRICES[hostess.hostess_profile.rank]
+    amount = settings.BASE_PRICE + rank_price
+    amount = int(amount / 100)
 
     currency = 'JPY'
     request_options = {
