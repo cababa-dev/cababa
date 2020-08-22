@@ -52,7 +52,7 @@ class ReservationMenu(Menu):
                 actions=[
                     URIAction(
                         label='キャスト詳細',
-                        uri='https://{}reservations/hostess/{}'.format(settings.HOST_NAME, reservation.time.hostess.user_id)
+                        uri='https://{}/reservations/hostess/{}'.format(settings.HOST_NAME, reservation.time.hostess.user_id)
                     ),
                 ]
             )

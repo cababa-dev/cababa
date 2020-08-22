@@ -101,4 +101,4 @@ $('ul.available_time li').on('click', function (e) {
     var value = selectedItem.data('value');
     $('select[name=available_time]').value = value;
     $('.hostess-detail button[type=submit]').prop('disabled', false);
-})
+});

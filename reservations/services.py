@@ -74,7 +74,7 @@ class ReservationService:
         client = ZoomClient(usable_account.api_key, usable_account.api_secret)
 
         # 2. ZOOMのルームを作成する
-        settings = dict(
+        room_settings = dict(
             host_video=False,
             join_before_host=True,
             participant_video=True,
@@ -86,7 +86,7 @@ class ReservationService:
             timezone=settings.TIME_ZONE,
             duration=(reservation.time.end_at - reservation.time.start_at).seconds, # [sec]
             user_id=usable_account.admin_email,
-            settings=settings
+            settings=room_settings
         )
         response = client.meeting.create(**request_params)
         data = response.json()

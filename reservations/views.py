@@ -101,6 +101,8 @@ class CreateReserveView(mixins.GuestPageMixin, View):
     # 予約実行
     def post(self, request, available_id):
         available_time = self.get_queryset(available_id)
+        if models.Reservation.objects.filter(time=available_time).exists():
+            return redirect('reservations:hostess_detail?error=予約できませんでした', reservation.time.hostess.user_id)
         reservation = models.Reservation.objects.create(guest=self.request.user, time=available_time)
         service = services.ReservationService()
         service.send_notification(reservation)
@@ -123,10 +125,10 @@ class ReserveAuthorizeView(View):
     def get(self, request, reservation_id):
         transaction_id = request.GET.get('transactionId')
         transaction = self.get_queryset(reservation_id=reservation_id, transaction_id=transaction_id)
-        resp = line.pay_confirm(transaction)
-        transaction.confirmed = True
-        transaction.canceled = False
-        transaction.save()
+        # resp = line.pay_confirm(transaction)
+        # transaction.confirmed = True
+        # transaction.canceled = False
+        # transaction.save()
 
         # ミーティングを作成
         reservation = transaction.reservation
