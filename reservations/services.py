@@ -82,6 +82,7 @@ class ReservationService:
             waiting_room=False,
         )
         request_params = dict(
+            # type=1, # 1: instant meeting, 2: scheduled meeting
             start_time=reservation.time.start_at,
             timezone=settings.TIME_ZONE,
             duration=(reservation.time.end_at - reservation.time.start_at).seconds, # [sec]

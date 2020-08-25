@@ -23,22 +23,22 @@
 
         <div class="form-field">
             <label for="profile_image1"><span>*</span> プロフィール画像1</label>
-            <input type="file" name="profile_image1" accept="image/*;capture=camcorder" required>
+            <input type="file" name="profile_image1" accept="image/*" onchange="validateFileType('profile_image1')" required>
         </div>
 
         <div class="form-field">
             <label for="profile_image2">プロフィール画像2</label>
-            <input type="file" name="profile_image2" accept="image/*;capture=camcorder">
+            <input type="file" name="profile_image2" accept="image/*" onchange="validateFileType('profile_image2')">
         </div>
 
         <div class="form-field">
             <label for="profile_image3">プロフィール画像3</label>
-            <input type="file" name="profile_image3" accept="image/*;capture=camcorder">
+            <input type="file" name="profile_image3" accept="image/*" onchange="validateFileType('profile_image3')">
         </div>
 
         <div class="form-field">
             <label for="profile_image4">プロフィール画像4</label>
-            <input type="file" name="profile_image4" accept="image/*;capture=camcorder">
+            <input type="file" name="profile_image4" accept="image/*" onchange="validateFileType('profile_image4')">
         </div>
 
         <div class="form-field">
@@ -148,4 +148,26 @@
         </div>
     </div> -->
 
+{% endblock %}
+
+
+{% block js %}
+<script>
+    function validateFileType(fieldName){
+        var imageInput = $('input[name='+fieldName+']')[0];
+        if (imageInput.files[0]) {
+            const file = imageInput.files[0];
+            var pattern = /image-*/;
+      
+            if (!file.type.match(pattern)) {
+                alert('画像を選んでください');
+                // フォームフィールドをリセットする
+                imageInput.value = '';
+                return;
+            }
+      
+            // here you can do whatever you want with your image. Now you are sure that it is an image
+          } 
+    }
+</script>
 {% endblock %}
