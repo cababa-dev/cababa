@@ -25,6 +25,8 @@ urlpatterns = [
     path('user_agreement/', views.user_agreement_view, name='user_agreement_view'),
     path('cast_agreement/', views.cast_agreement_view, name='cast_agreement_view'),
     path('privacy_policy/', views.privacy_policy_view, name='privacy_policy_view'),
+    path('cancel_policy/', views.cancel_policy_view, name='cancel_policy_view'),
+    path('specified_commercial_transactions_act/', views.specified_commercial_transactions_act_view, name='specified_commercial_transactions_act_view'),
     path('system/', views.system_view, name='system_view'),
     path('admin/', admin.site.urls),
     path('pre_register/', include('pre_register.urls')),

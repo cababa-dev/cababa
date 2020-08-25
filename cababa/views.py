@@ -42,5 +42,14 @@ def privacy_policy_view(request):
     return render(request, 'cababa/agreement.html', context=context)
 
 
+def cancel_policy_view(request):
+    context = dict(md_text=markdown_html('cancel_policy'))
+    return render(request, 'cababa/agreement.html', context=context)
+
+
+def specified_commercial_transactions_act_view(request):
+    context = dict(md_text=markdown_html('specified_commercial_transactions_act'))
+    return render(request, 'cababa/agreement.html', context=context)
+
 def system_view(request):
     return render(request, 'cababa/system.html')
