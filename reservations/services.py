@@ -113,7 +113,7 @@ class ReservationService:
         return meeting
 
     def send_meeting(self, meeting):
-        join_text = "ZOOM参加のURLはこちら\n\n{}".format(meeting.join_url)
+        join_text = "支払いが完了し、予約が確定しました！\n\nZOOM参加のURLは以下です。\n時間になりましたら、以下のの情報からアクセスしてください\n\n{}".format(meeting.join_url)
         password_text = meeting.password
         password_help_text = "↑パスワードはこちら"
 
