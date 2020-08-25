@@ -130,7 +130,7 @@ class HostessInviteView(View):
     
 
 class HostessGroupInviteView(View):
-    template = 'hostess/group_invite.html'
+    template = 'hostess/invite_group.html'
 
     def get_queryset(self, group_id):
         querysets = user_models.Group.objects.get(group_id=group_id)

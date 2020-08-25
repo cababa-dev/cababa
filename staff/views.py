@@ -253,6 +253,6 @@ class HostessInviteView(mixins.StaffPageMixin, View):
     template = 'staff/hostess/invite.html'
 
     def get(self, request):
-        invitation_url = 'https://' + settings.HOST_NAME + reverse('hostess:invite', kwargs=dict(group_id=request.user.group.group_id))
+        invitation_url = 'https://' + settings.HOST_NAME + reverse('hostess:invite_group', kwargs=dict(group_id=request.user.group.group_id))
         context = dict(invitation_url=invitation_url)
         return render(request, self.template, context)
