@@ -16,7 +16,7 @@
         <div class="swiper-wrapper">
             <!-- Slides -->
             {% for image in hostess.hostess_profile.images %}
-                <img class="swiper-slide" src="{{ image }}" alt="">
+                <img class="swiper-slide" src="{{ image }}" alt="" style="left: {% widthratio forloop.counter0 1 100 %}%;">
             {% endfor %}
         </div>
         <!-- If we need scrollbar -->
