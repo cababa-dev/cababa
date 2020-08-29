@@ -207,7 +207,7 @@ class UnconfirmReservationMenu(Menu):
         transaction = service.create_transaction(reservation)
         # ゲストに通知
         date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
-        text = "お嬢が予約を承認しました！\n\n【予約情報】\nお嬢おなまえ: {}\n{}\n\n".format(hostess.display_name, date)
+        text = "キャストが予約を承認しました！\n\n【予約情報】\nキャストおなまえ: {}\n{}\n\n".format(hostess.display_name, date)
         text += "こちらから支払いお願いします。一度キャンセルすると支払いが出来なくなりますのでお気をつけください！\n{}\n\n請求元は「Japan night life」と表示されます".format(transaction.url)
         line_bot_api_guest.push_message(reservation.guest.line_user_id, TextSendMessage(text=text))
         return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='ゲストに承認通知を送信しました'))
@@ -224,7 +224,7 @@ class UnconfirmReservationMenu(Menu):
         reservation.save()
         # ゲストに通知
         date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
-        text = "キャストと予定が合いませんでした！\n別の時間帯を打診してみてください！\n\n【予約情報】\nお嬢おなまえ: {}\n{}".format(hostess.display_name, date)
+        text = "キャストと予定が合いませんでした！\n別の時間帯を打診してみてください！\n\n【予約情報】\nキャストおなまえ: {}\n{}".format(hostess.display_name, date)
         line_bot_api_guest.push_message(reservation.guest.line_user_id, TextSendMessage(text=text))
         return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='ゲストに承認通知を送信しました'))
 

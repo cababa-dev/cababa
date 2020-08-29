@@ -25,11 +25,6 @@ class LinePayTransaction(BaseModel, models.Model):
     amount = models.IntegerField(_('amount'), default=1)
     currency = models.CharField(_('currency'), max_length=10, default='JPY')
 
-    class Meta:
-        unique_together = (
-            ('reservation', 'canceled'),
-        )
-
 
 class ZoomAccount(BaseModel, models.Model):
     api_key = models.CharField(_('api_key'), max_length=50, unique=True)

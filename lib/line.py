@@ -13,6 +13,8 @@ from linepay import LinePayApi
 from django.urls import reverse
 from django.conf import settings
 
+from reservations.services import ReservationService
+
 
 # LINEログインページへのURLを作成
 def login_url(request, is_guest=True, context={}):
@@ -119,13 +121,8 @@ def pay_request(reservation):
     LINE_PAY_REQEST_BASE_URL = "https://{}".format(settings.HOST_NAME)
     hostess = reservation.time.hostess
 
-    # テスト用に1円決済
-    # amount = 1
-    # 本番はランクに合わせて金額設定
-    rank_price = settings.RANK_PRICES[hostess.hostess_profile.rank]
-    amount = settings.BASE_PRICE + rank_price
-    amount = int(amount / 100)
-
+    service = ReservationService()
+    amount = service.get_pay_amount(reservation)
     currency = 'JPY'
     request_options = {
 		"amount": amount,
@@ -177,6 +174,9 @@ def pay_request(reservation):
 
 def pay_confirm(transaction):
     api = get_line_pay_api()
+    print(int(transaction.transaction_id),
+        float(transaction.amount), 
+		transaction.currency,)
     response = api.confirm(
 		int(transaction.transaction_id),
         float(transaction.amount), 

@@ -1,5 +1,6 @@
 import json
 import xlrd
+from linebot import LineBotApi
 from linebot.models import TextSendMessage, PostbackAction, TemplateSendMessage, ButtonsTemplate
 from zoomus import ZoomClient
 
@@ -17,10 +18,10 @@ class ReservationService:
         line_bot_api = line.get_line_bot_api(is_guest=True)
         hostess_name = reservation.time.hostess.display_name
         date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
-        text = "予約が完了しました！\n\n【予約情報】\nお嬢おなまえ: {}\n{}".format(hostess_name, date)
+        text = "予約が完了しました！\n\n【予約情報】\nキャストおなまえ: {}\n{}".format(hostess_name, date)
         line_bot_api.push_message(reservation.guest.line_user_id, TextSendMessage(text=text))
 
-        # お嬢に通知
+        # キャストに通知
         line_bot_api = line.get_line_bot_api(is_guest=False)
         actions = [
             PostbackAction(
@@ -39,6 +40,15 @@ class ReservationService:
         message = TemplateSendMessage(alt_text='alt text', template=buttons)
         line_bot_api.push_message(reservation.time.hostess.line_user_id, message)
 
+    def get_pay_amount(self, reservation):
+        # テスト用に1円決済
+        # amount = 1
+        # 本番はランクに合わせて金額設定
+        rank_price = settings.RANK_PRICES[reservation.time.hostess.hostess_profile.rank]
+        amount = settings.BASE_PRICE + rank_price
+        amount = int(amount / 100)
+        return amount
+
     def create_transaction(self, reservation):
         resp = line.pay_request(reservation)
         transaction = models.LinePayTransaction.objects.create(
@@ -47,9 +57,17 @@ class ReservationService:
             transaction_id=resp['transaction_id'],
             access_token=resp['access_token'],
             url=resp['url']['web'],
+            amount=self.get_pay_amount(reservation),
             reservation=reservation
         )
         return transaction
+    
+    def resend_pay_notification(self, transaction):
+        line_bot_api_guest = LineBotApi(settings.GUEST_LINE_ACCESS_TOKEN)
+        date = "開始{}\n終了{}\n".format(localtime(transaction.reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(transaction.reservation.time.end_at).strftime('%m-%d %H:%M'))
+        text = "【予約情報】\nキャストおなまえ: {}\n{}\n\n".format(transaction.reservation.time.hostess.display_name, date)
+        text += "こちらから支払いお願いします。一度キャンセルすると支払いが出来なくなりますのでお気をつけください！\n{}\n\n請求元は「Japan night life」と表示されます".format(transaction.url)
+        line_bot_api_guest.push_message(transaction.reservation.guest.line_user_id, TextSendMessage(text=text))
     
     def create_meeting(self, reservation):
         # 1. 同じ時刻に使用されていないZOOMアカウントを探す
@@ -113,7 +131,7 @@ class ReservationService:
         return meeting
 
     def send_meeting(self, meeting):
-        join_text = "支払いが完了し、予約が確定しました！\n\nZOOM参加のURLは以下です。\n時間になりましたら、以下のの情報からアクセスしてください\n\n{}".format(meeting.join_url)
+        join_text = "支払いが完了し、予約が確定しました！\n\nZOOM参加のURLは以下です。\n時間になりましたら、以下の情報からアクセスしてください\n\n{}\n\n【音声/映像にトラブルがある場合は以下をご覧ください。\nhttps://note.com/cababa/n/n150b47c0db09　】".format(meeting.join_url)
         password_text = meeting.password
         password_help_text = "↑パスワードはこちら"
 
@@ -123,7 +141,7 @@ class ReservationService:
         line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=password_text))
         line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=password_help_text))
 
-        # お嬢に通知
+        # キャストに通知
         line_bot_api = line.get_line_bot_api(is_guest=False)
         line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=join_text))
         line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=password_text))

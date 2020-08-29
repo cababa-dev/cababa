@@ -16,34 +16,60 @@
 <div class="hostess-index">
     <h2>キャスト一覧</h2>
 
-    {% regroup page_obj by rank as hostess_group %}
-
-    {% for group in hostess_group %}
-        <div class="rank-block">
-            {% if group.grouper == 'PM' %}
-                <h3>Platinum rank</h3>
-            {% elif group.grouper == 'GD' %}
-                <h3>Gold rank</h3>
-            {% elif group.grouper == 'SR' %}
-                <h3>Silver rank</h3>
-            {% endif %}
-            <div class="hostess-list">
-                {% for hostess_profile in group.list %}
-                    <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
-                        <div class="hostess-block">
-                            <div class="img-wrap">
-                                <img src="{{ hostess_profile.images.0 }}" alt="">
-                            </div>
-                            <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
-                            <p>{{ hostess_profile.hostess.group.name }}</p>
+    <!-- シルバーランク -->
+    <div class="rank-block">
+        <h3>Silver rank</h3>
+        <div class="hostess-list">
+            {% for hostess_profile in rank_group.SR %}
+                <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
+                    <div class="hostess-block">
+                        <div class="img-wrap">
+                            <img src="{{ hostess_profile.images.0 }}" alt="">
                         </div>
-                    </a>
-                {% endfor %}
-            </div>
+                        <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
+                        <p>{{ hostess_profile.hostess.group.name }}</p>
+                    </div>
+                </a>
+            {% endfor %}
         </div>
-    {% endfor %}
-
     </div>
+
+    <!-- ゴールドランク -->
+    <div class="rank-block">
+        <h3>Gold rank</h3>
+        <div class="hostess-list">
+            {% for hostess_profile in rank_group.GD %}
+                <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
+                    <div class="hostess-block">
+                        <div class="img-wrap">
+                            <img src="{{ hostess_profile.images.0 }}" alt="">
+                        </div>
+                        <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
+                        <p>{{ hostess_profile.hostess.group.name }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- プラチナランク -->
+    <div class="rank-block">
+        <h3>Platinum rank</h3>
+        <div class="hostess-list">
+            {% for hostess_profile in rank_group.PM %}
+                <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
+                    <div class="hostess-block">
+                        <div class="img-wrap">
+                            <img src="{{ hostess_profile.images.0 }}" alt="">
+                        </div>
+                        <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
+                        <p>{{ hostess_profile.hostess.group.name }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}

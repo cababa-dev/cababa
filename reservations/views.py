@@ -18,16 +18,21 @@ class HostessListView(View):
     def get_queryset(self, page=1, page_size=24, **query):
         querysets = user_models.HostessProfile.objects.search(**query)
         page_obj = Paginator(querysets, page_size)
-        return page_obj.page(page)
+        querysets = page_obj.page(page)
+        # グループ分け
+        rank_group = dict()
+        for hostess_profile in querysets:
+            rank_group[hostess_profile.rank] = rank_group.get(hostess_profile.rank, []) + [hostess_profile]
+        return rank_group
 	
     # ホステス検索
     def get(self, request):
         form = forms.HostessSearchForm(request.GET)
         if not form.is_valid():
-            querysets = self.get_queryset()
+            rank_group = self.get_queryset()
         else:
-            querysets = self.get_queryset(**form.cleaned_data)
-        context = dict(page_obj=querysets)
+            rank_group = self.get_queryset(**form.cleaned_data)
+        context = dict(rank_group=rank_group)
         return render(request, self.template, context=context)
 
 class HostessSearchView(View):
@@ -125,10 +130,11 @@ class ReserveAuthorizeView(View):
     def get(self, request, reservation_id):
         transaction_id = request.GET.get('transactionId')
         transaction = self.get_queryset(reservation_id=reservation_id, transaction_id=transaction_id)
-        # resp = line.pay_confirm(transaction)
-        # transaction.confirmed = True
-        # transaction.canceled = False
-        # transaction.save()
+        # 支払いを確定
+        resp = line.pay_confirm(transaction)
+        transaction.confirmed = True
+        transaction.canceled = False
+        transaction.save()
 
         # ミーティングを作成
         reservation = transaction.reservation
@@ -143,7 +149,7 @@ class ReserveCancelView(View):
     template = 'reservation/cancel.html'
 
     def get_queryset(self, reservation_id, transaction_id):
-        return models.LinePayTransaction.objects.get(reservation_id=reservation_id, transaction_id=transaction_id)
+        return models.LinePayTransaction.objects.get(reservation__reservation_id=reservation_id, transaction_id=transaction_id)
 
     def get(self, request, reservation_id):
         transaction_id = request.GET.get('transactionId')
@@ -151,5 +157,9 @@ class ReserveCancelView(View):
         transaction.confirmed = False
         transaction.canceled = True
         transaction.save()
+        # 再度トランザクションを作成して通知する
+        service = services.ReservationService()
+        transaction = service.create_transaction(transaction.reservation)
+        service.resend_pay_notification(transaction)
         context = dict(transaction=transaction)
         return render(request, self.template, context=context)
