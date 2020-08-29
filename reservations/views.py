@@ -4,6 +4,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from django.core.paginator import Paginator
+from django.urls import reverse
 from django.db.models import Q
 
 from lib import mixins, line
@@ -106,8 +107,8 @@ class CreateReserveView(mixins.GuestPageMixin, View):
     # 予約実行
     def post(self, request, available_id):
         available_time = self.get_queryset(available_id)
-        if models.Reservation.objects.filter(time=available_time).exists():
-            return redirect('reservations:hostess_detail?error=予約できませんでした', reservation.time.hostess.user_id)
+        if models.Reservation.objects.filter(time=available_time).filter(~Q(is_approval=False)).exists():
+            return redirect('{}?error=予約できませんでした'.format(reverse('reservations:hostess_detail', kwargs=dict(hostess_id=available_time.hostess.user_id))))
         reservation = models.Reservation.objects.create(guest=self.request.user, time=available_time)
         service = services.ReservationService()
         service.send_notification(reservation)
