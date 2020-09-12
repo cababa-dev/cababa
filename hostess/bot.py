@@ -1,5 +1,6 @@
 import datetime
 import pytz
+from dateutil.relativedelta import relativedelta
 
 import linebot
 from linebot import WebhookHandler, LineBotApi
@@ -20,7 +21,7 @@ from lib.bot import (
     Menu, ActionHandler, MenuHandler,
     SimpleMenu, SimpleSelection, SimpleSelectionItem,
 )
-from reservations.models import Reservation, ZoomMeeting
+from reservations.models import Reservation, ZoomMeeting, LinePayTransaction
 from reservations.services import ReservationService
 from . import models
 
@@ -86,7 +87,7 @@ class AvailableTimeMemu(Menu):
             ])
             for available in availables
         ]
-        message = TemplateSendMessage(alt_text='alt text', template=CarouselTemplate(columns=columns))
+        message = TemplateSendMessage(alt_text='出勤可能日を選択', template=CarouselTemplate(columns=columns))
         return line_bot_api.reply_message(event.reply_token, message)
 
     """設定した出勤時間をキャンセルする
@@ -189,7 +190,7 @@ class UnconfirmReservationMenu(Menu):
             )
             columns.append(column)
             
-        message = TemplateSendMessage(alt_text='alt text', template=CarouselTemplate(columns=columns))
+        message = TemplateSendMessage(alt_text='予約一覧', template=CarouselTemplate(columns=columns))
         return line_bot_api.reply_message(event.reply_token, message)
     
     """予約の通知に対する返答 - 承認
@@ -266,7 +267,7 @@ class ReservationMenu(Menu):
             )
             columns.append(column)
             
-        message = TemplateSendMessage(alt_text='alt text', template=CarouselTemplate(columns=columns))
+        message = TemplateSendMessage(alt_text='予約一覧', template=CarouselTemplate(columns=columns))
         return line_bot_api.reply_message(event.reply_token, message)
 
     def action_detail(self, event, query):
@@ -316,7 +317,65 @@ class SalesMenu(Menu):
     name = 'sales'
 
     def main_action(self, event):
-        return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='こちらは現在準備中です。9月にリリース予定です'))
+        hostess = self.get_hostess(event)
+        # 過去の予約一覧を取得
+        reservations = Reservation.objects.filter(time__hostess=hostess, is_approval=True)
+        # 予約に対する支払い履歴一覧を取得
+        transactions = LinePayTransaction.objects.filter(reservation__in=reservations).order_by('-updated_at')
+        monthly_sales = {}
+        for transaction in transactions:
+            # いったん月毎に集計
+            key = "{}-{}".format(transaction.updated_at.year, transaction.updated_at.month)
+            monthly_sales_amount = monthly_sales.get(key, 0)
+            monthly_sales[key] = monthly_sales_amount + transaction.amount
+        # 集計結果を一覧で表示
+        columns = []
+        for year_month, amount in monthly_sales.items():
+            ym = year_month.split('-')
+            column = CarouselColumn(
+                title="{}年{}月".format(ym[0], ym[1]),
+                text=f"￥{amount:,}",
+                actions=[
+                    PostbackAction(
+                        label='内訳',
+                        display_text='内訳',
+                        data='menu=sales&action=sales_detail&month={}'.format(year_month)
+                    ),
+                ]
+            )
+            columns.append(column)
+            
+        message = TemplateSendMessage(alt_text='売上一覧', template=CarouselTemplate(columns=columns))
+        return line_bot_api.reply_message(event.reply_token, message)
+    
+    def action_sales_detail(self, event, query):
+        ym = query['month']
+        month_start = datetime.datetime.strptime(ym, '%Y-%m')
+        month_end = month_start + relativedelta(months=1) - datetime.timedelta(seconds=1)
+        # ターゲット月の支払いを取得
+        transactions = LinePayTransaction.objects.filter(updated_at__gte=month_start, updated_at__lte=month_end)[:6]
+        # 内訳を一覧表示
+        columns = []
+        for transaction in transactions:
+            start = localtime(transaction.reservation.time.start_at).strftime('%m-%d %H:%M')
+            end = localtime(transaction.reservation.time.end_at).strftime('%m-%d %H:%M')
+            hourly = settings.BASE_PRICE
+            specif = settings.RANK_PRICES[transaction.reservation.time.hostess.hostess_profile.rank]
+            text = f"開始{start:}\n終了{end:}\n時給:￥{hourly:,}\n指名料:￥{specif:,}"
+            column = CarouselColumn(
+                title=transaction.reservation.guest.display_name,
+                text=text,
+                actions=[
+                    PostbackAction(
+                        label='詳細',
+                        display_text='詳細',
+                        data='menu=reservations&action=detail&reservation_id={}'.format(transaction.reservation.reservation_id)
+                    )
+                ]
+            )
+            columns.append(column)
+        message = TemplateSendMessage(alt_text='内訳一覧', template=CarouselTemplate(columns=columns))
+        return line_bot_api.reply_message(event.reply_token, message)
 
 
 
