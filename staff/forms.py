@@ -198,8 +198,6 @@ class HostessForm(forms.ModelForm):
     style = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=HostessProfile.StyleTypes.choices, required=False)
     personality = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=HostessProfile.PersonalityTypes.choices, required=False)
 
-    line_id = forms.CharField()
-
     class Meta:
         model = HostessProfile
         fields = ('name', 'height', 'prefecture_code', 'body', 'age', 'message', 'rank',)
@@ -228,7 +226,6 @@ class HostessForm(forms.ModelForm):
             username=str(uuid.uuid4()),
             display_name=data['display_name'],
             group=self.context['request'].user.group,
-            line_user_id=data['line_id'],
             user_type=User.UserTypes.HOSTESS,
         )
         # プロフィールを作成
