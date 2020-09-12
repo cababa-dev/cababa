@@ -75,6 +75,9 @@ class HostessProfileManager(models.Manager):
             pass
         print(query_list)
         if len(query_list) == 0:
-            return self.all()
-        q = reduce(lambda x, y: x | y, query_list[1:], query_list[0])
-        return self.filter(q)
+            query = self.all()
+        else:
+            q = reduce(lambda x, y: x | y, query_list[1:], query_list[0])
+            query = self.filter(q)
+        # LINE登録済みのお嬢のみ表示
+        return query.filter(~Q(hostess__id_token=None))
