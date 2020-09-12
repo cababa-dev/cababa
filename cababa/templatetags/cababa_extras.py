@@ -1,3 +1,4 @@
+import datetime
 import japanmap
 
 from django import template
@@ -24,6 +25,10 @@ def get_area_display(area):
         if choice[0] == area:
             return choice[1]
     return None
+
+@register.filter(name='get_date')
+def get_date(dt):
+    return dt - datetime.timedelta(hours=2)
 
 @register.filter(name='get_style_display')
 def get_style_display(style):

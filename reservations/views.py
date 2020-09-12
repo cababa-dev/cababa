@@ -70,7 +70,7 @@ class HostessDetailView(View):
         hostess = self.get_queryset(hostess_id)
         start_at = datetime.datetime.today()
         end_at = start_at + datetime.timedelta(days=7)
-        available_times = hostess_models.AvailableTime.objects.filter(hostess=hostess, start_at__gt=start_at, end_at__lt=end_at)
+        available_times = hostess_models.AvailableTime.objects.filter(hostess=hostess, start_at__gt=start_at, end_at__lt=end_at).order_by('start_at')
         # 予約済みの場合は表示しない。ただし、拒否された予約の場合は表示する
         available_times = [a for a in available_times if not models.Reservation.objects.filter(time=a).filter(Q(is_approval=True) | Q(is_approval=None)).exists()]
         available_date = sorted(set([a.start_at.date() for a in available_times]))

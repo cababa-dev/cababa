@@ -17,58 +17,64 @@
     <h2>キャスト一覧</h2>
 
     <!-- シルバーランク -->
-    <div class="rank-block">
-        <h3>Silver rank</h3>
-        <div class="hostess-list">
-            {% for hostess_profile in rank_group.SR %}
-                <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
-                    <div class="hostess-block">
-                        <div class="img-wrap">
-                            <img src="{{ hostess_profile.images.0 }}" alt="">
+    {% if rank_group.SR %}
+        <div class="rank-block">
+            <h3>Silver rank</h3>
+            <div class="hostess-list">
+                {% for hostess_profile in rank_group.SR %}
+                    <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
+                        <div class="hostess-block">
+                            <div class="img-wrap">
+                                <img src="{{ hostess_profile.images.0 }}" alt="">
+                            </div>
+                            <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
+                            <p>{{ hostess_profile.hostess.group.name }}</p>
                         </div>
-                        <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
-                        <p>{{ hostess_profile.hostess.group.name }}</p>
-                    </div>
-                </a>
-            {% endfor %}
+                    </a>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 
     <!-- ゴールドランク -->
-    <div class="rank-block">
-        <h3>Gold rank</h3>
-        <div class="hostess-list">
-            {% for hostess_profile in rank_group.GD %}
-                <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
-                    <div class="hostess-block">
-                        <div class="img-wrap">
-                            <img src="{{ hostess_profile.images.0 }}" alt="">
+    {% if rank_group.GD %}
+        <div class="rank-block">
+            <h3>Gold rank</h3>
+            <div class="hostess-list">
+                {% for hostess_profile in rank_group.GD %}
+                    <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
+                        <div class="hostess-block">
+                            <div class="img-wrap">
+                                <img src="{{ hostess_profile.images.0 }}" alt="">
+                            </div>
+                            <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
+                            <p>{{ hostess_profile.hostess.group.name }}</p>
                         </div>
-                        <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
-                        <p>{{ hostess_profile.hostess.group.name }}</p>
-                    </div>
-                </a>
-            {% endfor %}
+                    </a>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 
     <!-- プラチナランク -->
-    <div class="rank-block">
-        <h3>Platinum rank</h3>
-        <div class="hostess-list">
-            {% for hostess_profile in rank_group.PM %}
-                <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
-                    <div class="hostess-block">
-                        <div class="img-wrap">
-                            <img src="{{ hostess_profile.images.0 }}" alt="">
+    {% if rank_group.PM %}
+        <div class="rank-block">
+            <h3>Platinum rank</h3>
+            <div class="hostess-list">
+                {% for hostess_profile in rank_group.PM %}
+                    <a href="{% url 'reservations:hostess_detail' hostess_profile.hostess.user_id %}">
+                        <div class="hostess-block">
+                            <div class="img-wrap">
+                                <img src="{{ hostess_profile.images.0 }}" alt="">
+                            </div>
+                            <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
+                            <p>{{ hostess_profile.hostess.group.name }}</p>
                         </div>
-                        <h4 class="title">{{ hostess_profile.hostess.display_name }}{% if hostess.age %} ({{ hostess.age }}){% endif %}</h4>
-                        <p>{{ hostess_profile.hostess.group.name }}</p>
-                    </div>
-                </a>
-            {% endfor %}
+                    </a>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 
 </div>
 

@@ -75,8 +75,8 @@ class AvailableTimeMemu(Menu):
         # 本日から1週間で検索
         # 出勤時間を取得
         hostess = self.get_hostess(event)
-        start_date = make_aware(datetime.datetime.strptime(query['day'], '%Y-%m-%d'))
-        end_date = start_date + datetime.timedelta(days=1)
+        start_date = make_aware(datetime.datetime.strptime(query['day'], '%Y-%m-%d')) + datetime.timedelta(hours=2)
+        end_date = start_date + datetime.timedelta(days=1) + datetime.timedelta(hours=2)
         availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess, start_at__gte=start_date, end_at__lte=end_date).order_by('start_at') if not Reservation.objects.filter(time=a).exists()]
         # カルーセルで表示
         columns = [
@@ -239,7 +239,7 @@ class ReservationMenu(Menu):
     def main_action(self, event):
         hostess = self.get_hostess(event)
         now = datetime.datetime.now()
-        reservations = Reservation.objects.filter(time__hostess=hostess, time__start_at__gte=now, is_approval=True)
+        reservations = Reservation.objects.filter(time__hostess=hostess, time__start_at__gte=now, is_approval=True).order_by('time__start_at')
         # reservations = Reservation.objects.filter(time__hostess=hostess, is_approval=True)
         # 依頼が無い場合
         if len(reservations) == 0:

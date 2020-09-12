@@ -80,7 +80,7 @@
 
             <ul class="available_time">
                 {% for available_time in available_times %}
-                    <li class="date-{{ available_time.start_at|date:'Ymd' }}" data-value="{{ available_time.available_id }}">{{ available_time.start_at|date:'H:i' }} - {{ available_time.end_at|date:'H:i' }}</li>
+                    <li class="date-{{ available_time.start_at|get_date|date:'Ymd' }}" data-value="{{ available_time.available_id }}">{{ available_time.start_at|date:'H:i' }} - {{ available_time.end_at|date:'H:i' }}</li>
                 {% endfor %}
             </ul>
         </div>
