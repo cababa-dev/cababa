@@ -4,6 +4,8 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.db.models import Q
 
+from hostess.models import AvailableTime
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -72,7 +74,9 @@ class HostessProfileManager(models.Manager):
             query_list.append(Q(age__gte=age_q[0], age__lte=age_q[1]))
         if datetime_start and datetime_end:
             # 出勤日で検索
-            pass
+            hostess_ids = AvailableTime.objects.filter(start_at__gte=datetime_start, end_at__lte=datetime_end).order_by('hostess_id').distinct('hostess_id').values('hostess_id')
+            hostess_ids = [r['hostess_id'] for r in hostess_ids]
+            query_list.append(Q(hostess_id__in=hostess_ids))
         print(query_list)
         if len(query_list) == 0:
             query = self.all()

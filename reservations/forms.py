@@ -46,8 +46,12 @@ class HostessSearchForm(forms.Form):
         elif date_str and time_str:
             start_time = time_str.split('-')[0]
             end_time = time_str.split('-')[1]
-            cleaned_data['datetime_start'] = datetime.datetime.strptime('{}T{}'.format(date_str, start_time), '%Y-%m-%dT%H%M')
-            cleaned_data['datetime_end'] = datetime.datetime.strptime('{}T{}'.format(date_str, end_time), '%Y-%m-%dT%H%M')
+            cleaned_data['datetime_start'] = datetime.datetime.strptime('{}T{}'.format(date_str, start_time), '%Y-%m-%dT%H_%M')
+            if cleaned_data['datetime_start'].hour < 12:
+                cleaned_data['datetime_start'] = cleaned_data['datetime_start'] + datetime.timedelta(days=1)
+            cleaned_data['datetime_end'] = datetime.datetime.strptime('{}T{}'.format(date_str, end_time), '%Y-%m-%dT%H_%M')
+            if cleaned_data['datetime_end'].hour < 12:
+                cleaned_data['datetime_end'] = cleaned_data['datetime_end'] + datetime.timedelta(days=1)
         return cleaned_data
 
 
