@@ -99,6 +99,7 @@ $('ul.available_time li').on('click', function (e) {
     selectedItem.addClass('active');
     // selectフォームの値を変更
     var value = selectedItem.data('value');
-    $('select[name=available_time]').value = value;
+    $('select[name=available_time]').val(value); 
+    $('select[name=available_time]').change();
     $('.hostess-detail button[type=submit]').prop('disabled', false);
 });
