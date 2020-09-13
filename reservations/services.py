@@ -130,22 +130,58 @@ class ReservationService:
         )
         return meeting
 
-    def send_meeting(self, meeting):
-        join_text = "支払いが完了し、予約が確定しました！\n\nZOOM参加のURLは以下です。\n時間になりましたら、以下の情報からアクセスしてください\n\n{}\n\n【音声/映像にトラブルがある場合は以下をご覧ください。\nhttps://note.com/cababa/n/n150b47c0db09　】".format(meeting.join_url)
-        password_text = meeting.password
-        password_help_text = "↑パスワードはこちら"
+    def splitper(self, s, n=4):
+        s = str(s)
+        assert n > 0
+        d, m = divmod(len(s), n)
+        l = []
+        if m:
+            l.append(s[:m])
+        for i in range(d):
+            a = i * n + m
+            l.append(s[a:a+n])
+        return " ".join(l)
 
-        # ゲストに通知
-        line_bot_api = line.get_line_bot_api(is_guest=True)
-        line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=join_text))
-        line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=password_text))
-        line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=password_help_text))
+    def send_meeting(self, meeting):
+        text = "ゲストの支払いが完了し、予約が確定しました！\n"
+        text += "なまえ: {}\n".format(meeting.reservation.guest.display_name)
+        text += "日付: {}\n".format(localtime(meeting.reservation.time.start_at).strftime('%Y-%m-%d'))
+        text += "時間: {}-{}\n".format(localtime(meeting.reservation.time.start_at).strftime('%H:%M'), localtime(meeting.reservation.time.end_at).strftime('%H:%M'))
+        text += "\n"
+        text += "時間になりましたら、ZOOMを立ち上げて\n"
+        text += "こちらの情報からアクセスしてください\n"
+        text += "\n"
+        text += "{}\n".format(meeting.join_url)
+        text += "\n"
+        text += "ミーティングID: {}\n".format(self.splitper(meeting.zoom_meeting_id))
+        text += "パスワード: {}\n".format(meeting.password)
+        text += "\n"
+        text += "音声/映像にトラブルがある場合は以下をご覧ください。\n"
+        text += "https://note.com/cababa/n/n150b47c0db09"
 
         # キャストに通知
         line_bot_api = line.get_line_bot_api(is_guest=False)
-        line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=join_text))
-        line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=password_text))
-        line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=password_help_text))
+        line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=text))
+
+        text = "支払いが完了し、予約が確定しました！\n"
+        text += "キャスト名: {}\n".format(meeting.reservation.time.hostess.display_name)
+        text += "日付: {}\n".format(localtime(meeting.reservation.time.start_at).strftime('%m-%d'))
+        text += "時間: {}-{}\n".format(localtime(meeting.reservation.time.start_at).strftime('%H:%M'), localtime(meeting.reservation.time.end_at).strftime('%H:%M'))
+        text += "\n"
+        text += "ZOOM参加のURLは以下です。\n"
+        text += "時間になりましたら、以下のの情報からアクセスしてください\n"
+        text += "\n"
+        text += "{}\n".format(meeting.join_url) 
+        text += "\n"
+        text += "ミーティングID: {}\n".format(self.splitper(meeting.zoom_meeting_id))
+        text += "パスワード: {}\n".format(meeting.password)
+        text += "\n"
+        text += "音声/映像にトラブルがある場合は以下をご覧ください。\n"
+        text += "https://note.com/cababa/n/n150b47c0db09"
+
+        # ゲストに通知
+        line_bot_api = line.get_line_bot_api(is_guest=True)
+        line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=text))
 
 
 class ZoomService:
