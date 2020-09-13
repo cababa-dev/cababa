@@ -66,7 +66,7 @@ class ReservationService:
         line_bot_api_guest = LineBotApi(settings.GUEST_LINE_ACCESS_TOKEN)
         date = "開始{}\n終了{}\n".format(localtime(transaction.reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(transaction.reservation.time.end_at).strftime('%m-%d %H:%M'))
         text = "【予約情報】\nキャストおなまえ: {}\n{}\n\n".format(transaction.reservation.time.hostess.display_name, date)
-        text += "こちらから支払いお願いします。一度キャンセルすると支払いが出来なくなりますのでお気をつけください！\n{}\n\n請求元は「Japan night life」と表示されます".format(transaction.url)
+        text += "こちらから支払いお願いします。一度キャンセルすると支払いが出来なくなりますのでお気をつけください！\n{}\n\n請求元は「株式会社ニューエース」と表示されます".format(transaction.url)
         line_bot_api_guest.push_message(transaction.reservation.guest.line_user_id, TextSendMessage(text=text))
     
     def create_meeting(self, reservation):
