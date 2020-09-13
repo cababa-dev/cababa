@@ -57,7 +57,7 @@
         <div class="hostess-profile">
             <h3><img src="{% static 'images/calendar.svg' %}" alt="">予約情報</h3>
             <p>こちらの予約でお間違いなければ<br/>確定ボタンを押してください</p>
-            <p class="date">{{ available_time.start_at|date:"Y年n月j日" }} {{ available_time.start_at|date:"H:i" }} - {{ available_time.end_at|date:"H:i" }}</p>
+            <p class="date">{{ available_time.start_at|get_date|date:"Y年n月j日" }} {{ available_time.start_at|date:"H:i" }} - {{ available_time.end_at|date:"H:i" }}</p>
         </div>
 
         <div class="hostess-profile">

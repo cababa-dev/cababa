@@ -21,6 +21,7 @@ from lib.bot import (
     Menu, ActionHandler, MenuHandler,
     SimpleMenu, SimpleSelection, SimpleSelectionItem,
 )
+from lib.date import get_display_dt
 from reservations.models import Reservation, ZoomMeeting, LinePayTransaction
 from reservations.services import ReservationService
 from . import models
@@ -82,7 +83,7 @@ class AvailableTimeMemu(Menu):
         # カルーセルで表示
         columns = [
             CarouselColumn(
-                title=localtime(available.start_at).strftime('%Y-%m-%d'), text='{}-{}'.format(localtime(available.start_at).strftime('%H:%M'), localtime(available.end_at).strftime('%H:%M')), actions=[
+                title=localtime(get_display_dt(available.start_at)).strftime('%Y-%m-%d'), text='{}-{}'.format(localtime(available.start_at).strftime('%H:%M'), localtime(available.end_at).strftime('%H:%M')), actions=[
                 PostbackAction(label='キャンセルする', display_text='キャンセルする', data='menu={}&action=cancel&id={}'.format(self.name, available.available_id))
             ])
             for available in availables
@@ -171,7 +172,7 @@ class UnconfirmReservationMenu(Menu):
         # カルーセルで表示
         columns = []
         for reservation in reservations:
-            date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
+            date = "開始{}\n終了{}\n".format(localtime(get_display_dt(reservation.time.start_at)).strftime('%m-%d %H:%M'), localtime(get_display_dt(reservation.time.end_at)).strftime('%m-%d %H:%M'))
             column = CarouselColumn(
                 title=reservation.guest.display_name,
                 text=date,
@@ -207,7 +208,7 @@ class UnconfirmReservationMenu(Menu):
         service = ReservationService()
         transaction = service.create_transaction(reservation)
         # ゲストに通知
-        date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
+        date = "開始{}\n終了{}\n".format(localtime(get_display_dt(reservation.time.start_at)).strftime('%m-%d %H:%M'), localtime(get_display_dt(reservation.time.end_at)).strftime('%m-%d %H:%M'))
         text = "キャストが予約を承認しました！\n\n【予約情報】\nキャストおなまえ: {}\n{}\n\n".format(hostess.display_name, date)
         text += "こちらから支払いお願いします。一度キャンセルすると支払いが出来なくなりますのでお気をつけください！\n{}\n\n請求元は「株式会社ニューエース」と表示されます".format(transaction.url)
         line_bot_api_guest.push_message(reservation.guest.line_user_id, TextSendMessage(text=text))
@@ -224,7 +225,7 @@ class UnconfirmReservationMenu(Menu):
         reservation.is_approval = False
         reservation.save()
         # ゲストに通知
-        date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
+        date = "開始{}\n終了{}\n".format(localtime(get_display_dt(reservation.time.start_at)).strftime('%m-%d %H:%M'), localtime(get_display_dt(reservation.time.end_at)).strftime('%m-%d %H:%M'))
         text = "キャストと予定が合いませんでした！\n別の時間帯を打診してみてください！\n\n【予約情報】\nキャストおなまえ: {}\n{}".format(hostess.display_name, date)
         line_bot_api_guest.push_message(reservation.guest.line_user_id, TextSendMessage(text=text))
         return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='ゲストに承認通知を送信しました'))
@@ -248,7 +249,7 @@ class ReservationMenu(Menu):
         # カルーセルで表示
         columns = []
         for reservation in reservations:
-            date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
+            date = "開始{}\n終了{}\n".format(localtime(get_display_dt(reservation.time.start_at)).strftime('%m-%d %H:%M'), localtime(get_display_dt(reservation.time.end_at)).strftime('%m-%d %H:%M'))
             column = CarouselColumn(
                 title=reservation.guest.display_name,
                 text=date,
@@ -357,8 +358,8 @@ class SalesMenu(Menu):
         # 内訳を一覧表示
         columns = []
         for transaction in transactions:
-            start = localtime(transaction.reservation.time.start_at).strftime('%m-%d %H:%M')
-            end = localtime(transaction.reservation.time.end_at).strftime('%m-%d %H:%M')
+            start = localtime(get_display_dt(transaction.reservation.time.start_at)).strftime('%m-%d %H:%M')
+            end = localtime(get_display_dt(transaction.reservation.time.end_at)).strftime('%m-%d %H:%M')
             hourly = settings.BASE_PRICE
             specif = settings.RANK_PRICES[transaction.reservation.time.hostess.hostess_profile.rank]
             text = f"開始{start:}\n終了{end:}\n時給:￥{hourly:,}\n指名料:￥{specif:,}"

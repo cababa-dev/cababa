@@ -18,7 +18,7 @@ from lib.bot import (
     Menu, ActionHandler, MenuHandler,
     SimpleMenu, SimpleSelection, SimpleSelectionItem,
 )
-
+from lib.date import get_display_dt
 from reservations.models import Reservation, LinePayTransaction
 
 
@@ -45,7 +45,7 @@ class ReservationMenu(Menu):
         # カルーセルで表示
         columns = []
         for reservation in reservations:
-            date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
+            date = "開始{}\n終了{}\n".format(localtime(get_display_dt(reservation.time.start_at)).strftime('%m-%d %H:%M'), localtime(get_display_dt(reservation.time.end_at)).strftime('%m-%d %H:%M'))
             column = CarouselColumn(
                 title=reservation.guest.display_name,
                 text=date,
@@ -80,7 +80,7 @@ class InvoiceMenu(Menu):
         columns = []
         for transaction in transactions:
             title = '{date} {start}-{end}'.format(
-                date=localtime(transaction.reservation.time.start_at).strftime('%m/%d'),
+                date=localtime(get_display_dt(transaction.reservation.time.start_at)).strftime('%m/%d'),
                 start=localtime(transaction.reservation.time.start_at).strftime('%H:%M'),
                 end=localtime(transaction.reservation.time.end_at).strftime('%H:%M'),
             )

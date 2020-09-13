@@ -9,6 +9,7 @@ from django.utils.timezone import localtime
 from django.conf import settings
 
 from lib import line, zoom
+from lib.date import get_display_dt
 from . import models
 
 
@@ -17,7 +18,7 @@ class ReservationService:
         # ゲストに通知
         line_bot_api = line.get_line_bot_api(is_guest=True)
         hostess_name = reservation.time.hostess.display_name
-        date = "開始{}\n終了{}\n".format(localtime(reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(reservation.time.end_at).strftime('%m-%d %H:%M'))
+        date = "開始{}\n終了{}\n".format(localtime(get_display_dt(reservation.time.start_at)).strftime('%m-%d %H:%M'), localtime(get_display_dt(reservation.time.end_at)).strftime('%m-%d %H:%M'))
         text = "予約が完了しました！\n\n【予約情報】\nキャストおなまえ: {}\n{}".format(hostess_name, date)
         line_bot_api.push_message(reservation.guest.line_user_id, TextSendMessage(text=text))
 
@@ -64,7 +65,7 @@ class ReservationService:
     
     def resend_pay_notification(self, transaction):
         line_bot_api_guest = LineBotApi(settings.GUEST_LINE_ACCESS_TOKEN)
-        date = "開始{}\n終了{}\n".format(localtime(transaction.reservation.time.start_at).strftime('%m-%d %H:%M'), localtime(transaction.reservation.time.end_at).strftime('%m-%d %H:%M'))
+        date = "開始{}\n終了{}\n".format(localtime(get_display_dt(transaction.reservation.time.start_at)).strftime('%m-%d %H:%M'), localtime(get_display_dt(transaction.reservation.time.end_at)).strftime('%m-%d %H:%M'))
         text = "【予約情報】\nキャストおなまえ: {}\n{}\n\n".format(transaction.reservation.time.hostess.display_name, date)
         text += "こちらから支払いお願いします。一度キャンセルすると支払いが出来なくなりますのでお気をつけください！\n{}\n\n請求元は「株式会社ニューエース」と表示されます".format(transaction.url)
         line_bot_api_guest.push_message(transaction.reservation.guest.line_user_id, TextSendMessage(text=text))
@@ -145,7 +146,7 @@ class ReservationService:
     def send_meeting(self, meeting):
         text = "ゲストの支払いが完了し、予約が確定しました！\n"
         text += "なまえ: {}\n".format(meeting.reservation.guest.display_name)
-        text += "日付: {}\n".format(localtime(meeting.reservation.time.start_at).strftime('%Y-%m-%d'))
+        text += "日付: {}\n".format(get_display_dt(meeting.reservation.time.start_at).strftime('%Y-%m-%d'))
         text += "時間: {}-{}\n".format(localtime(meeting.reservation.time.start_at).strftime('%H:%M'), localtime(meeting.reservation.time.end_at).strftime('%H:%M'))
         text += "\n"
         text += "時間になりましたら、ZOOMを立ち上げて\n"
@@ -165,7 +166,7 @@ class ReservationService:
 
         text = "支払いが完了し、予約が確定しました！\n"
         text += "キャスト名: {}\n".format(meeting.reservation.time.hostess.display_name)
-        text += "日付: {}\n".format(localtime(meeting.reservation.time.start_at).strftime('%m-%d'))
+        text += "日付: {}\n".format(get_display_dt(meeting.reservation.time.start_at).strftime('%Y-%m-%d'))
         text += "時間: {}-{}\n".format(localtime(meeting.reservation.time.start_at).strftime('%H:%M'), localtime(meeting.reservation.time.end_at).strftime('%H:%M'))
         text += "\n"
         text += "ZOOM参加のURLは以下です。\n"

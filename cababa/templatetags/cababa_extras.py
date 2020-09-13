@@ -4,6 +4,7 @@ import japanmap
 from django import template
 from django.utils.html import format_html
 
+from lib.date import get_display_dt
 from users.models import HostessProfile
 
 
@@ -28,7 +29,7 @@ def get_area_display(area):
 
 @register.filter(name='get_date')
 def get_date(dt):
-    return dt - datetime.timedelta(hours=2)
+    return get_display_dt(dt)
 
 @register.filter(name='get_style_display')
 def get_style_display(style):
