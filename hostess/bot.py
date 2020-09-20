@@ -370,7 +370,7 @@ class SalesMenu(Menu):
             end = localtime(get_display_dt(transaction.reservation.time.end_at)).strftime('%m-%d %H:%M')
             hourly = settings.BASE_PRICE
             specif = settings.RANK_PRICES[transaction.reservation.time.hostess.hostess_profile.rank]
-            text = f"開始{start:}\n終了{end:}\n時給:￥{hourly:,}\n指名料:￥{specif:,}"
+            text = f"{start:} - {end:}\n時給:￥{hourly:,}\n指名料:￥{specif:,}"
             column = CarouselColumn(
                 title=transaction.reservation.guest.display_name,
                 text=text,
