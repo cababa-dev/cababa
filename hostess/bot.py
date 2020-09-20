@@ -323,6 +323,8 @@ class SalesMenu(Menu):
         reservations = Reservation.objects.filter(time__hostess=hostess, is_approval=True)
         # 予約に対する支払い履歴一覧を取得
         transactions = LinePayTransaction.objects.filter(reservation__in=reservations, confirmed=True).order_by('-reservation__time__start_at')
+        if len(transactions) == 0:
+            return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='売上履歴はありません'))
         monthly_sales = {}
         for transaction in transactions:
             # いったん月毎に集計
@@ -359,6 +361,8 @@ class SalesMenu(Menu):
         month_end = month_start + relativedelta(months=1) - datetime.timedelta(seconds=1)
         # ターゲット月の支払いを取得
         transactions = LinePayTransaction.objects.filter(reservation__in=reservations, updated_at__gte=month_start, updated_at__lte=month_end, confirmed=True).order_by('-reservation__time__start_at')[:10]
+        if len(transactions) == 0:
+            return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='売上履歴はありません'))
         # 内訳を一覧表示
         columns = []
         for transaction in transactions:
