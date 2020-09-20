@@ -79,21 +79,23 @@ class InvoiceMenu(Menu):
 
         columns = []
         for transaction in transactions:
-            title = '{date} {start}-{end}'.format(
+            title = '{date} {start}-{end} {hostess}'.format(
                 date=localtime(get_display_dt(transaction.reservation.time.start_at)).strftime('%m/%d'),
                 start=localtime(transaction.reservation.time.start_at).strftime('%H:%M'),
                 end=localtime(transaction.reservation.time.end_at).strftime('%H:%M'),
-            )
-            text = '合計金額:\9,000\n■内訳\nベース料金：2,500円\n指名料：1,000円\nオプション料金：6,000円'.format(
                 hostess=transaction.reservation.time.hostess.display_name,
             )
+            hourly = settings.BASE_PRICE
+            specif = settings.RANK_PRICES[transaction.reservation.time.hostess.hostess_profile.rank]
+            total = transaction.amount
+            text = f'合計金額:￥{total:,}\n■内訳\nベース料金：￥{hourly:,}, 指名料：￥{specif:,}'
             column = CarouselColumn(
                 title=title,
                 text=text,
                 actions=[
                     URIAction(
                         label='再予約',
-                        uri='https://{}reservations/hostess/{}'.format(settings.HOST_NAME, transaction.reservation.time.hostess.user_id)
+                        uri='https://{}/reservations/hostess/{}'.format(settings.HOST_NAME, transaction.reservation.time.hostess.user_id)
                     ),
                 ]
             )
