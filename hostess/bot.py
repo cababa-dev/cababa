@@ -56,7 +56,7 @@ class AvailableTimeMemu(Menu):
         # 出勤時間を取得
         hostess = self.get_hostess(event)
         now = datetime.datetime.now()
-        availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess, start_at__gte=now).order_by('start_at') if not Reservation.objects.filter(time=a).exists()]
+        availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess, start_at__gte=now).order_by('start_at') if not Reservation.objects.filter(time=a).filter(Q(is_approval=True) | Q(is_approval=None)).exists()]
         # 出勤時間が無ければエラーメッセージを返す
         if len(availables) == 0:
             return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='設定されていません'))
@@ -79,7 +79,7 @@ class AvailableTimeMemu(Menu):
         hostess = self.get_hostess(event)
         start_date = make_aware(datetime.datetime.strptime(query['day'], '%Y-%m-%d')) + datetime.timedelta(hours=2)
         end_date = start_date + datetime.timedelta(days=1) + datetime.timedelta(hours=2)
-        availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess, start_at__gte=start_date, end_at__lte=end_date).order_by('start_at') if not Reservation.objects.filter(time=a).exists()]
+        availables = [a for a in models.AvailableTime.objects.filter(hostess=hostess, start_at__gte=start_date, end_at__lte=end_date).order_by('start_at') if not Reservation.objects.filter(time=a).filter(Q(is_approval=True) | Q(is_approval=None)).exists()]
         # カルーセルで表示
         columns = [
             CarouselColumn(
@@ -275,7 +275,7 @@ class ReservationMenu(Menu):
         reservation = Reservation.objects.get(reservation_id=query.get('reservation_id'))
         meeting = ZoomMeeting.objects.get(reservation=reservation)
         text = "ZOOM参加のURLはこちら\n\n{}".format(meeting.join_url)
-        line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=text))
+        return line_bot_api.reply_message(event.reply_token, TextSendMessage(text=text))
 
     def action_cancel_menu(self, event, query):
         reservation = Reservation.objects.get(reservation_id=query.get('reservation_id'))
