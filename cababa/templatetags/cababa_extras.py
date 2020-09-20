@@ -14,6 +14,8 @@ register = template.Library()
 def prefecture_str(value):
     if value == 0:
         return '非公開'
+    if type(value) != int:
+        return '非公開'
     return japanmap.pref_names[value]
 
 @register.filter
