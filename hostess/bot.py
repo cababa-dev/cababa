@@ -366,8 +366,8 @@ class SalesMenu(Menu):
         # 内訳を一覧表示
         columns = []
         for transaction in transactions:
-            start = localtime(get_display_dt(transaction.reservation.time.start_at)).strftime('%m-%d %H:%M')
-            end = localtime(get_display_dt(transaction.reservation.time.end_at)).strftime('%m-%d %H:%M')
+            start = localtime(get_display_dt(transaction.reservation.time.start_at)).strftime('%m/%d %H:%M')
+            end = localtime(get_display_dt(transaction.reservation.time.end_at)).strftime('%H:%M')
             hourly = settings.BASE_PRICE
             specif = settings.RANK_PRICES[transaction.reservation.time.hostess.hostess_profile.rank]
             text = f"{start:} - {end:}\n時給:￥{hourly:,}\n指名料:￥{specif:,}"
