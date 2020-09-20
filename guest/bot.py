@@ -47,7 +47,7 @@ class ReservationMenu(Menu):
         for reservation in reservations:
             date = "開始{}\n終了{}\n".format(localtime(get_display_dt(reservation.time.start_at)).strftime('%m-%d %H:%M'), localtime(get_display_dt(reservation.time.end_at)).strftime('%m-%d %H:%M'))
             column = CarouselColumn(
-                title=reservation.guest.display_name,
+                title=reservation.time.hostess.display_name,
                 text=date,
                 actions=[
                     URIAction(

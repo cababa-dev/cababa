@@ -350,11 +350,15 @@ class SalesMenu(Menu):
         return line_bot_api.reply_message(event.reply_token, message)
     
     def action_sales_detail(self, event, query):
+        hostess = self.get_hostess(event)
+        # 過去の予約一覧を取得
+        reservations = Reservation.objects.filter(time__hostess=hostess, is_approval=True)
+        
         ym = query['month']
         month_start = datetime.datetime.strptime(ym, '%Y-%m')
         month_end = month_start + relativedelta(months=1) - datetime.timedelta(seconds=1)
         # ターゲット月の支払いを取得
-        transactions = LinePayTransaction.objects.filter(updated_at__gte=month_start, updated_at__lte=month_end)[:6]
+        transactions = LinePayTransaction.objects.filter(reservation__in=reservations, updated_at__gte=month_start, updated_at__lte=month_end)[:6]
         # 内訳を一覧表示
         columns = []
         for transaction in transactions:
