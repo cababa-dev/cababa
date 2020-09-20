@@ -322,7 +322,7 @@ class SalesMenu(Menu):
         # 過去の予約一覧を取得
         reservations = Reservation.objects.filter(time__hostess=hostess, is_approval=True)
         # 予約に対する支払い履歴一覧を取得
-        transactions = LinePayTransaction.objects.filter(reservation__in=reservations, confirmed=True).order_by('-updated_at')
+        transactions = LinePayTransaction.objects.filter(reservation__in=reservations, confirmed=True).order_by('-reservation__time__start_at')
         monthly_sales = {}
         for transaction in transactions:
             # いったん月毎に集計
@@ -358,7 +358,7 @@ class SalesMenu(Menu):
         month_start = datetime.datetime.strptime(ym, '%Y-%m')
         month_end = month_start + relativedelta(months=1) - datetime.timedelta(seconds=1)
         # ターゲット月の支払いを取得
-        transactions = LinePayTransaction.objects.filter(reservation__in=reservations, updated_at__gte=month_start, updated_at__lte=month_end, confirmed=True).order_by('-updated_at')[:10]
+        transactions = LinePayTransaction.objects.filter(reservation__in=reservations, updated_at__gte=month_start, updated_at__lte=month_end, confirmed=True).order_by('-reservation__time__start_at')[:10]
         # 内訳を一覧表示
         columns = []
         for transaction in transactions:

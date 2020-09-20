@@ -72,7 +72,7 @@ class InvoiceMenu(Menu):
     def main_action(self, event):
         # 支払い履歴を取得
         guest = self.get_guest(event)
-        transactions = LinePayTransaction.objects.filter(reservation__guest=guest, confirmed=True).order_by('-created_at')[:10]
+        transactions = LinePayTransaction.objects.filter(reservation__guest=guest, confirmed=True).order_by('-reservation__time__start_at')[:10]
 
         if len(transactions) == 0:
             return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='支払履歴はありません'))
