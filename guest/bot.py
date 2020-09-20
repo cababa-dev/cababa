@@ -72,7 +72,7 @@ class InvoiceMenu(Menu):
     def main_action(self, event):
         # 支払い履歴を取得
         guest = self.get_guest(event)
-        transactions = LinePayTransaction.objects.filter(reservation__guest=guest)[:5]
+        transactions = LinePayTransaction.objects.filter(reservation__guest=guest).order_by('-created_at')[:10]
 
         if len(transactions) == 0:
             return line_bot_api.reply_message(event.reply_token, TextSendMessage(text='支払履歴はありません'))
@@ -88,7 +88,7 @@ class InvoiceMenu(Menu):
             hourly = settings.BASE_PRICE
             specif = settings.RANK_PRICES[transaction.reservation.time.hostess.hostess_profile.rank]
             total = transaction.amount
-            text = f'合計金額:￥{total:,}\n■内訳\nベース料金：￥{hourly:,}, 指名料：￥{specif:,}'
+            text = f'合計金額:￥{total:,}\n■内訳\nベース料金:￥{hourly:,}, 指名料:￥{specif:,}'
             column = CarouselColumn(
                 title=title,
                 text=text,
