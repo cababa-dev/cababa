@@ -43,3 +43,7 @@ def get_style_display(style):
 @register.filter(name='line_break')
 def line_break(message):
     return format_html('<br/>'.join(message.split('\n')))
+
+@register.filter
+def to_https(value):
+    return value.replace("http", "https")

@@ -1,12 +1,17 @@
 import os
 import uuid
+from io import BytesIO
+
+from PIL import Image
 
 from django import forms
 from django.contrib.auth import authenticate, login
 from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from django.conf import settings
 
 from users.models import User, Group, HostessProfile
+from lib.profile import crop_resize_image
 from . import models
 
 
@@ -212,7 +217,17 @@ class HostessForm(forms.ModelForm):
         filename = '.'.join(filename)
         if not os.path.exists(upload_dir):
             os.makedirs(upload_dir)
-        filename = default_storage.save('hostess/profile_image/'+filename, image_file)
+        file_path = 'hostess/profile_image/' + filename
+        # 画像をリサイズ
+        img_bin = BytesIO(image_file.read())
+        im = Image.open(img_bin)
+        im_crop = crop_resize_image(im)
+        image_buf = BytesIO()
+        im_crop.save(image_buf, format="JPEG")
+        image_stringio = image_buf.getvalue()
+        im_crop_file = ContentFile(image_stringio)
+
+        filename = default_storage.save(file_path, im_crop_file)
         image_url = default_storage.url(filename)
         image_url = image_url.split('?')[0]
         return image_url

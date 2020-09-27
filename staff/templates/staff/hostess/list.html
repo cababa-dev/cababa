@@ -38,7 +38,7 @@
                         <td>登録済み</td>
                     {% else %}
                         {% url 'hostess:invite' hostess.user_id as invitation_url %}
-                        <input id="{{ hostess.user_id }}" type="text" value="{{ invitation_url|absolute_url:request }}" readonly style="top: -100px; position: fixed;">
+                        <input id="{{ hostess.user_id }}" type="text" value="{{ invitation_url|absolute_url:request|to_https }}" readonly style="top: -100px; position: fixed;">
                         <td>
                             <button class="btn btn-primary copy-button" data-id="{{ hostess.user_id }}">コピー</button>
                             <a href="http://line.me/R/msg/text/?こちらからCABABAに登録お願いします {{ invitation_url|absolute_url:request }}">
