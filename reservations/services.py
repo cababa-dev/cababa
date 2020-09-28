@@ -1,7 +1,7 @@
 import json
 import xlrd
 from linebot import LineBotApi
-from linebot.models import TextSendMessage, PostbackAction, TemplateSendMessage, ButtonsTemplate
+from linebot.models import TextSendMessage, ImageSendMessage, PostbackAction, TemplateSendMessage, ButtonsTemplate
 from zoomus import ZoomClient
 
 from django.db.models import Q
@@ -143,6 +143,28 @@ class ReservationService:
             l.append(s[a:a+n])
         return " ".join(l)
 
+    def send_howto(self, line_bot_api, user_id):
+        text = "画面中央部の【ミーティングを起動】をクリックしてください。"
+        line_bot_api.push_message(user_id, TextSendMessage(text=text))
+        image_url = "https://assets.st-note.com/production/uploads/images/33218618/picture_pc_fa1ab7ef7f643325cee03c3f10bda021.png"
+        line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
+        text = "【ビデオ付きで参加】をクリックしてください。"
+        line_bot_api.push_message(user_id, TextSendMessage(text=text))
+        image_url = "https://assets.st-note.com/production/uploads/images/33218255/picture_pc_fc99dbb0c88da9130cbdc4d8b6313256.jpg"
+        line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
+        text = "音声が聞こえない時や、映像が映らないときは、【ミュートを解除】【ビデオの開始】の療法が解除されているかご確認ください。\n以下の左図のように赤い斜め線が入っている場合は解除されていません。右図のように【ミュート】【ビデオの停止】という表記になっている状態が正しい状態です。"
+        line_bot_api.push_message(user_id, TextSendMessage(text=text))
+        image_url = "https://assets.st-note.com/production/uploads/images/33218444/picture_pc_004f012e97a102995359ef7c2fce5f64.png"
+        line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
+        text = "【バーチャル背景機能について】※モバイル・タブレットからの場合\n"
+        text += "自宅から参加する時や背景を隠したい時等は以下からバーチャル背景の機能を参考にしてみてください。\n"
+        text += "①左図：右下の詳細（3つの点）をクリックしてください\n"
+        text += "②中央図：バーチャル背景をクリックしてください\n"
+        text += "③右図：写真を選択してください（+ボタンで自分だけの写真を背景にすることも可能です）"
+        line_bot_api.push_message(user_id, TextSendMessage(text=text))
+        image_url = "https://assets.st-note.com/production/uploads/images/33701824/picture_pc_98cb818f1ab2bfcbe3160e230c684f49.png"
+        line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
+
     def send_meeting(self, meeting):
         text = "ゲストの支払いが完了し、予約が確定しました！\n"
         text += "なまえ: {}\n".format(meeting.reservation.guest.display_name)
@@ -156,13 +178,15 @@ class ReservationService:
         text += "\n"
         text += "ミーティングID: {}\n".format(self.splitper(meeting.zoom_meeting_id))
         text += "パスワード: {}\n".format(meeting.password)
-        text += "\n"
-        text += "音声/映像にトラブルがある場合は以下をご覧ください。\n"
-        text += "https://note.com/cababa/n/n150b47c0db09"
+        # text += "\n"
+        # text += "音声/映像にトラブルがある場合は以下をご覧ください。\n"
+        # text += "https://note.com/cababa/n/n150b47c0db09"
 
         # キャストに通知
         line_bot_api = line.get_line_bot_api(is_guest=False)
         line_bot_api.push_message(meeting.reservation.time.hostess.line_user_id, TextSendMessage(text=text))
+        # noteの代わりにトラブル対応方法を送信
+        self.send_howto(line_bot_api, meeting.reservation.time.hostess.line_user_id)
 
         text = "支払いが完了し、予約が確定しました！\n"
         text += "キャスト名: {}\n".format(meeting.reservation.time.hostess.display_name)
@@ -176,13 +200,15 @@ class ReservationService:
         text += "\n"
         text += "ミーティングID: {}\n".format(self.splitper(meeting.zoom_meeting_id))
         text += "パスワード: {}\n".format(meeting.password)
-        text += "\n"
-        text += "音声/映像にトラブルがある場合は以下をご覧ください。\n"
-        text += "https://note.com/cababa/n/n150b47c0db09"
+        # text += "\n"
+        # text += "音声/映像にトラブルがある場合は以下をご覧ください。\n"
+        # text += "https://note.com/cababa/n/n150b47c0db09"
 
         # ゲストに通知
         line_bot_api = line.get_line_bot_api(is_guest=True)
         line_bot_api.push_message(meeting.reservation.guest.line_user_id, TextSendMessage(text=text))
+        # noteの代わりにトラブル対応方法を送信
+        self.send_howto(line_bot_api, meeting.reservation.time.hostess.line_user_id)
 
 
 class ZoomService:
