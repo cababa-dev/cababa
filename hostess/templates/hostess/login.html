@@ -1,6 +1,6 @@
 {% extends 'cababa/partials/base.html' %}
 {% load static %}
-{% block title %}ホステス登録{% endblock %}
+{% block title %}キャスト登録{% endblock %}
 
 {% block content %}
 
@@ -9,11 +9,11 @@
 {% endif %}
 
 <div class="hostess-invite">
-    <h2>ホステス登録</h2>
-    <p>LINEログインしてホステスデビューしましょう</p>
+    <h2>キャスト登録</h2>
+    <p>LINEログインしてキャストデビューしましょう</p>
 
     <h3>
-        <a class="hostess_agreement" href="{% url 'cast_agreement_view' %}">CABABAキャストアカウント規約</a>
+        <p class="hostess_agreement">登録/ログインにより<a class="hostess_agreement" href="{% url 'cast_agreement_view' %}">CABABA利用規約/CABABAキャストアカウント規約</a>および<a class="hostess_agreement" href="{% url 'privacy_policy_view' %}">プライバシーポリシー</a>に同意したとみなされます。</p>
         <a href="{{ login_url }}"><img src="{% static 'images/btn_login_base.png' %}"></a>
     </h3>
 </div>

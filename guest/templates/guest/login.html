@@ -10,10 +10,10 @@
 
 <div class="hostess-invite">
     <h2>CABABA予約システム</h2>
-    <p>LINEログインしてお嬢を予約しましょう</p>
+    <p>LINEログインしてキャストとビデオチャットを予約しましょう</p>
 
     <h3>
-        <a class="hostess_agreement" href="{% url 'user_agreement_view' %}">CABABA会員規約</a><br>
+        <p class="hostess_agreement">登録/ログインにより<a class="hostess_agreement" href="{% url 'user_agreement_view' %}">CABABA利用規約</a>および<a class="hostess_agreement" href="{% url 'privacy_policy_view' %}">プライバシーポリシー</a>に同意したとみなされます。</p><br>
         <a href="{{ login_url }}"><img src="{% static 'images/btn_login_base.png' %}"></a>
     </h3>
 </div>

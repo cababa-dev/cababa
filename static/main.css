@@ -19,7 +19,7 @@ footer {
     font-weight: bold;
     color: #000000;
     background-color: #C4C4C4;
-    height: 100px;
+    height: 150px;
     padding-top: 2px;
 }
 
@@ -860,6 +860,13 @@ ul.available_time li.active {
     margin: 0 30px;
     margin-bottom: 20px;
     letter-spacing: 1px;
+}
+
+.hostess_agreement {
+    font-size: 12px;
+    font-weight: 400;
+    color: #9D8860;
+    letter-spacing: 2px;
 }
 
 
