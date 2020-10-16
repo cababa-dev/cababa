@@ -271,3 +271,43 @@ class HostessForm(forms.ModelForm):
         hostess_profile.save()
         
         return hostess_profile
+
+
+class HostessEditForm(forms.ModelForm):
+    display_name = forms.CharField()
+
+    area = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=HostessProfile.AreaTypes.choices, required=False)
+    style = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=HostessProfile.StyleTypes.choices, required=False)
+    personality = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=HostessProfile.PersonalityTypes.choices, required=False)
+
+    class Meta:
+        model = HostessProfile
+        fields = ('name', 'height', 'prefecture_code', 'body', 'age', 'message', 'rank',)
+    
+    def __init__(self, *args, **kwargs):
+        self.context = kwargs.pop('context', {})
+        super(HostessEditForm, self).__init__(*args, **kwargs)
+
+    def update(self):
+        data = self.cleaned_data
+
+        # ユーザーを更新
+        user = self.context['hostess']
+        user.display_name = data['display_name']
+        user.save()
+
+        # プロフィールを更新
+        hostess_profile = user.hostess_profile
+        hostess_profile.name = data['name']
+        hostess_profile.height = data['height']
+        hostess_profile.prefecture_code = data['prefecture_code']
+        hostess_profile.area = data['area']
+        hostess_profile.body = data['body']
+        hostess_profile.age = data['age']
+        hostess_profile.style = data['style']
+        hostess_profile.personality = data['personality']
+        hostess_profile.message = data['message']
+        hostess_profile.rank = data['rank']
+        hostess_profile.save()
+        
+        return hostess_profile

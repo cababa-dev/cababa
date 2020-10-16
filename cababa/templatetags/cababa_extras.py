@@ -22,6 +22,13 @@ def prefecture_str(value):
 def absolute_url(path, request):
     return request.build_absolute_uri(path)
 
+@register.filter
+def is_selected(attrs, target):
+    if target in attrs:
+        return 'checked="checked"'
+    else:
+        return ""
+
 @register.filter(name='get_area_display')
 def get_area_display(area):
     for choice in HostessProfile.AreaTypes.choices:

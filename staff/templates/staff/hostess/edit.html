@@ -1,0 +1,238 @@
+{% extends 'staff-partials/base.html' %}
+{% load cababa %}
+
+{% block title %}キャスト追加{% endblock %}
+
+{% block content %}
+
+<div class="staff-form">
+    <h2>キャストの編集</h4>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="name"><strong>名前</strong> <span class="text-danger">*</span></label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="" value="{{ hostess.hostess_profile.name }}" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="display_name"><strong>名前 (源氏名)</strong> <span class="text-danger">*</span></label>
+                <input type="text" name="display_name" class="form-control" id="display_name" placeholder="" value="{{ hostess.display_name }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-1">
+                <label for="age"><strong>年齢</strong> <span class="text-danger">*</span></label>
+                <input type="number" name="age" class="form-control" id="age" placeholder="" value="{{ hostess.hostess_profile.age }}" required>歳
+            </div>
+            <div class="form-group col-md-1">
+                <label for="height"><strong>身長</strong></label>
+                <input type="number" name="height" class="form-control" id="height" placeholder="" value="{{ hostess.hostess_profile.height }}">cm
+            </div>
+            <div class="form-group col-md-2">
+                <label for="prefecture_code">出身地</label>
+                <select name="prefecture_code" id="prefecture_code" class="form-control">
+                    {% for prefecture in prefectures %}
+                        <option value="{{ prefecture.code }}" {% ifequal prefecture.code hostess.hostess_profile.prefecture_code  %}selected{% endifequal %}>{{ prefecture.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="rank">ランク</label>
+                <select name="rank" id="rank" class="form-control">
+                    <option value="SR" {% ifequal hostess.hostess_profile.rank "SR" %}selected{% endifequal %}>シルバー - ￥1,000</option>
+                    <option value="GD" {% ifequal hostess.hostess_profile.rank "GD" %}selected{% endifequal %}>ゴールド - ￥3,000</option>
+                    <option value="PM" {% ifequal hostess.hostess_profile.rank "PR" %}selected{% endifequal %}>プラチナ - ￥9,000</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="area"><strong>キャスト経験エリア</strong> <span class="text-danger">*</span></label>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="kabukicho" {{ hostess.hostess_profile.area|is_selected:"kabukicho" }}>
+                        <label class="form-check-label" for="kabukicho">歌舞伎町</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="roppongi" {{ hostess.hostess_profile.area|is_selected:"roppongi" }}>
+                        <label class="form-check-label" for="roppongi">六本木</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="ginza" {{ hostess.hostess_profile.area|is_selected:"ginza" }}>
+                        <label class="form-check-label" for="ginza">銀座</label>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="shibuya" {{ hostess.hostess_profile.area|is_selected:"shibuya" }}>
+                        <label class="form-check-label" for="shibuya">渋谷</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="ikebukuro" {{ hostess.hostess_profile.area|is_selected:"ikebukuro" }}>
+                        <label class="form-check-label" for="ikebukuro">池袋</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="ueno" {{ hostess.hostess_profile.area|is_selected:"ueno" }}>
+                        <label class="form-check-label" for="ueno">上野</label>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="kitashinchi" {{ hostess.hostess_profile.area|is_selected:"kitashinchi" }}>
+                        <label class="form-check-label" for="kitashinchi">北新地</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="minami" {{ hostess.hostess_profile.area|is_selected:"minami" }}>
+                        <label class="form-check-label" for="minami">ミナミ</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="nakasu" {{ hostess.hostess_profile.area|is_selected:"nakasu" }}>
+                        <label class="form-check-label" for="nakasu">中州</label>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="kokubuncho" {{ hostess.hostess_profile.area|is_selected:"kokubuncho" }}>
+                        <label class="form-check-label" for="kokubuncho">国分町</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="susukino" {{ hostess.hostess_profile.area|is_selected:"susukino" }}>
+                        <label class="form-check-label" for="susukino">ススキノ</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="area" value="others" {{ hostess.hostess_profile.area|is_selected:"others" }}>
+                        <label class="form-check-label" for="others">その他</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="body">体型</label>
+                <select name="body" id="body" class="form-control">
+                    {% for value, text in form.body.field.choices %}
+                        <option value="{{ value }}" {% ifequal value hostess.hostess_profile.body  %}selected{% endifequal %}>{{ text }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="style">雰囲気/スタイル（任意）</label>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="celeb" {{ hostess.hostess_profile.style|is_selected:"celeb" }}>
+                        <label class="form-check-label" for="style">お姉さん・セレブ</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="sexy" {{ hostess.hostess_profile.style|is_selected:"sexy" }}>
+                        <label class="form-check-label" for="style">セクシー・ナイスバディ</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="slim" {{ hostess.hostess_profile.style|is_selected:"slim" }}>
+                        <label class="form-check-label" for="style">モデル・スレンダー</label>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="business" {{ hostess.hostess_profile.style|is_selected:"business" }}>
+                        <label class="form-check-label" for="style">ビジネスパーソン</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="young" {{ hostess.hostess_profile.style|is_selected:"young" }}>
+                        <label class="form-check-label" for="style">ロリータ・妹</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="school" {{ hostess.hostess_profile.style|is_selected:"school" }}>
+                        <label class="form-check-label" for="style">女子大生</label>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="girl" {{ hostess.hostess_profile.style|is_selected:"girl" }}>
+                        <label class="form-check-label" for="style">ギャル</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="style" value="fat" {{ hostess.hostess_profile.style|is_selected:"fat" }}>
+                        <label class="form-check-label" for="style">ぽっちゃり</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="personality">性格</label>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="heal" {{ hostess.hostess_profile.personality|is_selected:"heal" }}>
+                        <label class="form-check-label" for="personality">癒し</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="goody" {{ hostess.hostess_profile.personality|is_selected:"goody" }}>
+                        <label class="form-check-label" for="personality">天然</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="evil" {{ hostess.hostess_profile.personality|is_selected:"evil" }}>
+                        <label class="form-check-label" for="personality">小悪魔</label>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="pure" {{ hostess.hostess_profile.personality|is_selected:"pure" }}>
+                        <label class="form-check-label" for="personality">ピュア/素直</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="smart" {{ hostess.hostess_profile.personality|is_selected:"smart" }}>
+                        <label class="form-check-label" for="personality">知的</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="groovy" {{ hostess.hostess_profile.personality|is_selected:"groovy" }}>
+                        <label class="form-check-label" for="personality">ノリノリ</label>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="friendly" {{ hostess.hostess_profile.personality|is_selected:"friendly" }}>
+                        <label class="form-check-label" for="personality">フレンドリー</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="outdoor" {{ hostess.hostess_profile.personality|is_selected:"outdoor" }}>
+                        <label class="form-check-label" for="personality">アウトドア</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="personality" value="indoor" {{ hostess.hostess_profile.personality|is_selected:"indoor" }}>
+                        <label class="form-check-label" for="personality">インドア</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="message"><strong>メッセージ</strong> <span class="text-danger">*</span></label>
+                <textarea name="message" class="form-control"  cols="40" rows="8" required>{{ hostess.hostess_profile.message }}</textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">登録</button>
+    </form>
+</div>
+
+{% endblock %}

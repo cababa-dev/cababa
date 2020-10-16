@@ -233,15 +233,26 @@ class HostessEditView(mixins.StaffPageMixin, View):
     def get_queryset(self, hostess_id):
         querysets = user_models.User.objects.get(user_id=hostess_id, user_type=user_models.User.UserTypes.HOSTESS, group=self.request.user.group)
         return querysets
+    
+    def get_prefectures(self):
+        prefectures = []
+        for name, code in zip(japanmap.pref_names, list(range(len(japanmap.pref_names)))):
+            prefectures.append(dict(
+                name=name,
+                code=code
+            ))
+        prefectures[0]['name'] = '非公開'
+        return prefectures
 
     def get(self, request, hostess_id):
-        querysets = self.get_queryset(hostess_id)
-        context = {'hostess': querysets}
+        hostess = self.get_queryset(hostess_id)
+        form = forms.HostessForm()
+        context = dict(form=form, hostess=hostess, prefectures=self.get_prefectures())
         return render(request, self.template, context)
 
     def post(self, request, hostess_id):
         querysets = self.get_queryset(hostess_id)
-        form = forms.HostessForm(request.POST, context={'request': request, 'hostess': querysets})
+        form = forms.HostessEditForm(request.POST, context={'request': request, 'hostess': querysets})
         if not form.is_valid():
             context = dict(form=form)
             return render(request, self.template, context)
