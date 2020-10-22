@@ -47,8 +47,6 @@ class ReservationService:
         # 本番はランクに合わせて金額設定
         rank_price = settings.RANK_PRICES[reservation.time.hostess.hostess_profile.rank]
         amount = settings.BASE_PRICE + rank_price
-        if not settings.IS_PRODUCTION:
-            amount = int(amount / 100)
         return amount
 
     def create_transaction(self, reservation):

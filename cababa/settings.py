@@ -212,14 +212,26 @@ BUSINESS_END_HOUR = 2
 # スプレッドシート
 SPREADSHEET_KEY = '1w46J1C0v9lpZVHx_bIGPVrWjL8KlP9P39uOf1Msp_Vs'
 
-# 料金表
-BASE_PRICE = 2500 # 2,500円/30分
-# 指名料
-RANK_PRICES = {
-    'SR': 1000,
-    'GD': 3000,
-    'PM': 9000,
-}
 
 # 本番環境かどうか
 IS_PRODUCTION = (env('STAGE') == 'master')
+
+
+if IS_PRODUCTION:
+    # 料金表
+    BASE_PRICE = 2500 # 2,500円/30分
+    # 指名料
+    RANK_PRICES = {
+        'SR': 1000,
+        'GD': 3000,
+        'PM': 9000,
+    }
+else:
+    # 料金表
+    BASE_PRICE = 25 # 2,500円/30分
+    # 指名料
+    RANK_PRICES = {
+        'SR': 10,
+        'GD': 30,
+        'PM': 90,
+    }
