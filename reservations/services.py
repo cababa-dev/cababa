@@ -232,7 +232,7 @@ class ReservationService:
         text += "※始める前にこちらをご覧ください※\n"
         text += "\n"
         text += "服装、迷惑行為等基本的なことをまとめています。\n"
-        text += "https://note.com/cababa/n/n00540a1c02c7"
+        text += "https://note.com/cababa/n/n882aea984bda"
 
         # ゲストに通知
         line_bot_api = line.get_line_bot_api(is_guest=True)
