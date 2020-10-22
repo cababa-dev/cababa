@@ -220,3 +220,6 @@ RANK_PRICES = {
     'GD': 3000,
     'PM': 9000,
 }
+
+# 本番環境かどうか
+IS_PRODUCTION = (env('STAGE') == 'master')
