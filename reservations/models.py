@@ -12,6 +12,11 @@ class Reservation(BaseModel, models.Model):
     time = models.ForeignKey('hostess.AvailableTime', db_index=True, on_delete=models.CASCADE)
     is_approval = models.BooleanField(_('is_approval'), db_index=True, null=True, default=None)
 
+    @property
+    def paied(self):
+        transaction = LinePayTransaction.objects.filter(reservation=self).order_by('-created_at').first()
+        return transaction.confirmed if transaction else False
+
 
 class LinePayTransaction(BaseModel, models.Model):
     transaction_id = models.CharField(_('transaction_id'), max_length=100, db_index=True)

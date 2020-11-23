@@ -9,6 +9,7 @@ from django.conf import settings
 
 from lib import mixins
 from users import models as user_models
+from reservations import models as reservation_models
 from . import models, forms, services
 
 
@@ -266,4 +267,17 @@ class HostessInviteView(mixins.StaffPageMixin, View):
     def get(self, request):
         invitation_url = 'https://' + settings.HOST_NAME + reverse('hostess:invite_group', kwargs=dict(group_id=request.user.group.group_id))
         context = dict(invitation_url=invitation_url)
+        return render(request, self.template, context)
+
+
+class ReservationListView(mixins.StaffPageMixin, View):
+    template = 'staff/reservation/list.html'
+
+    def get_queryset(self):
+        querysets = reservation_models.Reservation.objects.filter(time__hostess__group=self.request.user.group).order_by('-created_at')
+        return querysets
+
+    def get(self, request):
+        page_obj = self.get_queryset()
+        context = {'page_obj': page_obj}
         return render(request, self.template, context)

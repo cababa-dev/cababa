@@ -3,6 +3,7 @@ import japanmap
 
 from django import template
 from django.utils.html import format_html
+from django.conf import settings
 
 from lib.date import get_display_dt
 from users.models import HostessProfile
@@ -54,3 +55,9 @@ def line_break(message):
 @register.filter
 def to_https(value):
     return value.replace("http", "https")
+
+@register.filter
+def pay_amount(reservation):
+    rank_price = settings.RANK_PRICES[reservation.time.hostess.hostess_profile.rank]
+    amount = settings.BASE_PRICE + rank_price
+    return amount

@@ -1,0 +1,42 @@
+{% extends 'staff-partials/base.html' %}
+{% load static %}
+{% load cababa %}
+
+{% block title %}お嬢一覧{% endblock %}
+
+{% block content %}
+
+{% if page_obj %}
+<!-- お嬢を一覧表示 -->
+    <table class="table">
+        <thead class="thead-dark">
+            <th scope="col">ホステス名</th>
+            <th scope="col">ゲスト名</th>
+            <th scope="col">日付</th>
+            <th scope="col">時間</th>
+            <th scope="col">料金</th>
+            <th scope="col">予約日</th>
+            <th scope="col">承認済み？</th>
+            <th scope="col">支払い済み？</th>
+        </thead>
+        <tbody>
+            {% for reservation in page_obj %}
+                <tr>
+                    <td scope="row"><a href="{% url 'staff:hostess_detail' reservation.time.hostess.user_id %}">{{ reservation.time.hostess.display_name }}</a></td>
+                    <td>{{ reservation.guest.display_name }}</td>
+                    <td>{{ reservation.time.start_at|date:"Y年m月d日" }}</td>
+                    <td>{{ reservation.time.start_at|date:"H:i" }}-{{ reservation.time.end_at|date:"H:i" }}</td>
+                    <td>{{ reservation|pay_amount }}円</td>
+                    <td>{{ reservation.created_at|date:"Y年m月d日 H:i" }}</td>
+                    <td>{{ reservation.is_approval|yesno:"はい,いいえ,いいえ" }}</td>
+                    <td>{{ reservation.paied|yesno:"はい,いいえ,いいえ" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <!-- まだ予約が一件もない場合 -->
+    <h3>まだ予約はありません</h3>
+{% endif %}
+
+{% endblock %}
