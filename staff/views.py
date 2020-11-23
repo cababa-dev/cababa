@@ -48,7 +48,7 @@ class StaffSignupView(View):
             context = dict(form=form)
             return render(request, self.template, context)
         user = form.save()
-        return render(request, 'staff/signup_done.html')
+        return render(request, 'staff/account/signup_done.html')
 
 
 class SignupConfirmView(View):
